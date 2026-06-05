@@ -1,0 +1,25 @@
+name: flutter_ui_kit
+description: >-
+  A reusable, transport- and domain-agnostic Flutter component library and
+  design system. Ships design tokens (spacing, sizing, radius, typography,
+  semantic colors), tablet-first breakpoints, and core widgets (button, text
+  field, dropdown, status chip, banner, checkbox). Depends only on the Flutter
+  SDK so it can be reused by any Flutter project.
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.12.0
+  flutter: '>=3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

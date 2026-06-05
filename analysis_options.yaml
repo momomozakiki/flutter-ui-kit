@@ -1,0 +1,8 @@
+include: package:flutter_lints/flutter.yaml
+
+# Mirror the repo-root rules (this package depends on flutter_lints, not lints).
+linter:
+  rules:
+    - prefer_final_locals
+    - prefer_const_constructors
+    - avoid_print
