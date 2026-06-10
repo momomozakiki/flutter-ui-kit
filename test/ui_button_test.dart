@@ -34,4 +34,35 @@ void main() {
     final FilledButton button = tester.widget(find.byType(FilledButton));
     expect(button.onPressed, isNull);
   });
+
+  testWidgets('danger tone fills with the UiColors danger token', (tester) async {
+    await tester.pumpWidget(host(
+      UiButton.primary(
+          label: 'Disconnect', onPressed: () {}, tone: UiButtonTone.danger),
+    ));
+    final FilledButton button = tester.widget(find.byType(FilledButton));
+    final Color? bg = button.style?.backgroundColor?.resolve(<WidgetState>{});
+    expect(bg, UiColors.light.danger);
+    expect(bg, isNot(Colors.red));
+  });
+
+  testWidgets('success tone fills with the UiColors success token',
+      (tester) async {
+    await tester.pumpWidget(host(
+      UiButton.primary(
+          label: 'Connected', onPressed: () {}, tone: UiButtonTone.success),
+    ));
+    final FilledButton button = tester.widget(find.byType(FilledButton));
+    final Color? bg = button.style?.backgroundColor?.resolve(<WidgetState>{});
+    expect(bg, UiColors.light.success);
+  });
+
+  testWidgets('normal tone leaves the theme default (no override)',
+      (tester) async {
+    await tester.pumpWidget(host(
+      UiButton.primary(label: 'Connect', onPressed: () {}),
+    ));
+    final FilledButton button = tester.widget(find.byType(FilledButton));
+    expect(button.style, isNull);
+  });
 }

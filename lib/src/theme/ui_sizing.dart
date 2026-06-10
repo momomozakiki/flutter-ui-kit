@@ -21,6 +21,10 @@ abstract final class UiSizing {
   static const double fieldMedium = 200;
   static const double fieldWide = 320;
 
+  /// A compact, constant button width (e.g. a Connect/Connected toggle that
+  /// must not resize between states) sized to fit a short verb + icon.
+  static const double buttonCompact = 150;
+
   // Generic side-panel widths (e.g. a settings panel or a log sidebar).
   static const double panelNarrow = 280;
   static const double panelWide = 320;

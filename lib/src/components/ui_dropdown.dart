@@ -41,6 +41,9 @@ class UiDropdown<T> extends StatelessWidget {
     final Widget field = DropdownButtonFormField<T>(
       initialValue: value,
       isDense: isDense,
+      // Let the selected item take the available width (and ellipsize) so a
+      // narrow, fixed-[width] dropdown never overflows its row by a few pixels.
+      isExpanded: true,
       decoration: InputDecoration(
         labelText: label,
         isDense: isDense,
