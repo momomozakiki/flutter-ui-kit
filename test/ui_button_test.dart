@@ -57,6 +57,21 @@ void main() {
     expect(bg, UiColors.light.success);
   });
 
+  testWidgets('long label stays on one line and scales down to fit',
+      (tester) async {
+    await tester.pumpWidget(host(
+      const SizedBox(
+        width: 80,
+        child: UiButton.secondary(label: 'Save As', onPressed: null),
+      ),
+    ));
+
+    expect(find.byType(FittedBox), findsOneWidget);
+    final Text text = tester.widget(find.text('Save As'));
+    expect(text.maxLines, 1);
+    expect(text.softWrap, isFalse);
+  });
+
   testWidgets('normal tone leaves the theme default (no override)',
       (tester) async {
     await tester.pumpWidget(host(

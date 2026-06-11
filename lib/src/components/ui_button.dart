@@ -116,7 +116,13 @@ class UiButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Text labelWidget = Text(label);
+    // Keep labels on a single line and shrink only when too wide for the
+    // button's slot (e.g. "Save As…" in a narrow equal-width action row),
+    // rather than wrapping to two lines.
+    final Widget labelWidget = FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(label, maxLines: 1, softWrap: false),
+    );
     switch (variant) {
       case UiButtonVariant.primary:
         final fill = _tonedFill(context);
