@@ -29,4 +29,5 @@ abstract final class UiSpacing {
   static const SizedBox gapHSm = SizedBox(width: sm);
   static const SizedBox gapHMd = SizedBox(width: md);
   static const SizedBox gapHLg = SizedBox(width: lg);
+  static const SizedBox gapHXl = SizedBox(width: xl);
 }
