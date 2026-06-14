@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../theme/ui_sizing.dart';
 import '../theme/ui_spacing.dart';
 
-/// Full-page placeholder for a feature that is planned but not yet available
-/// (e.g. printer / scanner / camera tabs, or an unimplemented preview panel).
-/// Renders a centered card with the feature icon, its title, and an
-/// "Under maintenance" caption.
+/// Full-page placeholder centered card: a feature icon, a [title], and a
+/// caption ([subtitle]). The caption defaults to "Under maintenance" for the
+/// not-yet-available case (printer / scanner / camera tabs, unimplemented
+/// preview panels), but can be overridden to convey a different non-error state
+/// — e.g. a feature that is ready but waiting on a precondition ("connect a
+/// device").
 ///
 /// Domain-free and token-based (no hardcoded colors/sizes), so it is reusable
 /// across projects.
@@ -14,11 +16,15 @@ class UnderMaintenancePage extends StatelessWidget {
   const UnderMaintenancePage({
     required this.icon,
     required this.title,
+    this.subtitle = 'Under maintenance',
     super.key,
   });
 
   final IconData icon;
   final String title;
+
+  /// Caption under the [title]. Defaults to "Under maintenance".
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +50,7 @@ class UnderMaintenancePage extends StatelessWidget {
                   ),
                   UiSpacing.gapVXs,
                   Text(
-                    'Under maintenance',
+                    subtitle,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.disabledColor),
