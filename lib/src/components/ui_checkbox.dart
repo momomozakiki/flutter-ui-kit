@@ -23,7 +23,10 @@ class UiCheckbox extends StatelessWidget {
       onTap: enabled ? () => onChanged!(!value) : null,
       borderRadius: BorderRadius.circular(4),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: UiSpacing.xs),
+        // Trailing right padding so the label isn't flush against the
+        // component edge (the checkbox's tap target already spaces the left).
+        padding: const EdgeInsets.fromLTRB(
+            0, UiSpacing.xs, UiSpacing.sm, UiSpacing.xs),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
