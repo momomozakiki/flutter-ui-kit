@@ -32,3 +32,4 @@ export 'src/components/ui_text_field.dart';
 
 // composite (generic compositions)
 export 'src/composite/ui_responsive.dart';
+export 'src/composite/under_maintenance_page.dart';
