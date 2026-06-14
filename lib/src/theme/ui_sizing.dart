@@ -25,6 +25,11 @@ abstract final class UiSizing {
   /// must not resize between states) sized to fit a short verb + icon.
   static const double buttonCompact = 150;
 
+  /// Min / max width for a compact "quick key" chip (e.g. W / Tare / Z / R) so a
+  /// one-letter key stays tappable and a long label can't balloon.
+  static const double quickKeyMinWidth = 56;
+  static const double quickKeyMaxWidth = 120;
+
   // Generic side-panel widths (e.g. a settings panel or a log sidebar).
   static const double panelNarrow = 280;
   static const double panelWide = 320;
