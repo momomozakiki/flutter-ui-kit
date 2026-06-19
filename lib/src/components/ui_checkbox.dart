@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../theme/ui_spacing.dart';
 
 /// A checkbox with a tappable trailing [label] (tapping the label toggles it
-/// too). Pass `onChanged: null` to disable.
+/// too). Pass `onChanged: null` to disable. Provide [tooltip] to surface an
+/// explanatory message on hover (desktop) or long-press (touch).
 class UiCheckbox extends StatelessWidget {
   const UiCheckbox({
     required this.label,
     required this.value,
     required this.onChanged,
+    this.tooltip,
     super.key,
   });
 
@@ -16,10 +18,13 @@ class UiCheckbox extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
+  /// Optional explanatory message shown on hover (desktop) / long-press (touch).
+  final String? tooltip;
+
   @override
   Widget build(BuildContext context) {
     final bool enabled = onChanged != null;
-    return InkWell(
+    final Widget checkbox = InkWell(
       onTap: enabled ? () => onChanged!(!value) : null,
       borderRadius: BorderRadius.circular(4),
       child: Padding(
@@ -39,6 +44,12 @@ class UiCheckbox extends StatelessWidget {
           ],
         ),
       ),
+    );
+    if (tooltip == null || tooltip!.isEmpty) return checkbox;
+    return Tooltip(
+      message: tooltip!,
+      triggerMode: TooltipTriggerMode.longPress,
+      child: checkbox,
     );
   }
 }
