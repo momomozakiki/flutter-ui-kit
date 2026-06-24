@@ -25,6 +25,7 @@ class UiTextField extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.keyboardType,
     this.style,
+    this.obscureText = false,
     super.key,
   });
 
@@ -61,6 +62,9 @@ class UiTextField extends StatelessWidget {
   /// Overrides the input text style (e.g. a compact/mono table cell).
   final TextStyle? style;
 
+  /// Masks the text (e.g. a password / backup-passphrase field).
+  final bool obscureText;
+
   @override
   Widget build(BuildContext context) {
     final Widget field = TextField(
@@ -71,6 +75,7 @@ class UiTextField extends StatelessWidget {
       textAlign: textAlign,
       keyboardType: keyboardType,
       style: style,
+      obscureText: obscureText,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
       enabled: enabled,
