@@ -11,6 +11,13 @@ abstract final class UiSizing {
   /// Default height for compact/dense controls (e.g. dense form fields).
   static const double controlHeight = 44;
 
+  /// Height for a compact button ([UiButtonSize.compact]) used for *secondary*
+  /// actions in dense list rows. A deliberate, documented reduction from the
+  /// 48 px [touchTarget] floor: it stays comfortably tappable (above the
+  /// ~32–36 px point where mis-taps spike) while keeping a busy action row from
+  /// overflowing. Primary actions keep the full [touchTarget] height.
+  static const double buttonCompactHeight = 40;
+
   // Icon sizes.
   static const double iconSm = 18;
   static const double iconMd = 24;

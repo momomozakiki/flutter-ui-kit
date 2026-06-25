@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../theme/ui_colors.dart';
+import '../theme/ui_sizing.dart';
+import '../theme/ui_spacing.dart';
 
 /// Visual emphasis of a [UiButton].
 enum UiButtonVariant {
@@ -21,6 +23,14 @@ enum UiButtonVariant {
 /// "Disconnect" action) — never a hardcoded color.
 enum UiButtonTone { normal, success, danger }
 
+/// Sizing of a [UiButton].
+///
+/// [normal] uses the theme's [UiSizing.touchTarget] (48 px) floor. [compact]
+/// trims horizontal padding and lowers the height to [UiSizing.buttonCompactHeight]
+/// for *secondary* actions in dense list rows where a full-height button would
+/// overflow — see that token's doc for the accessibility rationale.
+enum UiButtonSize { normal, compact }
+
 /// A single button atom with three emphasis variants, an optional semantic
 /// [tone], and an optional leading [icon]. Pass `onPressed: null` to disable it.
 ///
@@ -33,6 +43,7 @@ class UiButton extends StatelessWidget {
     this.icon,
     this.variant = UiButtonVariant.primary,
     this.tone = UiButtonTone.normal,
+    this.size = UiButtonSize.normal,
     super.key,
   });
 
@@ -42,6 +53,7 @@ class UiButton extends StatelessWidget {
     required VoidCallback? onPressed,
     IconData? icon,
     UiButtonTone tone = UiButtonTone.normal,
+    UiButtonSize size = UiButtonSize.normal,
     Key? key,
   }) : this(
           label: label,
@@ -49,6 +61,7 @@ class UiButton extends StatelessWidget {
           icon: icon,
           variant: UiButtonVariant.primary,
           tone: tone,
+          size: size,
           key: key,
         );
 
@@ -58,6 +71,7 @@ class UiButton extends StatelessWidget {
     required VoidCallback? onPressed,
     IconData? icon,
     UiButtonTone tone = UiButtonTone.normal,
+    UiButtonSize size = UiButtonSize.normal,
     Key? key,
   }) : this(
           label: label,
@@ -65,6 +79,7 @@ class UiButton extends StatelessWidget {
           icon: icon,
           variant: UiButtonVariant.secondary,
           tone: tone,
+          size: size,
           key: key,
         );
 
@@ -74,6 +89,7 @@ class UiButton extends StatelessWidget {
     required VoidCallback? onPressed,
     IconData? icon,
     UiButtonTone tone = UiButtonTone.normal,
+    UiButtonSize size = UiButtonSize.normal,
     Key? key,
   }) : this(
           label: label,
@@ -81,6 +97,7 @@ class UiButton extends StatelessWidget {
           icon: icon,
           variant: UiButtonVariant.text,
           tone: tone,
+          size: size,
           key: key,
         );
 
@@ -89,6 +106,7 @@ class UiButton extends StatelessWidget {
   final IconData? icon;
   final UiButtonVariant variant;
   final UiButtonTone tone;
+  final UiButtonSize size;
 
   /// Background / foreground for a filled button in this [tone], or `null` for
   /// [UiButtonTone.normal] (let the theme decide).
@@ -123,14 +141,31 @@ class UiButton extends StatelessWidget {
       fit: BoxFit.scaleDown,
       child: Text(label, maxLines: 1, softWrap: false),
     );
+    // Compact metrics for dense rows: trim horizontal padding (the real overflow
+    // fix) and lower the height to [UiSizing.buttonCompactHeight], letting the
+    // button shrink to it. `shrinkWrap` is required so the per-button minimumSize
+    // actually overrides the theme-enforced 48 px touch-target floor. We do NOT
+    // add VisualDensity.compact — it would subtract a further ~8 px and drop the
+    // button to ~32 px, below the comfortable-tap range. All null when the size
+    // is normal, so styleFrom falls through to the theme unchanged.
+    final bool compact = size == UiButtonSize.compact;
+    final Size? minSize =
+        compact ? const Size(0, UiSizing.buttonCompactHeight) : null;
+    final EdgeInsetsGeometry? padding =
+        compact ? const EdgeInsets.symmetric(horizontal: UiSpacing.sm) : null;
+    final MaterialTapTargetSize? tapTargetSize =
+        compact ? MaterialTapTargetSize.shrinkWrap : null;
     switch (variant) {
       case UiButtonVariant.primary:
         final fill = _tonedFill(context);
-        final style = fill == null
+        final style = (fill == null && !compact)
             ? null
             : FilledButton.styleFrom(
-                backgroundColor: fill.background,
-                foregroundColor: fill.foreground,
+                backgroundColor: fill?.background,
+                foregroundColor: fill?.foreground,
+                minimumSize: minSize,
+                padding: padding,
+                tapTargetSize: tapTargetSize,
               );
         return icon == null
             ? FilledButton(
@@ -142,10 +177,15 @@ class UiButton extends StatelessWidget {
                 label: labelWidget);
       case UiButtonVariant.secondary:
         final fg = _tonedForeground(context);
-        final style = fg == null
+        final style = (fg == null && !compact)
             ? null
             : OutlinedButton.styleFrom(
-                foregroundColor: fg, side: BorderSide(color: fg));
+                foregroundColor: fg,
+                side: fg == null ? null : BorderSide(color: fg),
+                minimumSize: minSize,
+                padding: padding,
+                tapTargetSize: tapTargetSize,
+              );
         return icon == null
             ? OutlinedButton(
                 onPressed: onPressed, style: style, child: labelWidget)
@@ -156,8 +196,14 @@ class UiButton extends StatelessWidget {
                 label: labelWidget);
       case UiButtonVariant.text:
         final fg = _tonedForeground(context);
-        final style =
-            fg == null ? null : TextButton.styleFrom(foregroundColor: fg);
+        final style = (fg == null && !compact)
+            ? null
+            : TextButton.styleFrom(
+                foregroundColor: fg,
+                minimumSize: minSize,
+                padding: padding,
+                tapTargetSize: tapTargetSize,
+              );
         return icon == null
             ? TextButton(onPressed: onPressed, style: style, child: labelWidget)
             : TextButton.icon(

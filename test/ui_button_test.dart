@@ -80,4 +80,28 @@ void main() {
     final FilledButton button = tester.widget(find.byType(FilledButton));
     expect(button.style, isNull);
   });
+
+  testWidgets('compact size renders below the 48 px touch-target floor',
+      (tester) async {
+    await tester.pumpWidget(host(
+      UiButton.secondary(
+        label: 'Re-issue',
+        onPressed: () {},
+        size: UiButtonSize.compact,
+      ),
+    ));
+    final double height =
+        tester.getSize(find.byType(OutlinedButton)).height;
+    expect(height, lessThan(UiSizing.touchTarget));
+    expect(height, closeTo(UiSizing.buttonCompactHeight, 0.01));
+  });
+
+  testWidgets('normal size keeps the theme 48 px floor', (tester) async {
+    await tester.pumpWidget(host(
+      UiButton.secondary(label: 'Re-issue', onPressed: () {}),
+    ));
+    final double height =
+        tester.getSize(find.byType(OutlinedButton)).height;
+    expect(height, greaterThanOrEqualTo(UiSizing.touchTarget));
+  });
 }
