@@ -40,4 +40,9 @@ abstract final class UiSizing {
   // Generic side-panel widths (e.g. a settings panel or a log sidebar).
   static const double panelNarrow = 280;
   static const double panelWide = 320;
+
+  /// Max height for a secondary, content-sized form section that scrolls past
+  /// this cap (e.g. the Alibi mapping block under the variables editor) so it
+  /// never crowds out the primary content or pushes the action row off-screen.
+  static const double formSectionMax = 320;
 }
