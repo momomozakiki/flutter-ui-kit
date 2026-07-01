@@ -27,6 +27,7 @@ class UiTextField extends StatelessWidget {
     this.style,
     this.obscureText = false,
     this.tooltip,
+    this.suffixIcon,
     super.key,
   });
 
@@ -69,6 +70,10 @@ class UiTextField extends StatelessWidget {
   /// Optional explanatory message shown on hover (desktop) / long-press (touch).
   final String? tooltip;
 
+  /// Optional trailing widget inside the field (e.g. a clear ✕ button). Wired to
+  /// [InputDecoration.suffixIcon]; leave null for no trailing affordance.
+  final Widget? suffixIcon;
+
   @override
   Widget build(BuildContext context) {
     final Widget field = TextField(
@@ -87,6 +92,7 @@ class UiTextField extends StatelessWidget {
         labelText: label,
         hintText: hintText,
         isDense: isDense,
+        suffixIcon: suffixIcon,
         border: const OutlineInputBorder(),
         floatingLabelBehavior:
             floatingLabelAlways ? FloatingLabelBehavior.always : null,
