@@ -26,6 +26,7 @@ class UiTextField extends StatelessWidget {
     this.keyboardType,
     this.style,
     this.obscureText = false,
+    this.tooltip,
     super.key,
   });
 
@@ -65,6 +66,9 @@ class UiTextField extends StatelessWidget {
   /// Masks the text (e.g. a password / backup-passphrase field).
   final bool obscureText;
 
+  /// Optional explanatory message shown on hover (desktop) / long-press (touch).
+  final String? tooltip;
+
   @override
   Widget build(BuildContext context) {
     final Widget field = TextField(
@@ -88,6 +92,13 @@ class UiTextField extends StatelessWidget {
             floatingLabelAlways ? FloatingLabelBehavior.always : null,
       ),
     );
-    return width == null ? field : SizedBox(width: width, child: field);
+    final Widget sized =
+        width == null ? field : SizedBox(width: width, child: field);
+    if (tooltip == null || tooltip!.isEmpty) return sized;
+    return Tooltip(
+      message: tooltip!,
+      triggerMode: TooltipTriggerMode.longPress,
+      child: sized,
+    );
   }
 }

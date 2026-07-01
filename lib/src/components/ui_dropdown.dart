@@ -25,6 +25,7 @@ class UiDropdown<T> extends StatelessWidget {
     this.isDense = true,
     this.enabled = true,
     this.width,
+    this.tooltip,
     super.key,
   });
 
@@ -35,6 +36,9 @@ class UiDropdown<T> extends StatelessWidget {
   final bool isDense;
   final bool enabled;
   final double? width;
+
+  /// Optional explanatory message shown on hover (desktop) / long-press (touch).
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +60,13 @@ class UiDropdown<T> extends StatelessWidget {
           .toList(),
       onChanged: enabled ? onChanged : null,
     );
-    return width == null ? field : SizedBox(width: width, child: field);
+    final Widget sized =
+        width == null ? field : SizedBox(width: width, child: field);
+    if (tooltip == null || tooltip!.isEmpty) return sized;
+    return Tooltip(
+      message: tooltip!,
+      triggerMode: TooltipTriggerMode.longPress,
+      child: sized,
+    );
   }
 }

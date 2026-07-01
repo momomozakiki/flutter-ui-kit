@@ -53,4 +53,28 @@ void main() {
         tester.widget(find.byType(DropdownButtonFormField<int>));
     expect(field.onChanged, isNull);
   });
+
+  testWidgets('wraps in a Tooltip only when tooltip is provided',
+      (tester) async {
+    Widget build(String? tooltip) => MaterialApp(
+          theme: buildUiTheme(),
+          home: Scaffold(
+            body: UiDropdown<String>(
+              label: 'Split by',
+              value: 'a',
+              tooltip: tooltip,
+              items: const [UiDropdownItem(value: 'a', label: 'A')],
+              onChanged: (_) {},
+            ),
+          ),
+        );
+
+    await tester.pumpWidget(build(null));
+    expect(find.byType(Tooltip), findsNothing);
+
+    await tester.pumpWidget(build('Explains the split modes'));
+    final Tooltip tip = tester.widget(find.byType(Tooltip));
+    expect(tip.message, 'Explains the split modes');
+    expect(tip.triggerMode, TooltipTriggerMode.longPress);
+  });
 }
