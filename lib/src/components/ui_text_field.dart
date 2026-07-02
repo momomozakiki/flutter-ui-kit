@@ -28,6 +28,7 @@ class UiTextField extends StatelessWidget {
     this.obscureText = false,
     this.tooltip,
     this.suffixIcon,
+    this.maxLines = 1,
     super.key,
   });
 
@@ -74,6 +75,10 @@ class UiTextField extends StatelessWidget {
   /// [InputDecoration.suffixIcon]; leave null for no trailing affordance.
   final Widget? suffixIcon;
 
+  /// Number of visible text lines (`1` = the default single-line field). Set >1
+  /// for a multi-line text area (e.g. pasting several lines of sample data).
+  final int maxLines;
+
   @override
   Widget build(BuildContext context) {
     final Widget field = TextField(
@@ -85,6 +90,7 @@ class UiTextField extends StatelessWidget {
       keyboardType: keyboardType,
       style: style,
       obscureText: obscureText,
+      maxLines: maxLines,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
       enabled: enabled,
