@@ -37,6 +37,13 @@ abstract final class UiSizing {
   static const double quickKeyMinWidth = 56;
   static const double quickKeyMaxWidth = 120;
 
+  /// Min / max width for a clustered action-row button (e.g. Save / Save As /
+  /// Suggestions) so short labels stay comfortably tappable and the widest label
+  /// ("Suggestions", plus i18n headroom) never clips — the button's `FittedBox`
+  /// shrinks anything still tight at [buttonMaxWidth].
+  static const double buttonMinWidth = 88;
+  static const double buttonMaxWidth = 160;
+
   // Generic side-panel widths (e.g. a settings panel or a log sidebar).
   static const double panelNarrow = 280;
   static const double panelWide = 320;
