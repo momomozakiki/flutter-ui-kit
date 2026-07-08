@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-/// Typography tokens. The kit nudges the base Material text theme slightly
-/// larger so labels and data read comfortably at tablet arm's-length, without
-/// hand-authoring every text style.
+/// Typography tokens. The kit applies a single scale to the base Material text
+/// theme so labels and data stay consistent without hand-authoring every text
+/// style.
 abstract final class UiTypography {
   const UiTypography._();
 
-  /// Scale applied to the base [TextTheme] for tablet legibility.
-  static const double fontScale = 1.05;
+  /// Scale applied to the base [TextTheme]. Compact override: slightly below
+  /// 1.0 so text reads a touch smaller alongside the reduced control sizes
+  /// (down from the earlier 1.05 tablet nudge).
+  static const double fontScale = 0.95;
 
   /// Returns [base] with every defined font size multiplied by [fontScale].
   ///

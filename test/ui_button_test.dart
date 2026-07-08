@@ -81,7 +81,7 @@ void main() {
     expect(button.style, isNull);
   });
 
-  testWidgets('compact size renders below the 48 px touch-target floor',
+  testWidgets('compact size renders below the interactive floor',
       (tester) async {
     await tester.pumpWidget(host(
       UiButton.secondary(
@@ -96,7 +96,7 @@ void main() {
     expect(height, closeTo(UiSizing.buttonCompactHeight, 0.01));
   });
 
-  testWidgets('normal size keeps the theme 48 px floor', (tester) async {
+  testWidgets('normal size keeps the theme interactive floor', (tester) async {
     await tester.pumpWidget(host(
       UiButton.secondary(label: 'Re-issue', onPressed: () {}),
     ));

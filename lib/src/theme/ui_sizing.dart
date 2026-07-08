@@ -1,55 +1,60 @@
 /// Sizing tokens in logical pixels: touch targets, control heights, icon sizes,
-/// and common field / panel widths. Tablet-first — interactive targets meet the
-/// Material 48dp accessibility floor so the same UI is comfortable on a 7"/10"
-/// tablet and on desktop.
+/// and common field / panel widths.
+///
+/// Compact override: the interactive floor is a deliberate 40 px (down from the
+/// Material 48dp accessibility floor) for a denser Console UI. This is an
+/// intentional product decision, confirmed by the user, that supersedes the
+/// 48dp guidance in the Adaptive UI spec §3.1; 40 px still stays above the
+/// ~32–36 px point where mis-taps spike. Revisit if 7" tablet field testing
+/// shows mis-taps.
 abstract final class UiSizing {
   const UiSizing._();
 
-  /// Minimum interactive target (Material accessibility floor).
-  static const double touchTarget = 48;
+  /// Minimum interactive target (compact floor — see the class note; below the
+  /// Material 48dp accessibility floor by intent).
+  static const double touchTarget = 40;
 
   /// Default height for compact/dense controls (e.g. dense form fields).
-  static const double controlHeight = 44;
+  static const double controlHeight = 36;
 
   /// Height for a compact button ([UiButtonSize.compact]) used for *secondary*
-  /// actions in dense list rows. A deliberate, documented reduction from the
-  /// 48 px [touchTarget] floor: it stays comfortably tappable (above the
-  /// ~32–36 px point where mis-taps spike) while keeping a busy action row from
-  /// overflowing. Primary actions keep the full [touchTarget] height.
-  static const double buttonCompactHeight = 40;
+  /// actions in dense list rows. A further reduction from the [touchTarget]
+  /// floor for a busy action row; stays above the ~32 px mis-tap threshold.
+  /// Primary actions keep the full [touchTarget] height.
+  static const double buttonCompactHeight = 32;
 
   // Icon sizes.
-  static const double iconSm = 18;
-  static const double iconMd = 24;
-  static const double iconLg = 40;
+  static const double iconSm = 16;
+  static const double iconMd = 20;
+  static const double iconLg = 32;
 
   // Common field widths.
-  static const double fieldNarrow = 130;
-  static const double fieldMedium = 200;
-  static const double fieldWide = 320;
+  static const double fieldNarrow = 104;
+  static const double fieldMedium = 160;
+  static const double fieldWide = 256;
 
   /// A compact, constant button width (e.g. a Connect/Connected toggle that
   /// must not resize between states) sized to fit a short verb + icon.
-  static const double buttonCompact = 150;
+  static const double buttonCompact = 120;
 
   /// Min / max width for a compact "quick key" chip (e.g. W / Tare / Z / R) so a
   /// one-letter key stays tappable and a long label can't balloon.
-  static const double quickKeyMinWidth = 56;
-  static const double quickKeyMaxWidth = 120;
+  static const double quickKeyMinWidth = 48;
+  static const double quickKeyMaxWidth = 100;
 
   /// Min / max width for a clustered action-row button (e.g. Save / Save As /
   /// Suggestions) so short labels stay comfortably tappable and the widest label
   /// ("Suggestions", plus i18n headroom) never clips — the button's `FittedBox`
   /// shrinks anything still tight at [buttonMaxWidth].
-  static const double buttonMinWidth = 88;
-  static const double buttonMaxWidth = 160;
+  static const double buttonMinWidth = 72;
+  static const double buttonMaxWidth = 132;
 
   // Generic side-panel widths (e.g. a settings panel or a log sidebar).
-  static const double panelNarrow = 280;
-  static const double panelWide = 320;
+  static const double panelNarrow = 224;
+  static const double panelWide = 256;
 
   /// Max height for a secondary, content-sized form section that scrolls past
   /// this cap (e.g. the Alibi mapping block under the variables editor) so it
   /// never crowds out the primary content or pushes the action row off-screen.
-  static const double formSectionMax = 320;
+  static const double formSectionMax = 260;
 }

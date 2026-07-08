@@ -3,17 +3,18 @@ import 'package:flutter/widgets.dart';
 /// Spacing scale in logical pixels. Use these instead of magic numbers so
 /// spacing stays consistent across the whole app and any future project.
 ///
-/// The scale is tablet-first: the steps are generous enough for comfortable
-/// touch layouts on 7" and 10" tablets while still reading well on desktop.
+/// The scale is compact (a deliberate ~20% reduction from the earlier
+/// tablet-first steps) for a denser Console UI; it still reads on 7"/10"
+/// tablets and desktop. See the compact-override note in the Adaptive UI spec.
 abstract final class UiSpacing {
   const UiSpacing._();
 
   static const double xs = 4;
-  static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
-  static const double xl = 24;
-  static const double xxl = 32;
+  static const double sm = 6;
+  static const double md = 10;
+  static const double lg = 13;
+  static const double xl = 20;
+  static const double xxl = 26;
 
   /// Common symmetric paddings.
   static const EdgeInsets allSm = EdgeInsets.all(sm);
