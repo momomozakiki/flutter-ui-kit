@@ -3,8 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_ui_kit/flutter_ui_kit.dart';
 
 void main() {
-  testWidgets('renders at a compact height (contentPadding + minHeight floor)',
-      (tester) async {
+  testWidgets('renders at exactly the shared control height', (tester) async {
     await tester.pumpWidget(MaterialApp(
       theme: buildUiTheme(),
       home: const Scaffold(
@@ -13,10 +12,10 @@ void main() {
     ));
 
     final double height = tester.getSize(find.byType(TextField)).height;
-    // Lower bound proves the InputDecorationTheme.constraints minHeight is
-    // enforced; upper bound catches a dropped/loosened contentPadding.
-    expect(height, greaterThanOrEqualTo(UiSizing.controlHeight));
-    expect(height, lessThanOrEqualTo(UiSizing.controlHeight + 2 * UiSpacing.sm));
+    // Exact, not a range: InputDecorationTheme.constraints is now TIGHT
+    // (min == max == controlHeight), so this can never silently drift taller
+    // than the button/chip/checkbox it lines up with in the same row.
+    expect(height, UiSizing.controlHeight);
   });
 
   testWidgets('wraps in a Tooltip only when tooltip is provided',

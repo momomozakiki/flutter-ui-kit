@@ -54,8 +54,7 @@ void main() {
     expect(field.onChanged, isNull);
   });
 
-  testWidgets('renders at a compact height (contentPadding + minHeight floor)',
-      (tester) async {
+  testWidgets('renders at exactly the shared control height', (tester) async {
     await tester.pumpWidget(MaterialApp(
       theme: buildUiTheme(),
       home: Scaffold(
@@ -72,10 +71,10 @@ void main() {
 
     final double height =
         tester.getSize(find.byType(DropdownButtonFormField<String>)).height;
-    // Lower bound proves the InputDecorationTheme.constraints minHeight is
-    // enforced; upper bound catches a dropped/loosened contentPadding.
-    expect(height, greaterThanOrEqualTo(UiSizing.controlHeight));
-    expect(height, lessThanOrEqualTo(UiSizing.controlHeight + 2 * UiSpacing.sm));
+    // Exact, not a range: InputDecorationTheme.constraints is now TIGHT
+    // (min == max == controlHeight), so this can never silently drift taller
+    // than the button/chip/checkbox it lines up with in the same row.
+    expect(height, UiSizing.controlHeight);
   });
 
   testWidgets('wraps in a Tooltip only when tooltip is provided',

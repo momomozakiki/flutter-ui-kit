@@ -96,12 +96,17 @@ void main() {
     expect(height, closeTo(UiSizing.buttonCompactHeight, 0.01));
   });
 
-  testWidgets('normal size keeps the theme interactive floor', (tester) async {
+  testWidgets('normal size renders at exactly the interactive height',
+      (tester) async {
     await tester.pumpWidget(host(
       UiButton.secondary(label: 'Re-issue', onPressed: () {}),
     ));
     final double height =
         tester.getSize(find.byType(OutlinedButton)).height;
-    expect(height, greaterThanOrEqualTo(UiSizing.touchTarget));
+    // Exact, not a floor: touchSized now pins minimumSize AND maximumSize (plus
+    // shrinkWrap so the reported layout size isn't padded past the painted
+    // size), so a button can never silently render taller than the
+    // dropdown/chip/checkbox sharing its row.
+    expect(height, UiSizing.touchTarget);
   });
 }
