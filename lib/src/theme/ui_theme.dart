@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'ui_colors.dart';
 import 'ui_radius.dart';
 import 'ui_sizing.dart';
-import 'ui_spacing.dart';
+import 'ui_tuning.dart';
 import 'ui_typography.dart';
 
 /// Builds the app [ThemeData] for the kit: Material 3, seeded color scheme, the
@@ -43,12 +43,20 @@ ThemeData buildUiTheme({
   // paints at 40) — that mismatch is what made the button's row look taller
   // than the dropdown/chips sitting in it. shrinkWrap makes reported size
   // match painted size.
-  const ButtonStyle touchSized = ButtonStyle(
-    minimumSize: WidgetStatePropertyAll<Size>(Size(0, UiSizing.touchTarget)),
-    maximumSize: WidgetStatePropertyAll<Size>(
-        Size(double.infinity, UiSizing.touchTarget)),
-    padding:
-        WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: UiSpacing.md)),
+  // Reads UiTuning.instance (not the raw consts) for the handful of values a
+  // debug-only live tuning panel can override; both are seeded identically so
+  // this is a no-op until a slider is actually touched. touchSized and
+  // inputDecorationTheme can no longer be `const` because of this — they read
+  // a runtime singleton, not a compile-time constant. Single code path in
+  // both debug and release (no kDebugMode branch here) so what's tuned in
+  // debug and what ships in release can never silently diverge.
+  final double controlHeight = UiTuning.instance.controlHeight;
+  final ButtonStyle touchSized = ButtonStyle(
+    minimumSize: WidgetStatePropertyAll<Size>(Size(0, controlHeight)),
+    maximumSize:
+        WidgetStatePropertyAll<Size>(Size(double.infinity, controlHeight)),
+    padding: WidgetStatePropertyAll<EdgeInsets>(
+        EdgeInsets.symmetric(horizontal: UiTuning.instance.spacingMd)),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     visualDensity: VisualDensity.standard,
   );
@@ -63,19 +71,20 @@ ThemeData buildUiTheme({
     // content-heavy fields (e.g. a floating label) render taller than 40 —
     // Flutter's box protocol guarantees a tight constraint forces exactly
     // that size regardless of what the field's content would otherwise want.
-    inputDecorationTheme: const InputDecorationTheme(
+    inputDecorationTheme: InputDecorationTheme(
       isDense: true,
-      contentPadding:
-          EdgeInsets.symmetric(horizontal: UiSpacing.md, vertical: UiSpacing.sm),
-      constraints: BoxConstraints.tightFor(height: UiSizing.controlHeight),
-      border: OutlineInputBorder(borderRadius: UiRadius.brSm),
+      contentPadding: EdgeInsets.symmetric(
+          horizontal: UiTuning.instance.spacingMd,
+          vertical: UiTuning.instance.spacingSm),
+      constraints: BoxConstraints.tightFor(height: controlHeight),
+      border: const OutlineInputBorder(borderRadius: UiRadius.brSm),
     ),
     // Compact density shrinks Material controls (menu rows, checkbox, chips,
     // tabs). Buttons are protected by their `minimumSize` floors (see
     // touchSized / UiButton), so they never drop below 40 / 32 px.
     visualDensity: VisualDensity.compact,
-    filledButtonTheme: const FilledButtonThemeData(style: touchSized),
-    outlinedButtonTheme: const OutlinedButtonThemeData(style: touchSized),
-    textButtonTheme: const TextButtonThemeData(style: touchSized),
+    filledButtonTheme: FilledButtonThemeData(style: touchSized),
+    outlinedButtonTheme: OutlinedButtonThemeData(style: touchSized),
+    textButtonTheme: TextButtonThemeData(style: touchSized),
   );
 }

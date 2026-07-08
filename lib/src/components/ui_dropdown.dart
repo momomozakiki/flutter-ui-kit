@@ -48,6 +48,13 @@ class UiDropdown<T> extends StatelessWidget {
       // Let the selected item take the available width (and ellipsize) so a
       // narrow, fixed-[width] dropdown never overflows its row by a few pixels.
       isExpanded: true,
+      // itemHeight has a hard floor of kMinInteractiveDimension (48) enforced
+      // by an assertion when given an explicit value — it cannot be set to a
+      // smaller number directly. `null` opts each row out of that uniform
+      // floor and into intrinsic sizing instead, so the opened menu's row
+      // height matches this field's own compact density rather than defaulting
+      // to 48.
+      itemHeight: null,
       decoration: InputDecoration(
         labelText: label,
         isDense: isDense,

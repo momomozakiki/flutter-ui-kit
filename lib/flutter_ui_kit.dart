@@ -20,6 +20,7 @@ export 'src/theme/ui_radius.dart';
 export 'src/theme/ui_sizing.dart';
 export 'src/theme/ui_spacing.dart';
 export 'src/theme/ui_theme.dart';
+export 'src/theme/ui_tuning.dart';
 export 'src/theme/ui_typography.dart';
 
 // components (core atoms)
@@ -32,4 +33,5 @@ export 'src/components/ui_text_field.dart';
 
 // composite (generic compositions)
 export 'src/composite/ui_responsive.dart';
+export 'src/composite/ui_tuning_panel.dart';
 export 'src/composite/under_maintenance_page.dart';
