@@ -11,11 +11,16 @@ abstract final class UiSizing {
   const UiSizing._();
 
   /// Minimum interactive target (compact floor — see the class note; below the
-  /// Material 48dp accessibility floor by intent).
+  /// Material 48dp accessibility floor by intent). Kept **equal to
+  /// [controlHeight]** so buttons line up with the other form controls.
   static const double touchTarget = 40;
 
-  /// Default height for compact/dense controls (e.g. dense form fields).
-  static const double controlHeight = 36;
+  /// THE shared form-control height. Every dropdown, text field, [UiButton],
+  /// command chip, and checkbox renders at this height so a row of mixed
+  /// controls aligns. Kept equal to [touchTarget]; change them together.
+  /// Consumed by `inputDecorationTheme` (field/dropdown height), `UiButton`
+  /// (via [touchTarget]), `UiCheckbox`, and the quick-command chips.
+  static const double controlHeight = 40;
 
   /// Height for a compact button ([UiButtonSize.compact]) used for *secondary*
   /// actions in dense list rows. A further reduction from the [touchTarget]

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/ui_sizing.dart';
 import '../theme/ui_spacing.dart';
 
 /// A checkbox with a tappable trailing [label] (tapping the label toggles it
@@ -24,24 +25,31 @@ class UiCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool enabled = onChanged != null;
-    final Widget checkbox = InkWell(
-      onTap: enabled ? () => onChanged!(!value) : null,
-      borderRadius: BorderRadius.circular(4),
-      child: Padding(
-        // Trailing right padding so the label isn't flush against the
-        // component edge (the checkbox's tap target already spaces the left).
-        padding: const EdgeInsets.fromLTRB(
-            0, UiSpacing.xs, UiSpacing.sm, UiSpacing.xs),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Checkbox(
-              value: value,
-              onChanged: enabled ? (bool? v) => onChanged!(v ?? false) : null,
-            ),
-            UiSpacing.gapHXs,
-            Text(label),
-          ],
+    final Widget checkbox = SizedBox(
+      // Fixed to the shared control height so a checkbox row lines up with
+      // dropdowns / fields / buttons in the same layout (see UiSizing).
+      height: UiSizing.controlHeight,
+      child: InkWell(
+        onTap: enabled ? () => onChanged!(!value) : null,
+        borderRadius: BorderRadius.circular(4),
+        child: Padding(
+          // Trailing right padding so the label isn't flush against the
+          // component edge (the checkbox's tap target already spaces the left).
+          padding: const EdgeInsets.only(right: UiSpacing.sm),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Checkbox(
+                value: value,
+                // shrinkWrap so the box doesn't reserve the 48px padded target
+                // and can sit centered in the controlHeight row.
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                onChanged: enabled ? (bool? v) => onChanged!(v ?? false) : null,
+              ),
+              UiSpacing.gapHXs,
+              Text(label),
+            ],
+          ),
         ),
       ),
     );
