@@ -16,8 +16,18 @@ void main() {
     expect(t.spacingSm, UiSpacing.sm);
     expect(t.spacingMd, UiSpacing.md);
     expect(t.spacingLg, UiSpacing.lg);
-    expect(t.chipPaddingH, UiSpacing.sm);
-    expect(t.navRailWidth, 56);
+    expect(t.chipPaddingH, UiSizing.chipPaddingH);
+    expect(t.navRailWidth, UiSizing.navRailWidth);
+    expect(t.fontScale, UiTypography.fontScale);
+    expect(t.fontFamily, isNull);
+    // Per-component heights all seed equal to the shared controlHeight, so
+    // every control still starts aligned by default.
+    expect(t.dropdownHeight, UiSizing.controlHeight);
+    expect(t.textFieldHeight, UiSizing.controlHeight);
+    expect(t.tokenGridFieldHeight, UiSizing.controlHeight);
+    expect(t.buttonHeight, UiSizing.controlHeight);
+    expect(t.checkboxHeight, UiSizing.controlHeight);
+    expect(t.chipHeight, UiSizing.controlHeight);
   });
 
   test('a setter mutates the field and notifies listeners', () {
@@ -31,6 +41,29 @@ void main() {
     expect(notified, 1);
   });
 
+  test('a per-component setter diverges independently of controlHeight', () {
+    final t = UiTuning.instance;
+
+    t.dropdownHeight = 50;
+
+    expect(t.dropdownHeight, 50);
+    // Every other control stays at its own (still shared) default.
+    expect(t.controlHeight, UiSizing.controlHeight);
+    expect(t.textFieldHeight, UiSizing.controlHeight);
+    expect(t.buttonHeight, UiSizing.controlHeight);
+  });
+
+  test('fontFamily setter mutates and notifies', () {
+    final t = UiTuning.instance;
+    var notified = 0;
+    t.addListener(() => notified++);
+
+    t.fontFamily = 'Consolas';
+
+    expect(t.fontFamily, 'Consolas');
+    expect(notified, 1);
+  });
+
   test('reset restores every field to its seeded default', () {
     final t = UiTuning.instance;
     t.controlHeight = 44;
@@ -40,6 +73,14 @@ void main() {
     t.spacingLg = 24;
     t.chipPaddingH = 16;
     t.navRailWidth = 80;
+    t.fontScale = 1.2;
+    t.fontFamily = 'Arial';
+    t.dropdownHeight = 50;
+    t.textFieldHeight = 50;
+    t.tokenGridFieldHeight = 50;
+    t.buttonHeight = 50;
+    t.checkboxHeight = 50;
+    t.chipHeight = 50;
 
     t.reset();
 
@@ -48,7 +89,15 @@ void main() {
     expect(t.spacingSm, UiSpacing.sm);
     expect(t.spacingMd, UiSpacing.md);
     expect(t.spacingLg, UiSpacing.lg);
-    expect(t.chipPaddingH, UiSpacing.sm);
-    expect(t.navRailWidth, 56);
+    expect(t.chipPaddingH, UiSizing.chipPaddingH);
+    expect(t.navRailWidth, UiSizing.navRailWidth);
+    expect(t.fontScale, UiTypography.fontScale);
+    expect(t.fontFamily, isNull);
+    expect(t.dropdownHeight, UiSizing.controlHeight);
+    expect(t.textFieldHeight, UiSizing.controlHeight);
+    expect(t.tokenGridFieldHeight, UiSizing.controlHeight);
+    expect(t.buttonHeight, UiSizing.controlHeight);
+    expect(t.checkboxHeight, UiSizing.controlHeight);
+    expect(t.chipHeight, UiSizing.controlHeight);
   });
 }

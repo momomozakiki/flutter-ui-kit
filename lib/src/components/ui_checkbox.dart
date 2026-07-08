@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../theme/ui_sizing.dart';
 import '../theme/ui_spacing.dart';
+import '../theme/ui_tuning.dart';
 
 /// A checkbox with a tappable trailing [label] (tapping the label toggles it
 /// too). Pass `onChanged: null` to disable. Provide [tooltip] to surface an
@@ -11,6 +11,7 @@ class UiCheckbox extends StatelessWidget {
     required this.label,
     required this.value,
     required this.onChanged,
+    this.height,
     this.tooltip,
     super.key,
   });
@@ -19,6 +20,11 @@ class UiCheckbox extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
+  /// Overrides the shared control height (default `null` reads
+  /// `UiTuning.instance.checkboxHeight`, itself seeded from the shared
+  /// `UiSizing.controlHeight` — see `UiTuning`).
+  final double? height;
+
   /// Optional explanatory message shown on hover (desktop) / long-press (touch).
   final String? tooltip;
 
@@ -26,9 +32,9 @@ class UiCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool enabled = onChanged != null;
     final Widget checkbox = SizedBox(
-      // Fixed to the shared control height so a checkbox row lines up with
-      // dropdowns / fields / buttons in the same layout (see UiSizing).
-      height: UiSizing.controlHeight,
+      // Fixed height so a checkbox row lines up with dropdowns / fields /
+      // buttons in the same layout by default (see UiTuning.checkboxHeight).
+      height: height ?? UiTuning.instance.checkboxHeight,
       child: InkWell(
         onTap: enabled ? () => onChanged!(!value) : null,
         borderRadius: BorderRadius.circular(4),

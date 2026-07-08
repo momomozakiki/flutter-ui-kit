@@ -23,6 +23,26 @@ void main() {
     expect(height, UiSizing.controlHeight);
   });
 
+  testWidgets('an explicit height override renders at that height',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: buildUiTheme(),
+      home: Scaffold(
+        body: Center(
+          child: UiCheckbox(
+            label: 'Trim',
+            value: true,
+            height: 50,
+            onChanged: (_) {},
+          ),
+        ),
+      ),
+    ));
+
+    final double height = tester.getSize(find.byType(UiCheckbox)).height;
+    expect(height, 50);
+  });
+
   testWidgets('toggles and reflects value; disabled when onChanged is null',
       (tester) async {
     bool? changed;

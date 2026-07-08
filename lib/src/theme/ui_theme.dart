@@ -61,8 +61,16 @@ ThemeData buildUiTheme({
     visualDensity: VisualDensity.standard,
   );
 
+  // Font size and family are both live-tunable (UiTuning.fontScale/fontFamily)
+  // — scale is applied by UiTypography.textTheme, family via TextTheme.apply
+  // (a null family is a no-op, leaving the theme's own default untouched).
+  final TextTheme textTheme = UiTypography.textTheme(
+    base.textTheme,
+    scale: UiTuning.instance.fontScale,
+  ).apply(fontFamily: UiTuning.instance.fontFamily);
+
   return base.copyWith(
-    textTheme: UiTypography.textTheme(base.textTheme),
+    textTheme: textTheme,
     extensions: <ThemeExtension<dynamic>>[uiColors],
     // Control height is driven HERE, not by the size tokens: `contentPadding`
     // sets the field/dropdown height and `visualDensity` densifies dropdown

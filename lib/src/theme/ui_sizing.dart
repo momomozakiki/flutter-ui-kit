@@ -1,11 +1,14 @@
 /// Sizing tokens in logical pixels: touch targets, control heights, icon sizes,
 /// and common field / panel widths.
 ///
-/// Compact override: the interactive floor is a deliberate 40 px (down from the
-/// Material 48dp accessibility floor) for a denser Console UI. This is an
-/// intentional product decision, confirmed by the user, that supersedes the
-/// 48dp guidance in the Adaptive UI spec §3.1; 40 px still stays above the
-/// ~32–36 px point where mis-taps spike. Revisit if 7" tablet field testing
+/// Compact override: the interactive floor is a deliberate 35 px (down from the
+/// Material 48dp accessibility floor, and below the original 40 px compact
+/// override) for a denser Console UI. This value was tuned live, on-screen,
+/// via the debug-only `UiTuningPanel` (see `ui_tuning.dart`) rather than
+/// guessed from a screenshot — the user visually confirmed both readability
+/// and tap comfort before landing on it. It sits inside the ~32–36 px range
+/// earlier notes flagged as a mis-tap risk zone; that risk was accepted
+/// deliberately, not overlooked. Revisit (via the same panel) if field use
 /// shows mis-taps.
 abstract final class UiSizing {
   const UiSizing._();
@@ -13,14 +16,25 @@ abstract final class UiSizing {
   /// Minimum interactive target (compact floor — see the class note; below the
   /// Material 48dp accessibility floor by intent). Kept **equal to
   /// [controlHeight]** so buttons line up with the other form controls.
-  static const double touchTarget = 40;
+  static const double touchTarget = 35;
 
   /// THE shared form-control height. Every dropdown, text field, [UiButton],
   /// command chip, and checkbox renders at this height so a row of mixed
-  /// controls aligns. Kept equal to [touchTarget]; change them together.
-  /// Consumed by `inputDecorationTheme` (field/dropdown height), `UiButton`
-  /// (via [touchTarget]), `UiCheckbox`, and the quick-command chips.
-  static const double controlHeight = 40;
+  /// controls aligns **by default** — each can now also be tuned
+  /// independently via `UiTuning`'s per-component fields (dropdownHeight,
+  /// textFieldHeight, etc.), which all seed from this value. Kept equal to
+  /// [touchTarget]; change them together. Consumed by `inputDecorationTheme`
+  /// (field/dropdown height), `UiButton` (via [touchTarget]), `UiCheckbox`,
+  /// and the quick-command chips.
+  static const double controlHeight = 35;
+
+  /// Horizontal padding inside a quick-command chip pill. Tuned live via
+  /// `UiTuningPanel`; seeds `UiTuning.chipPaddingH`.
+  static const double chipPaddingH = 11;
+
+  /// Width of the left icon-only navigation rail. Tuned live via
+  /// `UiTuningPanel`; seeds `UiTuning.navRailWidth`.
+  static const double navRailWidth = 45;
 
   /// Height for a compact button ([UiButtonSize.compact]) used for *secondary*
   /// actions in dense list rows. A further reduction from the [touchTarget]

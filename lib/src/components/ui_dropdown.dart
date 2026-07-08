@@ -25,6 +25,7 @@ class UiDropdown<T> extends StatelessWidget {
     this.isDense = true,
     this.enabled = true,
     this.width,
+    this.height,
     this.tooltip,
     super.key,
   });
@@ -36,6 +37,11 @@ class UiDropdown<T> extends StatelessWidget {
   final bool isDense;
   final bool enabled;
   final double? width;
+
+  /// Overrides the shared theme control height for just this instance
+  /// (`null`, the default, inherits the theme's shared height unchanged).
+  /// Lets a specific dropdown be tuned independently — see `UiTuning`.
+  final double? height;
 
   /// Optional explanatory message shown on hover (desktop) / long-press (touch).
   final String? tooltip;
@@ -60,6 +66,11 @@ class UiDropdown<T> extends StatelessWidget {
         isDense: isDense,
         border: const OutlineInputBorder(),
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        // A non-null constraints value here overrides the theme's shared
+        // tight height for just this instance (Flutter merges per-instance
+        // InputDecoration fields over the InputDecorationTheme default).
+        constraints:
+            height == null ? null : BoxConstraints.tightFor(height: height),
       ),
       items: items
           .map((UiDropdownItem<T> it) =>

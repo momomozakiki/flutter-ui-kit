@@ -6,13 +6,20 @@ import 'package:flutter/widgets.dart';
 /// The scale is compact (a deliberate ~20% reduction from the earlier
 /// tablet-first steps) for a denser Console UI; it still reads on 7"/10"
 /// tablets and desktop. See the compact-override note in the Adaptive UI spec.
+///
+/// `xs`/`sm`/`md`/`lg` were tuned live via the debug-only `UiTuningPanel`
+/// (see `ui_tuning.dart`) — note `md` (7) is now *smaller* than `sm` (14),
+/// breaking the scale's usual ascending-by-name order. That's the user's
+/// deliberate tuned choice (each value serves a different call site — `sm`
+/// drives the header field's vertical content padding, `md` its horizontal),
+/// not an accidental inversion.
 abstract final class UiSpacing {
   const UiSpacing._();
 
   static const double xs = 4;
-  static const double sm = 6;
-  static const double md = 10;
-  static const double lg = 13;
+  static const double sm = 14;
+  static const double md = 7;
+  static const double lg = 10;
   static const double xl = 20;
   static const double xxl = 26;
 

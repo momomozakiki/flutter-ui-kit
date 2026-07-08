@@ -77,6 +77,28 @@ void main() {
     expect(height, UiSizing.controlHeight);
   });
 
+  testWidgets('an explicit height override renders at that height',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: buildUiTheme(),
+      home: Scaffold(
+        body: Center(
+          child: UiDropdown<String>(
+            label: 'Font',
+            height: 50,
+            value: 'a',
+            items: const [UiDropdownItem(value: 'a', label: 'A')],
+            onChanged: (_) {},
+          ),
+        ),
+      ),
+    ));
+
+    final double height =
+        tester.getSize(find.byType(DropdownButtonFormField<String>)).height;
+    expect(height, 50);
+  });
+
   testWidgets('wraps in a Tooltip only when tooltip is provided',
       (tester) async {
     Widget build(String? tooltip) => MaterialApp(

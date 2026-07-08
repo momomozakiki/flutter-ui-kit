@@ -33,5 +33,6 @@ export 'src/components/ui_text_field.dart';
 
 // composite (generic compositions)
 export 'src/composite/ui_responsive.dart';
+export 'src/composite/ui_tuning_overlay.dart';
 export 'src/composite/ui_tuning_panel.dart';
 export 'src/composite/under_maintenance_page.dart';

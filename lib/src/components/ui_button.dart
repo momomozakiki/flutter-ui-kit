@@ -44,6 +44,7 @@ class UiButton extends StatelessWidget {
     this.variant = UiButtonVariant.primary,
     this.tone = UiButtonTone.normal,
     this.size = UiButtonSize.normal,
+    this.height,
     super.key,
   });
 
@@ -54,6 +55,7 @@ class UiButton extends StatelessWidget {
     IconData? icon,
     UiButtonTone tone = UiButtonTone.normal,
     UiButtonSize size = UiButtonSize.normal,
+    double? height,
     Key? key,
   }) : this(
           label: label,
@@ -62,6 +64,7 @@ class UiButton extends StatelessWidget {
           variant: UiButtonVariant.primary,
           tone: tone,
           size: size,
+          height: height,
           key: key,
         );
 
@@ -72,6 +75,7 @@ class UiButton extends StatelessWidget {
     IconData? icon,
     UiButtonTone tone = UiButtonTone.normal,
     UiButtonSize size = UiButtonSize.normal,
+    double? height,
     Key? key,
   }) : this(
           label: label,
@@ -80,6 +84,7 @@ class UiButton extends StatelessWidget {
           variant: UiButtonVariant.secondary,
           tone: tone,
           size: size,
+          height: height,
           key: key,
         );
 
@@ -90,6 +95,7 @@ class UiButton extends StatelessWidget {
     IconData? icon,
     UiButtonTone tone = UiButtonTone.normal,
     UiButtonSize size = UiButtonSize.normal,
+    double? height,
     Key? key,
   }) : this(
           label: label,
@@ -98,6 +104,7 @@ class UiButton extends StatelessWidget {
           variant: UiButtonVariant.text,
           tone: tone,
           size: size,
+          height: height,
           key: key,
         );
 
@@ -107,6 +114,12 @@ class UiButton extends StatelessWidget {
   final UiButtonVariant variant;
   final UiButtonTone tone;
   final UiButtonSize size;
+
+  /// Overrides the shared theme control height for just this instance
+  /// (`null`, the default, inherits the theme's shared height unchanged).
+  /// Takes priority over [size]'s compact height when both are set. Lets a
+  /// specific button be tuned independently — see `UiTuning`.
+  final double? height;
 
   /// Background / foreground for a filled button in this [tone], or `null` for
   /// [UiButtonTone.normal] (let the theme decide).
@@ -151,21 +164,32 @@ class UiButton extends StatelessWidget {
     // zone. All null when the size is normal, so styleFrom falls through to the
     // theme unchanged.
     final bool compact = size == UiButtonSize.compact;
-    final Size? minSize =
-        compact ? const Size(0, UiSizing.buttonCompactHeight) : null;
+    // An explicit height override takes priority over compact's fixed height.
+    // It needs BOTH a minimumSize floor and a maximumSize ceiling (mirroring
+    // buildUiTheme's touchSized fix) — a floor alone lets the button's
+    // natural content push it taller than the requested height. shrinkWrap
+    // stops the default padded tap target from reporting an inflated layout
+    // size past the painted height (see ui_theme.dart's touchSized comment).
+    final Size? minSize = height != null
+        ? Size(0, height!)
+        : (compact ? const Size(0, UiSizing.buttonCompactHeight) : null);
+    final Size? maxSize =
+        height != null ? Size(double.infinity, height!) : null;
     final EdgeInsetsGeometry? padding =
         compact ? const EdgeInsets.symmetric(horizontal: UiSpacing.sm) : null;
-    final MaterialTapTargetSize? tapTargetSize =
-        compact ? MaterialTapTargetSize.shrinkWrap : null;
+    final MaterialTapTargetSize? tapTargetSize = (compact || height != null)
+        ? MaterialTapTargetSize.shrinkWrap
+        : null;
     switch (variant) {
       case UiButtonVariant.primary:
         final fill = _tonedFill(context);
-        final style = (fill == null && !compact)
+        final style = (fill == null && !compact && height == null)
             ? null
             : FilledButton.styleFrom(
                 backgroundColor: fill?.background,
                 foregroundColor: fill?.foreground,
                 minimumSize: minSize,
+                maximumSize: maxSize,
                 padding: padding,
                 tapTargetSize: tapTargetSize,
               );
@@ -179,12 +203,13 @@ class UiButton extends StatelessWidget {
                 label: labelWidget);
       case UiButtonVariant.secondary:
         final fg = _tonedForeground(context);
-        final style = (fg == null && !compact)
+        final style = (fg == null && !compact && height == null)
             ? null
             : OutlinedButton.styleFrom(
                 foregroundColor: fg,
                 side: fg == null ? null : BorderSide(color: fg),
                 minimumSize: minSize,
+                maximumSize: maxSize,
                 padding: padding,
                 tapTargetSize: tapTargetSize,
               );
@@ -198,11 +223,12 @@ class UiButton extends StatelessWidget {
                 label: labelWidget);
       case UiButtonVariant.text:
         final fg = _tonedForeground(context);
-        final style = (fg == null && !compact)
+        final style = (fg == null && !compact && height == null)
             ? null
             : TextButton.styleFrom(
                 foregroundColor: fg,
                 minimumSize: minSize,
+                maximumSize: maxSize,
                 padding: padding,
                 tapTargetSize: tapTargetSize,
               );

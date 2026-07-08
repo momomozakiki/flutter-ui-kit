@@ -18,6 +18,19 @@ void main() {
     expect(height, UiSizing.controlHeight);
   });
 
+  testWidgets('an explicit height override renders at that height',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: buildUiTheme(),
+      home: const Scaffold(
+        body: Center(child: UiTextField(label: 'Delimiter', height: 50)),
+      ),
+    ));
+
+    final double height = tester.getSize(find.byType(TextField)).height;
+    expect(height, 50);
+  });
+
   testWidgets('wraps in a Tooltip only when tooltip is provided',
       (tester) async {
     Widget build(String? tooltip) => MaterialApp(

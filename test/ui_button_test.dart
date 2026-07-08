@@ -109,4 +109,19 @@ void main() {
     // dropdown/chip/checkbox sharing its row.
     expect(height, UiSizing.touchTarget);
   });
+
+  testWidgets('an explicit height override renders at that height and wins over compact',
+      (tester) async {
+    await tester.pumpWidget(host(
+      UiButton.secondary(
+        label: 'Re-issue',
+        onPressed: () {},
+        size: UiButtonSize.compact,
+        height: 50,
+      ),
+    ));
+    final double height =
+        tester.getSize(find.byType(OutlinedButton)).height;
+    expect(height, 50);
+  });
 }

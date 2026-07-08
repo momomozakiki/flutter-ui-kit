@@ -18,6 +18,7 @@ class UiTextField extends StatelessWidget {
     this.enabled = true,
     this.isDense = true,
     this.width,
+    this.height,
     this.floatingLabelAlways = false,
     this.focusNode,
     this.autofocus = false,
@@ -43,6 +44,11 @@ class UiTextField extends StatelessWidget {
   final bool enabled;
   final bool isDense;
   final double? width;
+
+  /// Overrides the shared theme control height for just this instance
+  /// (`null`, the default, inherits the theme's shared height unchanged).
+  /// Lets a specific field be tuned independently — see `UiTuning`.
+  final double? height;
 
   /// When true, the label stays on the border even when empty/unfocused.
   final bool floatingLabelAlways;
@@ -102,6 +108,11 @@ class UiTextField extends StatelessWidget {
         border: const OutlineInputBorder(),
         floatingLabelBehavior:
             floatingLabelAlways ? FloatingLabelBehavior.always : null,
+        // A non-null constraints value here overrides the theme's shared
+        // tight height for just this instance (Flutter merges per-instance
+        // InputDecoration fields over the InputDecorationTheme default).
+        constraints:
+            height == null ? null : BoxConstraints.tightFor(height: height),
       ),
     );
     final Widget sized =
