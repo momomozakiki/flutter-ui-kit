@@ -54,6 +54,30 @@ void main() {
     expect(field.onChanged, isNull);
   });
 
+  testWidgets('renders at a compact height (contentPadding + minHeight floor)',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: buildUiTheme(),
+      home: Scaffold(
+        body: Center(
+          child: UiDropdown<String>(
+            label: 'Font',
+            value: 'a',
+            items: const [UiDropdownItem(value: 'a', label: 'A')],
+            onChanged: (_) {},
+          ),
+        ),
+      ),
+    ));
+
+    final double height =
+        tester.getSize(find.byType(DropdownButtonFormField<String>)).height;
+    // Lower bound proves the InputDecorationTheme.constraints minHeight is
+    // enforced; upper bound catches a dropped/loosened contentPadding.
+    expect(height, greaterThanOrEqualTo(UiSizing.controlHeight));
+    expect(height, lessThanOrEqualTo(UiSizing.controlHeight + 2 * UiSpacing.sm));
+  });
+
   testWidgets('wraps in a Tooltip only when tooltip is provided',
       (tester) async {
     Widget build(String? tooltip) => MaterialApp(

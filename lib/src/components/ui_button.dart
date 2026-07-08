@@ -25,7 +25,7 @@ enum UiButtonTone { normal, success, danger }
 
 /// Sizing of a [UiButton].
 ///
-/// [normal] uses the theme's [UiSizing.touchTarget] (48 px) floor. [compact]
+/// [normal] uses the theme's [UiSizing.touchTarget] (40 px) floor. [compact]
 /// trims horizontal padding and lowers the height to [UiSizing.buttonCompactHeight]
 /// for *secondary* actions in dense list rows where a full-height button would
 /// overflow — see that token's doc for the accessibility rationale.
@@ -144,10 +144,12 @@ class UiButton extends StatelessWidget {
     // Compact metrics for dense rows: trim horizontal padding (the real overflow
     // fix) and lower the height to [UiSizing.buttonCompactHeight], letting the
     // button shrink to it. `shrinkWrap` is required so the per-button minimumSize
-    // actually overrides the theme-enforced 48 px touch-target floor. We do NOT
-    // add VisualDensity.compact — it would subtract a further ~8 px and drop the
-    // button to ~32 px, below the comfortable-tap range. All null when the size
-    // is normal, so styleFrom falls through to the theme unchanged.
+    // actually overrides the theme-enforced 40 px touch-target floor. The theme
+    // sets VisualDensity.compact globally, but the button themes pin
+    // VisualDensity.standard (see buildUiTheme's touchSized), which this compact
+    // style inherits — so density can't shrink the 32 px floor into the mis-tap
+    // zone. All null when the size is normal, so styleFrom falls through to the
+    // theme unchanged.
     final bool compact = size == UiButtonSize.compact;
     final Size? minSize =
         compact ? const Size(0, UiSizing.buttonCompactHeight) : null;
