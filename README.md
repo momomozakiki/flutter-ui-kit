@@ -111,6 +111,16 @@ UiResponsive(
 );
 ```
 
+## For consuming apps
+
+Building a new Flutter app against this kit? Don't just add the git dependency and start — follow [`ONBOARDING.md`](Documentations/ONBOARDING.md) for a structured setup. It points you to the `templates/` folder, which contains:
+
+- [`templates/CONSUMER_CLAUDE_SNIPPET.md`](templates/CONSUMER_CLAUDE_SNIPPET.md) — a ready-to-paste block for your app's own `CLAUDE.md`, with git-dependency setup, local-dev overrides, and repo-separation rules.
+- [`templates/app-ui-component.SKILL.md.template`](templates/app-ui-component.SKILL.md.template) — a starter Claude Code skill for your app's UI layer, with placeholders you fill in.
+- [`templates/analysis_options.yaml`](templates/analysis_options.yaml) — the lint configuration your app should use.
+
+These templates ensure every consuming app stays consistent with the design system and each other.
+
 ### Local development against a sibling clone
 
 Iterating on both this kit and a consumer app at once? Use an override instead of re-tagging on
@@ -139,9 +149,11 @@ a tablet. See `Documentations/design-system-contract.md` and the code comments i
 
 ## Conventions
 
-Read [`Documentations/design-system-contract.md`](Documentations/design-system-contract.md) before
-adding or changing anything: layer placement, the component-vs-layout naming rule, the token-only
-rule, the default-with-override pattern, testing, and versioning.
+Before adding or changing anything, read the contributor contract and supporting guides:
+
+- [`Documentations/design-system-contract.md`](Documentations/design-system-contract.md) — layer placement, component-vs-layout naming, token-only rule, default-with-override pattern, testing, versioning.
+- [`Documentations/flutter-adaptive-ui-design-specification.md`](Documentations/flutter-adaptive-ui-design-specification.md) — tablet-first breakpoints, touch targets, and responsive layout patterns for Android 7"/10" and Windows.
+- [`Documentations/flutter-layout-and-component-design.md`](Documentations/flutter-layout-and-component-design.md) — core Flutter layout mechanics (constraints, Container, Row/Column, Stack, composition), component design patterns, and naming conventions.
 
 ## Verify
 

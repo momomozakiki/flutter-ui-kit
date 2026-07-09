@@ -1,0 +1,146 @@
+---
+name: {{APP_NAME}}-ui-component
+description: >-
+  Use when adding or editing a Flutter UI component, widget, or design token in
+  {{CONSUMING_PACKAGE}} — specifically app-specific composites in lib/src/composite/,
+  or when a request mentions buttons/fields/dropdowns/cards/theme/colors/spacing/responsive
+  layout. Enforces design-token usage (no hardcoded colors/sizes), flutter_ui_kit
+  dependency purity (it lives in a separate repo), and tablet-first sizing. Rules
+  for the shared kit's internal components are governed by that repo's own CLAUDE.md
+  and design-system-contract.md.
+---
+
+# Building reusable UI components for {{APP_NAME}}
+
+This app keeps UI **reusable and consistent** with the broader {{APP_NAME}} product family. Reusability covers
+*properties* (color, spacing, sizing, typography) as much as widgets — a hardcoded `12`
+or `Colors.green` is a leak that can't be re-themed and won't travel. Follow these rules
+whenever you add or change UI.
+
+## 1. Decide the layer (where the file goes)
+
+| What you're building | Folder | Notes |
+|----------------------|--------|-------|
+| **Core atom** — generic, domain-free (button, field, dropdown, chip, banner, checkbox…) | `flutter-ui-kit` repo: `lib/src/components/` | Governed by that repo's own CLAUDE.md. Very rare for an app to contribute; promotion rule applies. |
+| **Generic composition** — project-agnostic, built from atoms (responsive scaffold, toolbar…) | `flutter-ui-kit` repo: `lib/src/composite/` | Still no domain coupling. Governed by that repo's own CLAUDE.md. Promotion rule applies. |
+| **Design token** — a reusable property (color, spacing, size, radius, typography, breakpoint) | `flutter-ui-kit` repo: `lib/src/theme/` | Extend existing token files in the kit itself. Governed by that repo's own CLAUDE.md. |
+| **App-specific composite** — knows about {{APP_NAME}}'s domain/features/screens | this app: `lib/src/composite/` | Imports the external kit via git dependency; never the reverse. This skill governs app-specific composites here. |
+
+**The test for "core atom vs. app composite":** could a totally unrelated Flutter app use
+this widget unchanged? If it mentions {{APP_NAME}}-specific features, domain logic, or product concepts,
+it's an app composite and belongs here — putting it in the kit would poison the kit's purity (rule 3).
+
+## 2. Properties are tokens — never hardcode
+
+Reach for an existing token first. The full catalog (verify against the kit's `lib/src/theme/`):
+
+| Token | Where to find it | Notes |
+|-------|------------------|-------|
+| `UiSpacing` | `flutter-ui-kit/lib/src/theme/ui_spacing.dart` | spacing scale + gap widgets |
+| `UiSizing` | `flutter-ui-kit/lib/src/theme/ui_sizing.dart` | control heights, icon/field/panel sizes |
+| `UiRadius` | `flutter-ui-kit/lib/src/theme/ui_radius.dart` | corner radii (+ BorderRadius consts) |
+| `UiColors` (via `context.uiColors`) | `flutter-ui-kit/lib/src/theme/ui_colors.dart` | semantic colors (success, warning, danger, info, neutral) |
+| `UiTypography` | `flutter-ui-kit/lib/src/theme/ui_typography.dart` | text-theme builder + mono style |
+
+Rules at the call site:
+- **Sizes / spacing / radius:** a token, never a magic number (`12`, `280`, `BorderRadius.circular(8)`).
+- **Colors:** `context.uiColors.<semantic>` or `Theme.of(context).colorScheme.*` — **never** `Colors.red`, `Colors.green.shade700`, or a raw `Color(0x…)` at a call site.
+- **Text:** `Theme.of(context).textTheme.*`; `UiTypography.mono` for tabular/raw data.
+- **Missing token?** Check if the kit should have it (see promotion rule, section 5). If not, add a local app-specific token in `lib/src/theme/` rather than hardcoding "just here" — the next call site will copy you.
+
+### Gotcha: control height ≠ size tokens
+
+The **rendered height** of Material-derived controls — `TextField`, `Dropdown`, `Checkbox`, dropdown menu-item rows, list tiles — is **not** driven by `UiSizing.*` / `UiSpacing.*`.
+It is set by the **theme**: `InputDecorationTheme.contentPadding` (+ `constraints.minHeight`) for inputs, and `ThemeData.visualDensity` for menu rows / checkboxes / chips / tabs — all configured in the kit's `buildUiTheme()`.
+
+**Editing a size token (or having a dead one) will not move these controls at all.**
+
+- **To shrink/grow an input or menu row, change the theme (via app-side `UiTuning`), not a token.** See the kit's `Documentations/design-system-contract.md` for the full default-with-override pattern.
+- **Verify the rendered result, not the constant.** A clean `flutter analyze` plus an edited token is *not* evidence the UI changed. Prove it: a `pumpWidget` + `tester.getSize(...)` height assertion or an eyeball in `flutter run`.
+- **One shared control height.** All form controls — dropdown, text field, `UiButton`, chip, checkbox — must render at the **same height** (the kit's default, see `design-system-contract.md`'s setup section) so a row of mixed controls lines up.
+
+### Semantic color the right way
+
+Don't paint a widget with a literal color. Expose an enum and resolve it through `context.uiColors`, so the meaning is themeable and dark-mode-safe.
+
+```dart
+enum {{APP_NAME}}ThingTone { normal, success, danger }
+
+Color? _toneColor(BuildContext context) {
+  final colors = context.uiColors;
+  return switch (tone) {
+    {{APP_NAME}}ThingTone.normal => null, // let the theme decide
+    {{APP_NAME}}ThingTone.success => colors.success,
+    {{APP_NAME}}ThingTone.danger => colors.danger,
+  };
+}
+```
+
+## 3. Keep the external design system pure
+
+The `flutter_ui_kit` (in a separate repo) depends **only on the Flutter SDK** — no domain logic, no app-specific concepts. That purity is what lets it travel to other projects. **This app must not add domain-specific edits to kit internals** — if a widget needs {{APP_NAME}}-knowledge, it's an *app-specific composite* that lives here under `lib/src/composite/`, not in the kit.
+
+If you find yourself wanting to edit something inside `flutter-ui-kit/lib/`, stop and ask: does this belong in the kit (generic enough for any Flutter app?), or is it really a {{APP_NAME}}-specific composite or override?
+
+## 4. Tablet-first (7" and 10" Android tablets)
+
+- Targets 7" and 10" Android tablets. Interactive targets meet the **compact floor** (`UiSizing.touchTarget`, see the kit's docs for the current value).
+- For layouts that must adapt, use `UiResponsive` / `UiBreakpoints` / `UiDeviceClass` (compact, medium, expanded, large).
+- Hosts default the desktop window to **1280×800** (10" landscape, 16:10) with a **960×600** (7") minimum. Verify new UI reads well at both extremes.
+
+See the kit's `Documentations/design-system-contract.md` and `Documentations/flutter-adaptive-ui-design-specification.md` for the full guidance on breakpoints and touch targets.
+
+## 5. Promotion rule
+
+Keep a widget **local** to {{CONSUMING_PACKAGE}} until a **second consuming app** needs it. (Example: a specialized {{APP_NAME}} card component stays here for now.) Don't generalize prematurely — a one-use "reusable" widget is just indirection.
+
+**Promotion means opening a PR on the `flutter-ui-kit` repo** and updating this app's git dependency `ref:` tag once the kit is released.
+
+## 6. Wire it up, then verify
+
+1. **Export** the new widget from this app's barrel (if public):
+   - App-specific composites → export from `{{CONSUMING_PACKAGE}}/lib/{{CONSUMING_PACKAGE}}.dart` (or wherever this app's public API lives).
+2. **Test:** add a mirrored test (e.g. `my_card.dart` → `test/my_card_test.dart`).
+3. **Analyze + test** — both clean before committing:
+   - `flutter analyze && flutter test`
+
+### Self-check before you call it done
+
+Grep your new/changed UI files for the leaks the rules above forbid:
+
+```sh
+# raw colors (should be empty — use context.uiColors / colorScheme)
+grep -nE "Colors\.[a-zA-Z]|Color\(0x" <files>
+# bare BorderRadius / EdgeInsets numbers (prefer UiRadius.* / UiSpacing.*)
+grep -nE "BorderRadius\.circular\(|EdgeInsets\.all\([0-9]" <files>
+```
+
+A surviving hit needs a reason. Otherwise replace it with the matching token.
+
+## Component template (app-specific composite)
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_ui_kit/flutter_ui_kit.dart';
+
+/// One-line purpose. Document the API and any variants.
+class {{APP_NAME}}Thing extends StatelessWidget {
+  const {{APP_NAME}}Thing({required this.label, this.onTap, super.key});
+
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: UiSpacing.allMd, // tokens from the kit, not magic numbers
+      child: GestureDetector(
+        onTap: onTap,
+        child: Text(label), // colors via context.uiColors / colorScheme
+      ),
+    );
+  }
+}
+```
+
+**Kit components & tokens:** consult the `flutter-ui-kit` repo's [README.md](https://github.com/momomozakiki/flutter-ui-kit/blob/main/README.md) and [`Documentations/design-system-contract.md`](https://github.com/momomozakiki/flutter-ui-kit/blob/main/Documentations/design-system-contract.md).
