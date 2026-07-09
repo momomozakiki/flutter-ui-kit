@@ -40,8 +40,8 @@ Open for extension, closed for modification. You add a new semantic color by ext
 ```dart
 // In lib/src/theme/ui_colors.dart:
 class UiColors extends ThemeExtension<UiColors> {
-  final Color success, warning, danger, info, neutral;
-  final Color onSuccess, onWarning, onDanger, onInfo, onNeutral;
+  final Color success, warning, danger, info, neutral; // neutral has no "on" pair
+  final Color onSuccess, onWarning, onDanger, onInfo;
   // ... plus custom colors for specific semantic meanings
 
   const UiColors({

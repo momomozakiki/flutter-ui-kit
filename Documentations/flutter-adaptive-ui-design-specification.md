@@ -36,6 +36,14 @@ To prevent the app from collapsing on small screens, set a **minimum window size
 - **Maximum Window Size:** **None**. Users are free to maximize the window on their 4K monitors.
 - **Rationale:** The UI itself is protected by the internal `ConstrainedBox` (see Section 6.2), which caps the content width while allowing the window to fill the screen for an immersive, native desktop feel.
 
+> **This kit's own tablet-first hosts use a tighter 960×600 minimum instead** (matching the 7"
+> breakpoint floor in this repo's `README.md` Tablet-first table and
+> `templates/app-ui-component.SKILL.md.template`), so a resized desktop window never drops below what
+> the `expanded` breakpoint class needs to render correctly. 800×600 above is a generic, more
+> permissive floor for any Flutter app that doesn't need to replicate 7" tablet layout behavior on
+> desktop — the same "generic baseline vs. this kit's own deliberate default" pattern as the
+> touch-target floor in §3.1.
+
 ---
 
 ### 3. UI & Layout Specifications
