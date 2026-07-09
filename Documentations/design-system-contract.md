@@ -1,0 +1,118 @@
+# Design System Contract
+
+This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
+every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
+`omnidata_license_studio`, `scale_tech_insight`, and future Omni-family apps) stays visually and
+structurally consistent, and safely compatible with each other.
+
+## Language / SDK requirements
+
+- Dart SDK: `^3.12.0`
+- Flutter SDK: `>=3.0.0`
+- Material 3 (`useMaterial3: true`) only — no Material 2 fallback paths.
+
+## Dependency policy
+
+**Zero runtime dependencies beyond the Flutter SDK.** This is the single most important rule: it's
+what lets any consuming app — regardless of its own dependency tree — embed this kit without
+version-conflict risk. Never add a `pub` package dependency to `pubspec.yaml`'s `dependencies:`
+section. Dev-only tooling (`flutter_test`, `flutter_lints`) is fine under `dev_dependencies:`.
+
+## Lints
+
+`analysis_options.yaml` includes `package:flutter_lints/flutter.yaml` (`flutter_lints ^6.0.0`) plus
+three extra rules mirrored from the Omni-family root lint config:
+
+```yaml
+include: package:flutter_lints/flutter.yaml
+linter:
+  rules:
+    - prefer_final_locals
+    - prefer_const_constructors
+    - avoid_print
+```
+
+`flutter analyze` must be clean before any PR merges.
+
+## Layer rules (where new code goes)
+
+| Folder | Holds | Naming |
+|---|---|---|
+| `lib/src/theme/` | reusable **properties** (design tokens): `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`, `UiBreakpoints`, `UiTuning`, `buildUiTheme()` | descriptive, no `Ui` prefix required for non-widget classes |
+| `lib/src/components/` | **core atoms** — one widget per file, the generic Material control wrapped with the kit's consistent look | `Ui<Name>` (e.g. `UiButton`, `UiDropdown`) |
+| `lib/src/composite/` | **generic compositions** — project-agnostic groupings of atoms (e.g. `UiResponsive`, the tuning panel/overlay) | `Ui<Name>` |
+
+**App-specific screens/layouts never live here.** They stay in the consuming app's own repo, in that
+app's own `composite/`-equivalent folder, named however that app wants — see the naming rule below.
+
+## Naming rule: components vs. layouts
+
+- **Components** (this repo's `components/` and `composite/` layers): **one identical name across
+  every consuming app.** A `UiButton` is `UiButton` everywhere. Consumer apps must never locally
+  rename, shadow, or fork a kit component — if it needs different behavior, that's either a
+  constructor override (see below) or a signal the component itself needs to change here.
+- **Layouts** (an app's page/screen composition — e.g. how the Console page arranges its panels):
+  app-specific, named however that app wants, since apps don't share screens. A layout is promoted
+  into this kit's `composite/` layer — taking on a shared `Ui<Name>` — **only** once a second,
+  genuinely identical use case exists in another app. Until then, keep it local to that app (the
+  existing "promotion rule": don't move something here speculatively).
+
+## Token-only rule
+
+No widget hardcodes a `Color`, size, or spacing value. Always read from:
+- `UiSpacing` / `UiSizing` / `UiRadius` for sizes and spacing,
+- `context.uiColors` (the kit's semantic `ThemeExtension`) or `Theme.of(context).colorScheme` for
+  color.
+
+Never write `Colors.red.shade700` or a bare `16.0` in a widget body.
+
+## Default-with-override pattern
+
+Every tunable value ships as a `const` default. Per-instance overrides are optional named
+constructor parameters where `null` means "inherit the shared theme default" — existing call sites
+are unaffected when a new override param is added. Reference implementations:
+
+```dart
+// UiButton (and UiTextField, UiDropdown) accept an optional height override:
+UiButton(
+  label: 'Save',
+  onPressed: onSave,
+  height: 48, // overrides the shared UiSizing.controlHeight default for just this instance
+)
+```
+
+`UiTuning` is the debug-only live-tuning singleton: every field is seeded from the same const used
+in release, so nothing changes until a slider is actually touched, and there is a single code path
+in both debug and release builds (no `kDebugMode` branch inside `buildUiTheme()` itself) — this
+guards against debug-tuned values silently diverging from what ships. New tunables should follow
+this same pattern rather than inventing a parallel mechanism.
+
+## Testing
+
+Every new or changed widget/token gets a mirrored test under `test/` (e.g. `ui_button.dart` →
+`test/ui_button_test.dart`). `flutter test` must be clean before merge.
+
+## Versioning & releases
+
+- Semantic version tags: `vMAJOR.MINOR.PATCH`.
+- `CHANGELOG.md` gets an entry for every release — required for any change to the public API or
+  token values, not just optional documentation.
+- A breaking change to a token value or component API bumps **MAJOR**. Consumer apps pin an exact
+  tag in their `pubspec.yaml` git dependency (`ref: vX.Y.Z`, never `ref: main`), so nothing breaks
+  them until they deliberately bump the pinned tag.
+- Tag only after `flutter analyze` and `flutter test` are clean on `main`, and — for changes to this
+  contract document itself — after a human has actually read the update (this document defines rules
+  the whole org relies on; don't let it drift unreviewed).
+
+## Local development against this kit
+
+When actively iterating on both this kit and a consumer app at once, use a `dependency_overrides` in
+the consumer's `pubspec.yaml` pointing at a local sibling clone instead of the pinned git tag:
+
+```yaml
+dependency_overrides:
+  flutter_ui_kit:
+    path: ../flutter-ui-kit   # local sibling clone; remove before committing/releasing the consumer
+```
+
+Remove the override before committing — it must never ship in a consumer app's committed pubspec.
