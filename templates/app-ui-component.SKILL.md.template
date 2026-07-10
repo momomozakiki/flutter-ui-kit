@@ -55,7 +55,7 @@ It is set by the **theme**: `InputDecorationTheme.contentPadding` (+ `constraint
 
 **Editing a size token (or having a dead one) will not move these controls at all.**
 
-- **To shrink/grow an input or menu row, change the theme (via app-side `UiTuning`), not a token.** See the kit's `Documentations/design-system-contract.md` for the full default-with-override pattern.
+- **To shrink/grow an input or menu row, change the theme (via app-side `UiTuning`), not a token.** See the kit's `docs/design-system-contract.md` for the full default-with-override pattern.
 - **Verify the rendered result, not the constant.** A clean `flutter analyze` plus an edited token is *not* evidence the UI changed. Prove it: a `pumpWidget` + `tester.getSize(...)` height assertion or an eyeball in `flutter run`.
 - **One shared control height.** All form controls — dropdown, text field, `UiButton`, chip, checkbox — must render at the **same height** (the kit's default, see `design-system-contract.md`'s setup section) so a row of mixed controls lines up.
 
@@ -88,7 +88,7 @@ If you find yourself wanting to edit something inside `flutter-ui-kit/lib/`, sto
 - For layouts that must adapt, use `UiResponsive` / `UiBreakpoints` / `UiDeviceClass` (compact, medium, expanded, large).
 - Hosts default the desktop window to **1280×800** (10" landscape, 16:10) with a **960×600** (7") minimum. Verify new UI reads well at both extremes.
 
-See the kit's `Documentations/design-system-contract.md` and `Documentations/flutter-adaptive-ui-design-specification.md` for the full guidance on breakpoints and touch targets.
+See the kit's `docs/design-system-contract.md` and `docs/flutter-adaptive-ui-design-specification.md` for the full guidance on breakpoints and touch targets.
 
 ## 5. Promotion rule
 
@@ -143,4 +143,4 @@ class {{APP_NAME}}Thing extends StatelessWidget {
 }
 ```
 
-**Kit components & tokens:** consult the `flutter-ui-kit` repo's [README.md](https://github.com/momomozakiki/flutter-ui-kit/blob/main/README.md) and [`Documentations/design-system-contract.md`](https://github.com/momomozakiki/flutter-ui-kit/blob/main/Documentations/design-system-contract.md).
+**Kit components & tokens:** consult the `flutter-ui-kit` repo's [README.md](https://github.com/momomozakiki/flutter-ui-kit/blob/main/README.md) and [`docs/design-system-contract.md`](https://github.com/momomozakiki/flutter-ui-kit/blob/main/docs/design-system-contract.md).

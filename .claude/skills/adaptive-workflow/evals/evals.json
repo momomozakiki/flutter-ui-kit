@@ -1,0 +1,22 @@
+[
+  { "query": "ok let's actually start building the new UiSegmentedControl component now — where do we begin?", "should_trigger": true },
+  { "query": "pick up whatever was left unfinished last session and keep going", "should_trigger": true },
+  { "query": "what's next on the roadmap? i've got an hour and want to knock something out", "should_trigger": true },
+  { "query": "we finished the ui_status_chip test and analyze is green — close this out properly", "should_trigger": true },
+  { "query": "this is a big one: rework the whole theming and tuning layer. can you break it down and get started?", "should_trigger": true },
+  { "query": "what did we decide about the shared control-height mechanism a while back? i think it's in the archive", "should_trigger": true },
+  { "query": "i'm about to change the UiButton default height — anything i should sync or check before i dive in?", "should_trigger": true },
+  { "query": "let's implement the dark-theme token pass. set it up so the next session can continue if i don't finish", "should_trigger": true },
+  { "query": "add a UiRadioGroup component and make sure the contract doc, changelog, and roadmap stay consistent when you're done", "should_trigger": true },
+  { "query": "resume the plan in UNFINISHED.md — i had to stop yesterday halfway through", "should_trigger": true },
+  { "query": "what does the token-only rule mean and why does this kit enforce it?", "should_trigger": false },
+  { "query": "just fix this typo in the README header, 'compnent' -> 'component', that's it", "should_trigger": false },
+  { "query": "explain how the SessionStart hook wraps additionalContext — i'm reading hook-integration.md", "should_trigger": false },
+  { "query": "in the consuming app scale_tech_insight, can you restyle the login screen?", "should_trigger": false },
+  { "query": "what's the difference between a git rebase and a merge?", "should_trigger": false },
+  { "query": "rename the local `ctx` to `context` in ui_dropdown.dart, nothing else", "should_trigger": false },
+  { "query": "draft a roadmap for a completely separate mobile app idea i have, just brainstorming, not touching this repo", "should_trigger": false },
+  { "query": "is Provider or Riverpod better for state management in general?", "should_trigger": false },
+  { "query": "show me the current contents of ROADMAP.md", "should_trigger": false },
+  { "query": "what time is it in Tokyo right now?", "should_trigger": false }
+]

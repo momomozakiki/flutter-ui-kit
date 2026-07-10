@@ -1,0 +1,58 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Bash(git:*)",
+      "Bash(flutter:*)",
+      "Bash(dart:*)",
+      "Edit(.ai/**)",
+      "Edit(docs/**)",
+      "Edit(plans/**)",
+      "Edit(history/**)",
+      "Edit(ROADMAP.md)",
+      "Edit(CLAUDE.md)",
+      "Edit(.claude/**)",
+      "Write(.ai/**)",
+      "Write(docs/**)",
+      "Write(plans/**)",
+      "Write(history/**)",
+      "Write(ROADMAP.md)",
+      "Write(CLAUDE.md)",
+      "Write(.claude/**)"
+    ],
+    "deny": [
+      "Edit(**/settings.local.json)",
+      "Read(**/.env)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/gcloud/**)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/adaptive_workflow_hook.py\"" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/adaptive_workflow_hook.py\"" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/adaptive_workflow_hook.py\"" }
+        ]
+      }
+    ]
+  }
+}

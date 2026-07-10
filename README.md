@@ -12,7 +12,7 @@ This repo is the extracted, standalone home of what was previously `odb_library`
 `packages/flutter_ui_kit` — now consumed by every Omni-family app as a pinned git dependency instead
 of an in-tree path, so no app drifts from a different local copy of the design system. See
 [`CLAUDE.md`](CLAUDE.md) for the repo-separation rules and
-[`Documentations/design-system-contract.md`](Documentations/design-system-contract.md) for the full
+[`docs/design-system-contract.md`](docs/design-system-contract.md) for the full
 contributor contract.
 
 ## Why
@@ -54,7 +54,7 @@ lib/
 ## Usage
 
 Add the dependency, pinned to a released tag (never `ref: main` — see
-[`Documentations/design-system-contract.md`](Documentations/design-system-contract.md#versioning--releases)):
+[`docs/design-system-contract.md`](docs/design-system-contract.md#versioning--releases)):
 
 ```yaml
 dependencies:
@@ -113,7 +113,7 @@ UiResponsive(
 
 ## For consuming apps
 
-Building a new Flutter app against this kit? Don't just add the git dependency and start — follow [`ONBOARDING.md`](Documentations/ONBOARDING.md) for a structured setup. It points you to the `templates/` folder, which contains:
+Building a new Flutter app against this kit? Don't just add the git dependency and start — follow [`ONBOARDING.md`](docs/ONBOARDING.md) for a structured setup. It points you to the `templates/` folder, which contains:
 
 - [`templates/CONSUMER_CLAUDE_SNIPPET.md`](templates/CONSUMER_CLAUDE_SNIPPET.md) — a ready-to-paste block for your app's own `CLAUDE.md`, with git-dependency setup, local-dev overrides, and repo-separation rules.
 - [`templates/app-ui-component.SKILL.md.template`](templates/app-ui-component.SKILL.md.template) — a starter Claude Code skill for your app's UI layer, with placeholders you fill in.
@@ -144,16 +144,16 @@ The kit targets 7" and 10" Android tablets:
 | `large`    | `>= 1200`          | 10" landscape (1280×800 default)       |
 
 Hosts should default their desktop window to **1280×800** (10" landscape, 16:10) so behavior matches
-a tablet. See `Documentations/design-system-contract.md` and the code comments in
+a tablet. See `docs/design-system-contract.md` and the code comments in
 `lib/src/theme/ui_sizing.dart` for the current interactive-control-height floor and its rationale.
 
 ## Conventions
 
 Before adding or changing anything, read the contributor contract and supporting guides:
 
-- [`Documentations/design-system-contract.md`](Documentations/design-system-contract.md) — layer placement, component-vs-layout naming, token-only rule, default-with-override pattern, testing, versioning.
-- [`Documentations/flutter-adaptive-ui-design-specification.md`](Documentations/flutter-adaptive-ui-design-specification.md) — tablet-first breakpoints, touch targets, and responsive layout patterns for Android 7"/10" and Windows.
-- [`Documentations/flutter-layout-and-component-design.md`](Documentations/flutter-layout-and-component-design.md) — core Flutter layout mechanics (constraints, Container, Row/Column, Stack, composition), component design patterns, and naming conventions.
+- [`docs/design-system-contract.md`](docs/design-system-contract.md) — layer placement, component-vs-layout naming, token-only rule, default-with-override pattern, testing, versioning.
+- [`docs/flutter-adaptive-ui-design-specification.md`](docs/flutter-adaptive-ui-design-specification.md) — tablet-first breakpoints, touch targets, and responsive layout patterns for Android 7"/10" and Windows.
+- [`docs/flutter-layout-and-component-design.md`](docs/flutter-layout-and-component-design.md) — core Flutter layout mechanics (constraints, Container, Row/Column, Stack, composition), component design patterns, and naming conventions.
 
 ## Verify
 

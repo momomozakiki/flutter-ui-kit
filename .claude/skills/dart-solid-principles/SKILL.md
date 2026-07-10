@@ -241,7 +241,7 @@ One test file per source file, **mirroring its name** (e.g., `ui_button.dart` �
 
 ## References
 
-- [`Documentations/design-system-contract.md`](../../Documentations/design-system-contract.md) — the full kit contract.
+- [`docs/design-system-contract.md`](../../docs/design-system-contract.md) — the full kit contract.
 - `lib/src/` — the kit's actual structure, organized by the S, O, L, I, D principles above.
 - [`lib/src/theme/ui_colors.dart`](../../lib/src/theme/ui_colors.dart) (Open/Closed and Liskov examples).
 - [`lib/src/components/ui_button.dart`](../../lib/src/components/ui_button.dart) (Interface Segregation and semantic color example).

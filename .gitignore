@@ -5,3 +5,7 @@ build/
 pubspec.lock
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# Adaptive-workflow tooling (Claude Code)
+.claude/settings.local.json
+__pycache__/

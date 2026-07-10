@@ -1,6 +1,11 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+It is also the **Constitution** for this repo's Adaptive Self-Correcting Workflow (v3.3): the
+always-loaded, immutable core rules. The full process manual is the `adaptive-workflow` skill
+(`.claude/skills/adaptive-workflow/SKILL.md`), loaded on demand; the canonical spec lives in
+[`docs/adaptive-workflow/`](docs/adaptive-workflow/). When any of them disagree, this file and the
+canonical spec win.
 
 ## What this is
 
@@ -61,7 +66,7 @@ flutter test test/ui_button_test.dart   # single file
 ## Conventions (the contributor contract)
 
 The full contract lives in
-[`Documentations/design-system-contract.md`](Documentations/design-system-contract.md) — read it
+[`docs/design-system-contract.md`](docs/design-system-contract.md) — read it
 before adding or changing anything. Summary:
 
 - **Zero dependencies beyond the Flutter SDK.** This is what makes the kit safely embeddable in any
@@ -85,3 +90,84 @@ before adding or changing anything. Summary:
   `flutter test` are clean on `main`.
 - Consumer apps pin an exact tag (`ref: vX.Y.Z` in their `pubspec.yaml` git dependency) — never
   `ref: main`, so an in-progress change here can never silently break a consumer.
+
+---
+
+# Adaptive Self-Correcting Workflow — Constitution
+
+The immutable core of how tasks are run across sessions. The detailed process is the
+`adaptive-workflow` skill; use it whenever you start real work here. Trivial one-shot Q&A that
+touches no repo state is exempt.
+
+- **Filesystem-native recall, no index.** Find past work with `ls history/` (the weekly change
+  ledger) and `grep -r "keyword" plans/archive/` — never load the whole archive/ledger, never add a
+  central index.
+- **Conditional updates only.** Update shared docs *only* when a trigger below fires. No impact → do
+  nothing. (The change ledger is the one exception — it logs everything at scaled detail.)
+
+## Immutable Phase 0 Invariants (never skip)
+
+1. **Git sync:** Run `git pull --rebase` before any code change; check for a dirty tree. If the
+   remote is unreachable, report the error and ask the user how to proceed — do not silently skip.
+2. **Environment:** Verify the toolchain is ready. Run `.ai/env_check.ps1` (PowerShell) if present —
+   it reports Flutter/Dart/Git readiness (a report, not a gate).
+3. **Core docs:** Have `.ai/best_practices.md`, `.ai/naming_conventions.md`, and
+   `docs/design-system-contract.md` in context. (The SessionStart hook pre-injects summaries.)
+4. **Unfinished plan:** If `plans/UNFINISHED.md` exists, surface it to the user immediately:
+   *"You have an unfinished plan: [summary]. Continue it or archive it?"*
+
+## Meta-Planning (before implementing)
+
+- Assess: task scope, doc/contract impact, handoff need, validation rigor, retro value.
+- If the task is part of a larger goal, consult `ROADMAP.md` (or create one). Break large tasks into
+  roadmap chunks; put only the **next** chunk in `plans/UNFINISHED.md`.
+- Produce a bullet plan with acceptance criteria before executing. For the code itself, follow the
+  `flutter-ui-kit-component` and `dart-solid-principles` skills.
+
+## Conditional Update Triggers (during & after execution)
+
+| Trigger | Action |
+|---------|--------|
+| **Any change worth tracing later** (new component, token/API change, decision, config) | **Append a dated entry to the current weekly ledger `history/YYYY-Www.md`** (required, not optional) |
+| New pattern / rule / gotcha | Append to `.ai/best_practices.md` (with example) |
+| New naming convention | Append to `.ai/naming_conventions.md` |
+| Token / API / contract change | Update `docs/design-system-contract.md` (or relevant `docs/*.md`) with a dated annotation; bump the version + `CHANGELOG.md` |
+| Non-obvious technical decision | Write to `plans/archive/<slug>/execution_log.md` |
+| Repeatable mistake | Add a warning to `.ai/best_practices.md` or `retro.md` |
+| Task affects future roadmap items | Update `ROADMAP.md` |
+| Epic completed | Move it to `## Completed Epics` in `ROADMAP.md` |
+| No impact on shared knowledge | **Do nothing** (except the ledger) |
+
+## Closure Discipline
+
+- Move the completed plan from `plans/UNFINISHED.md` to `plans/archive/YYYY-MM-DD_<slug>/`
+  (`plan.md`, plus `references.md` / `execution_log.md` / `retro.md` as warranted).
+- Clear `plans/UNFINISHED.md` — it must **not** exist at rest (its presence blocks session closure).
+- **Append a closure entry to the current weekly ledger `history/YYYY-Www.md`** *before* committing —
+  mandatory, not optional.
+- Update `ROADMAP.md` if triggered; check off the completed item.
+- `git commit -m "Plan: <slug> — <summary>" && git push`. (Tag `vMAJOR.MINOR.PATCH` only when
+  `flutter analyze` and `flutter test` are clean on `main`.)
+- **You are not done until `plans/UNFINISHED.md` is cleared, the plan is archived, and the change
+  ledger is updated.**
+
+## Change History (required, non-optional)
+
+- **Every** change to the repo is recorded in a weekly ledger `history/YYYY-Www.md` (one file per
+  ISO week; `ls history/` is the time index). Substantial changes get a full **What / Why / Refs**
+  entry; minor changes get a single terse line. This is the realized, **required** form of the v3.3
+  spec's *optional* `changelogs/CHANGELOG.md`, and is separate from the repo-root `CHANGELOG.md`
+  (which is the semver *release* record). Format spec: [history/FORMAT.md](history/FORMAT.md).
+
+## Historical Context Retrieval
+
+- **By time:** `ls history/` for the week-by-week ledger, then read the week file(s) you need — the
+  chronological "what changed, when, why" view.
+- **By task depth:** Do NOT load the entire archive. Use `grep -r "keyword" plans/archive/` to find
+  relevant past tasks and `ls plans/archive/` to list them. Load only the specific file(s) needed.
+
+## Creating skills
+
+- Any new skill **must** be authored using the skill-creator skill. Skills are directories
+  (`.claude/skills/<name>/SKILL.md`, `name:` == dir), kebab-case, with a "pushy", trigger-oriented
+  `description`.

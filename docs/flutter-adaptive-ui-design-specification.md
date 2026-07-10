@@ -53,7 +53,7 @@ To prevent the app from collapsing on small screens, set a **minimum window size
 - **Desktop Hover Area:** Interactive elements must show a subtle hover state (`InkWell` or `MouseRegion`).
 - **Safe Spacing:** Maintain a minimum of **8 dp** between adjacent interactive targets.
 
-> **Note on custom touch-target floors:** Consuming apps may need to override the 48 dp baseline for their own product's density needs (e.g. a denser dashboard UI) — do so via this kit's `UiTuning` live-tuning mechanism or a component's optional `height:` override, not by forking this spec. See `Documentations/design-system-contract.md`'s default-with-override pattern for details. Revisit your floor choice if user testing reveals mis-taps.
+> **Note on custom touch-target floors:** Consuming apps may need to override the 48 dp baseline for their own product's density needs (e.g. a denser dashboard UI) — do so via this kit's `UiTuning` live-tuning mechanism or a component's optional `height:` override, not by forking this spec. See `docs/design-system-contract.md`'s default-with-override pattern for details. Revisit your floor choice if user testing reveals mis-taps.
 
 #### 3.2 Dynamic Margins (with Hard Cap)
 To prevent excessive padding on ultra-wide monitors, margins scale but are capped.
