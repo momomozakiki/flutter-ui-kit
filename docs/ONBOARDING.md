@@ -1,4 +1,21 @@
+---
+title: "Onboarding: Adding flutter_ui_kit to a new Flutter app"
+version: 1.0
+last_validated: 2026-07-11
+official: false
+source: agent-generated
+tags: [onboarding, consumer-setup, pubspec, git-dependency]
+applies_when: "Setting up a new Flutter app to consume flutter_ui_kit as a pinned git dependency."
+estimated_tokens: 1200
+---
+
 # Onboarding: Adding flutter_ui_kit to a new Flutter app
+**Version 1.0** — *step-by-step setup for a consuming app.*
+
+## Revision History
+| Version | Date       | Change   |
+|---------|------------|----------|
+| 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 
 Follow these steps in order to set up a brand-new Flutter app to use `flutter_ui_kit`.
 

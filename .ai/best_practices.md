@@ -1,4 +1,21 @@
+---
+title: Best Practices
+version: 1.0
+last_validated: 2026-07-11
+official: false
+source: agent-generated
+tags: [best-practices, living-doc, conventions, gotchas]
+applies_when: "Working in flutter-ui-kit — checking or recording repo conventions, patterns, and gotchas."
+estimated_tokens: 900
+---
+
 # Best Practices (living document)
+**Version 1.0** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
+
+## Revision History
+| Version | Date       | Change   |
+|---------|------------|----------|
+| 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 
 Hard-won conventions and gotchas for working in **flutter-ui-kit**. Append here
 whenever a new pattern, rule, or repeatable mistake surfaces (see the trigger table

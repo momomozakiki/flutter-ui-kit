@@ -22,6 +22,8 @@
     ],
     "deny": [
       "Edit(**/settings.local.json)",
+      "Edit(.claude/workflow-core/**)",
+      "Write(.claude/workflow-core/**)",
       "Read(**/.env)",
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)",
@@ -35,7 +37,8 @@
       {
         "matcher": "startup|resume",
         "hooks": [
-          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/adaptive_workflow_hook.py\"" }
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/workflow-core/hooks/workflow_hook.py\"" },
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/supplement.py\"" }
         ]
       }
     ],
@@ -43,14 +46,15 @@
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/adaptive_workflow_hook.py\"" }
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/workflow-core/hooks/workflow_hook.py\"" }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/adaptive_workflow_hook.py\"" }
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/workflow-core/hooks/workflow_hook.py\"" },
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/supplement.py\"" }
         ]
       }
     ]

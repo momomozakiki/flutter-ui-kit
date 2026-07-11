@@ -1,4 +1,21 @@
+---
+title: Naming Conventions
+version: 1.0
+last_validated: 2026-07-11
+official: false
+source: agent-generated
+tags: [naming, living-doc, conventions]
+applies_when: "Naming files, classes, tokens, components, or workflow artifacts in flutter-ui-kit."
+estimated_tokens: 800
+---
+
 # Naming Conventions (living document)
+**Version 1.0** — *per-language and per-artifact naming rules for flutter-ui-kit.*
+
+## Revision History
+| Version | Date       | Change   |
+|---------|------------|----------|
+| 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 
 Per-language and per-artifact naming rules for **flutter-ui-kit**. Append when a new
 convention is agreed. Match the code that already follows these rather than inventing

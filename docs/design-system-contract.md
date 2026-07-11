@@ -1,4 +1,21 @@
+---
+title: Design System Contract
+version: 1.0
+last_validated: 2026-07-11
+official: false
+source: agent-generated
+tags: [contract, design-system, contributor-guide, tokens, components]
+applies_when: "Adding or changing any component, token, or composition in flutter-ui-kit; verifying the contributor rules."
+estimated_tokens: 2600
+---
+
 # Design System Contract
+**Version 1.0** — *the tech/language requirements and layer/token rules every change here must follow.*
+
+## Revision History
+| Version | Date       | Change   |
+|---------|------------|----------|
+| 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /

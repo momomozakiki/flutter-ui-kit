@@ -15,6 +15,12 @@ chunk lives in `plans/UNFINISHED.md`.
 
 ## Epic 2: Documentation & contract upkeep
 - [ ] Reconcile the `docs/` set after the recent repo restructure (ONBOARDING, contract, adaptive-spec, layout guide) so cross-links resolve and there are no stale paths
+- [ ] Confirm provenance of the two `official: unknown` design docs (`flutter-adaptive-ui-design-specification.md`, `flutter-layout-and-component-design.md`) and the `Atomic Design in Flutter.md` third-party article (fill its `.prov.md` source URL)
+- [ ] Fold `docs/flutter-layout-and-component-design.md` (~9k tokens) into a folder per the Progressive Disclosure Guide (GUIDE §6.4) — exceeds the per-file token budget
+
+## Epic 3: Workflow-core integration follow-ups
+- [ ] Add `submodules: recursive` to flutter-ui-kit's own CI checkout so `.claude/workflow-core/` is present on fresh clones/CI (the submodule is dev-only; consumers via `flutter pub get` are unaffected)
+- [ ] Propose the supplement hook's three features (living-doc injection, ROADMAP `- [ ]` scan, UNFINISHED-in-Stop) upstream to `ai-self-correcting-workflow` (GUIDE §10), then retire them locally once merged
 
 ## Backlog / Icebox
 - [ ] Promote a shared composite into `lib/src/composite/` once a **second** app has a genuinely identical use case (promotion rule — wait-condition, not yet actionable)

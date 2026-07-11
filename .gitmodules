@@ -1,0 +1,3 @@
+[submodule ".claude/workflow-core"]
+	path = .claude/workflow-core
+	url = https://github.com/momomozakiki/ai-self-correcting-workflow.git

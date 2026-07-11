@@ -9,3 +9,4 @@ pubspec.lock
 # Adaptive-workflow tooling (Claude Code)
 .claude/settings.local.json
 __pycache__/
+.ai/.workflow_check_date

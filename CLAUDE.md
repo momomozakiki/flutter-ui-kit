@@ -1,11 +1,14 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-It is also the **Constitution** for this repo's Adaptive Self-Correcting Workflow (v3.3): the
-always-loaded, immutable core rules. The full process manual is the `adaptive-workflow` skill
-(`.claude/skills/adaptive-workflow/SKILL.md`), loaded on demand; the canonical spec lives in
-[`docs/adaptive-workflow/`](docs/adaptive-workflow/). When any of them disagree, this file and the
-canonical spec win.
+It is also the **Constitution** for this repo's Adaptive Self-Correcting Workflow (v4.4): the
+always-loaded, immutable core rules. The workflow itself is vendored as a git submodule at
+[`.claude/workflow-core/`](.claude/workflow-core/) (pinned to a reviewed commit) — its
+[`GUIDE.md`](.claude/workflow-core/GUIDE.md) is the canonical spec and its
+[`skills/adaptive-workflow/SKILL.md`](.claude/workflow-core/skills/adaptive-workflow/SKILL.md) the full
+process manual. The repo-local [`adaptive-workflow` skill](.claude/skills/adaptive-workflow/SKILL.md)
+is a thin pointer that adds this repo's flutter-specific bindings. When any of them disagree, this
+file and the workflow-core GUIDE win.
 
 ## What this is
 
@@ -93,81 +96,71 @@ before adding or changing anything. Summary:
 
 ---
 
-# Adaptive Self-Correcting Workflow — Constitution
+<!-- ==================================================================== -->
+<!-- BEGIN adaptive-workflow fragment (managed by .claude/workflow-core)   -->
+<!-- Included verbatim; project-specific notes go OUTSIDE this block.      -->
+<!-- ==================================================================== -->
 
-The immutable core of how tasks are run across sessions. The detailed process is the
-`adaptive-workflow` skill; use it whenever you start real work here. Trivial one-shot Q&A that
-touches no repo state is exempt.
+## Adaptive Self-Correcting Workflow
 
-- **Filesystem-native recall, no index.** Find past work with `ls history/` (the weekly change
-  ledger) and `grep -r "keyword" plans/archive/` — never load the whole archive/ledger, never add a
-  central index.
-- **Conditional updates only.** Update shared docs *only* when a trigger below fires. No impact → do
-  nothing. (The change ledger is the one exception — it logs everything at scaled detail.)
+This project follows the Adaptive Self-Correcting Workflow. The full reference
+lives in `.claude/workflow-core/GUIDE.md`; the agent operating manual is the
+`adaptive-workflow` skill (`.claude/workflow-core/skills/adaptive-workflow/SKILL.md`).
+Hooks provide ambient reminders — treat them as helpful nudges, not blockers.
 
-## Immutable Phase 0 Invariants (never skip)
+### Fixed invariants — always do first (Phase 0)
+- **F1 Git sync:** `git fetch && git pull --rebase`. If the tree is dirty, ask
+  the user how to proceed before changing anything.
+- **F2 Environment:** verify the tools in `workflow_config.json → env_check`.
+- **F3 Living docs:** load configured docs; flag any missing doc frontmatter
+  (provenance + version).
+- **F4 Unfinished plan / roadmap:** if `plans/UNFINISHED.md` exists, surface it
+  immediately; note the next unchecked roadmap item.
+- **F5 Daily workflow update check:** once per day, check `.claude/workflow-core`
+  for upstream updates.
 
-1. **Git sync:** Run `git pull --rebase` before any code change; check for a dirty tree. If the
-   remote is unreachable, report the error and ask the user how to proceed — do not silently skip.
-2. **Environment:** Verify the toolchain is ready. Run `.ai/env_check.ps1` (PowerShell) if present —
-   it reports Flutter/Dart/Git readiness (a report, not a gate).
-3. **Core docs:** Have `.ai/best_practices.md`, `.ai/naming_conventions.md`, and
-   `docs/design-system-contract.md` in context. (The SessionStart hook pre-injects summaries.)
-4. **Unfinished plan:** If `plans/UNFINISHED.md` exists, surface it to the user immediately:
-   *"You have an unfinished plan: [summary]. Continue it or archive it?"*
+### Per-task discipline
+- **Plan (Phase 1):** design a task-specific checklist covering tests, doc
+  updates, ledger entries, provenance, and roadmap impact.
+- **Execute (Phase 2):** implement → run linter/tests → apply conditional
+  triggers. **Log every intentional change** to the weekly ledger
+  `history/YYYY-Www.md` (skip only trivial typo/whitespace-only edits). Add doc
+  frontmatter (provenance + version) to any new or updated document.
+- **Close (Phase 3):** archive the plan, write the final ledger entry, update
+  the roadmap, then commit & push. You are **not done** until `UNFINISHED.md`
+  is cleared, the ledger entry is written, and the commit is pushed.
 
-## Meta-Planning (before implementing)
+<!-- END adaptive-workflow fragment -->
 
-- Assess: task scope, doc/contract impact, handoff need, validation rigor, retro value.
-- If the task is part of a larger goal, consult `ROADMAP.md` (or create one). Break large tasks into
-  roadmap chunks; put only the **next** chunk in `plans/UNFINISHED.md`.
-- Produce a bullet plan with acceptance criteria before executing. For the code itself, follow the
-  `flutter-ui-kit-component` and `dart-solid-principles` skills.
+## Workflow — flutter-ui-kit bindings
 
-## Conditional Update Triggers (during & after execution)
+Project-specific bindings the generic fragment above doesn't know (these live
+*outside* the managed block so a `git submodule update` re-sync never clobbers
+them). The [`adaptive-workflow` skill](.claude/skills/adaptive-workflow/SKILL.md)
+carries the same bindings in more detail.
 
-| Trigger | Action |
-|---------|--------|
-| **Any change worth tracing later** (new component, token/API change, decision, config) | **Append a dated entry to the current weekly ledger `history/YYYY-Www.md`** (required, not optional) |
-| New pattern / rule / gotcha | Append to `.ai/best_practices.md` (with example) |
-| New naming convention | Append to `.ai/naming_conventions.md` |
-| Token / API / contract change | Update `docs/design-system-contract.md` (or relevant `docs/*.md`) with a dated annotation; bump the version + `CHANGELOG.md` |
-| Non-obvious technical decision | Write to `plans/archive/<slug>/execution_log.md` |
-| Repeatable mistake | Add a warning to `.ai/best_practices.md` or `retro.md` |
-| Task affects future roadmap items | Update `ROADMAP.md` |
-| Epic completed | Move it to `## Completed Epics` in `ROADMAP.md` |
-| No impact on shared knowledge | **Do nothing** (except the ledger) |
-
-## Closure Discipline
-
-- Move the completed plan from `plans/UNFINISHED.md` to `plans/archive/YYYY-MM-DD_<slug>/`
-  (`plan.md`, plus `references.md` / `execution_log.md` / `retro.md` as warranted).
-- Clear `plans/UNFINISHED.md` — it must **not** exist at rest (its presence blocks session closure).
-- **Append a closure entry to the current weekly ledger `history/YYYY-Www.md`** *before* committing —
-  mandatory, not optional.
-- Update `ROADMAP.md` if triggered; check off the completed item.
-- `git commit -m "Plan: <slug> — <summary>" && git push`. (Tag `vMAJOR.MINOR.PATCH` only when
-  `flutter analyze` and `flutter test` are clean on `main`.)
-- **You are not done until `plans/UNFINISHED.md` is cleared, the plan is archived, and the change
-  ledger is updated.**
-
-## Change History (required, non-optional)
-
-- **Every** change to the repo is recorded in a weekly ledger `history/YYYY-Www.md` (one file per
-  ISO week; `ls history/` is the time index). Substantial changes get a full **What / Why / Refs**
-  entry; minor changes get a single terse line. This is the realized, **required** form of the v3.3
-  spec's *optional* `changelogs/CHANGELOG.md`, and is separate from the repo-root `CHANGELOG.md`
-  (which is the semver *release* record). Format spec: [history/FORMAT.md](history/FORMAT.md).
-
-## Historical Context Retrieval
-
-- **By time:** `ls history/` for the week-by-week ledger, then read the week file(s) you need — the
-  chronological "what changed, when, why" view.
-- **By task depth:** Do NOT load the entire archive. Use `grep -r "keyword" plans/archive/` to find
-  relevant past tasks and `ls plans/archive/` to list them. Load only the specific file(s) needed.
-
-## Creating skills
-
-- Any new skill **must** be authored using the skill-creator skill. Skills are directories
-  (`.claude/skills/<name>/SKILL.md`, `name:` == dir), kebab-case, with a "pushy", trigger-oriented
-  `description`.
+- **Config:** [`.claude/workflow_config.json`](.claude/workflow_config.json) maps the
+  generic concepts here → `source_directories: ["lib"]`,
+  `documentation_directories: ["docs", ".ai"]`, `roadmap_file: ROADMAP.md`,
+  `ledger.directory: history`, `main_branch: main`.
+- **Two chained hooks.** `.claude/workflow-core/hooks/workflow_hook.py` (canonical:
+  git status, doc nudge, ledger/dirty Stop reminders) runs alongside the local
+  `.claude/hooks/supplement.py`, which adds this repo's `.ai/env_check.ps1` output
+  (F2, puro-aware), the living-doc summaries (F3), the next `ROADMAP.md` `- [ ]`
+  item (F4), and the `plans/UNFINISHED.md` surfacing at Stop. `env_check.tool_paths`
+  is intentionally empty in the config so the supplement owns the environment check.
+- **F1 detail:** never silently skip on an unreachable remote or a dirty tree — a
+  stale base is how two sessions clobber each other.
+- **Ledger (required, non-optional).** Every change is recorded in a weekly ledger
+  `history/YYYY-Www.md` (`ls history/` is the time index); substantial → What/Why/Refs,
+  minor → one terse line. Format: [history/FORMAT.md](history/FORMAT.md). This is
+  separate from the repo-root `CHANGELOG.md` (the semver *release* record).
+- **Versioning:** a token/API/contract change updates
+  [`docs/design-system-contract.md`](docs/design-system-contract.md) dated, bumps the
+  semver + `CHANGELOG.md`; tag `vMAJOR.MINOR.PATCH` only once `flutter analyze` and
+  `flutter test` are clean on `main`.
+- **Filesystem-native recall, no index:** `ls history/` + `grep -r "keyword" plans/archive/`;
+  never load the whole archive/ledger.
+- **Creating skills:** any new skill must be authored with the skill-creator skill
+  (`.claude/skills/<name>/SKILL.md`, `name:` == dir, kebab-case, trigger-oriented
+  `description`).

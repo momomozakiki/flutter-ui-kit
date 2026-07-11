@@ -1,5 +1,19 @@
+---
+title: Flutter Adaptive UI Design Specification
+version: 3.0
+last_validated: 2026-07-11
+official: unknown
+source: origin unknown
+tags: [adaptive-ui, responsive, spec, tablet, desktop]
+applies_when: "Designing adaptive/responsive layouts across Android tablets and Windows desktop."
+estimated_tokens: 3000
+---
+
 # Flutter Adaptive UI Design Specification (v3.0)
 ## Target Platforms: Android Tablets (7"–10") & Windows Desktop
+
+> **Provenance:** origin not yet confirmed (see frontmatter `official: unknown`). If this was
+> adapted from an external source, add the URL/attribution and set `source` accordingly.
 
 ---
 

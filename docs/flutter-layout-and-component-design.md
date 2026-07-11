@@ -1,4 +1,21 @@
+---
+title: Flutter Layout & Component Design – Complete Guide
+version: 1.0
+last_validated: 2026-07-11
+official: unknown
+source: origin unknown
+tags: [layout, components, composition, responsive, guide]
+applies_when: "Learning or deciding Flutter layout mechanics, responsive patterns, and component composition."
+estimated_tokens: 9000
+---
+
 # Flutter Layout & Component Design – Complete Guide
+**Version 1.0** — *core layout mechanics → responsive patterns → component design.*
+
+> **Provenance:** origin not yet confirmed (`official: unknown`). If adapted from an external source,
+> add the URL/attribution and set `source`. **Note:** at ~9k estimated tokens this doc exceeds the
+> Progressive Disclosure per-file budget and is a candidate to fold into `docs/flutter-layout-and-component-design/`
+> (see GUIDE §6.4) — tracked as a future ROADMAP item, not done here.
 
 This document covers everything you need to know about Flutter's UI development – from core layout mechanics and visual effects of each Widget, to **responsive design patterns** for production dashboards, **naming conventions** for maintainable code, and a complete guide to **primitive components, composition, and custom component design**.
 
