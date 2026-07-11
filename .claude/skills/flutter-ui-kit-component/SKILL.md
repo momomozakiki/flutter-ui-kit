@@ -26,6 +26,31 @@ whenever you add or change a component, token, or composition in this repo.
 **The test for "in the kit vs. in a consuming app":** could a totally unrelated Flutter app use
 this widget/token unchanged, without knowing anything about any specific Omni product? If it mentions a product's domain, it belongs in the consuming app, not here.
 
+## 1a. Atomic-design layers & state boundaries
+
+This kit **is** an Atomic Design system — its folders map onto the canonical layers (see
+[`docs/Atomic Design in Flutter.md`](../../docs/Atomic%20Design%20in%20Flutter.md) §2 and §6 for
+the theory). Every new UI must land in the right layer **and** respect that layer's state boundary:
+
+| Atomic Design layer | This repo | State boundary |
+|---|---|---|
+| Tokens | `lib/src/theme/` | const-only, no widgets |
+| **Atoms** | `lib/src/components/` | always `StatelessWidget`; **only ephemeral UI state** (`FocusNode`, an internal `TextEditingController`/`ScrollController`, hover/press). No business logic, no data fetching, **no `AppLocalizations`** — accept raw `String`s; render validation *visuals* only (`errorText`), logic lives outside. |
+| **Molecules** | `lib/src/composite/` | compose atoms; **always stateless** — delegate all state/callbacks upward. |
+| **Organisms** | `lib/src/composite/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but **never** business logic or data fetching. |
+| Templates / Pages | *consuming apps, not here* | out of scope by design (repo-separation rule). |
+
+**Molecule vs. organism** (both share `composite/`, and no lint/test can tell them apart — a
+reviewer is the only gate):
+
+> If the widget only combines atoms and delegates all state/callbacks upward, it's a
+> **molecule**. If it manages a self-contained UI behaviour (expandable panel, tab bar, local
+> dropdown menu) without touching repositories or domain logic, it's an **organism**. If you
+> can't decide, it's probably an organism — when in doubt, ask a reviewer.
+
+Put a one-line role comment at the top of each composite widget stating whether it's a molecule
+or an organism, so the intent is visible in the file itself.
+
 ## 2. Properties are tokens — never hardcode
 
 Every color, size, spacing, or radius value comes from a token:
@@ -155,6 +180,10 @@ grep -nE "BorderRadius\.circular\(|EdgeInsets\.all\([0-9]" <files>
 ```
 
 A surviving hit needs a reason (e.g., you're *defining* a token in `theme/`). Otherwise replace it with the matching token.
+
+Also confirm the atomic layer & state boundary (see §1a):
+- Is it in the right folder — atom (`components/`), molecule/organism (`composite/`), token (`theme/`)?
+- Is the widget clearly a **molecule** (stateless) or an **organism** (local UI state only)? If the distinction is unclear, re-examine state ownership. An atom must be a `StatelessWidget` with no business logic.
 
 ## Component template (core atom)
 

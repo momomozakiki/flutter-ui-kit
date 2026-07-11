@@ -1,6 +1,6 @@
 ---
 title: Design System Contract
-version: 1.0
+version: 1.1
 last_validated: 2026-07-11
 official: false
 source: agent-generated
@@ -10,12 +10,13 @@ estimated_tokens: 2600
 ---
 
 # Design System Contract
-**Version 1.0** — *the tech/language requirements and layer/token rules every change here must follow.*
+**Version 1.1** — *the tech/language requirements and layer/token rules every change here must follow.*
 
 ## Revision History
 | Version | Date       | Change   |
 |---------|------------|----------|
 | 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
+| 1.1     | 2026-07-11 | Documented atomic-design layer mapping + state boundaries. |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
@@ -61,6 +62,27 @@ linter:
 
 **App-specific screens/layouts never live here.** They stay in the consuming app's own repo, in that
 app's own `composite/`-equivalent folder, named however that app wants — see the naming rule below.
+
+### Atomic-design mapping
+
+This kit **is** an Atomic Design system (see [`Atomic Design in Flutter.md`](Atomic%20Design%20in%20Flutter.md)
+for the theory); its layers map onto the canonical Atomic Design layers, and each layer carries a
+**state boundary** every new UI must respect:
+
+| Atomic Design layer | This repo | State boundary |
+|---|---|---|
+| Tokens | `lib/src/theme/` | const-only, no widgets |
+| **Atoms** | `lib/src/components/` | always `StatelessWidget`; only ephemeral UI state (`FocusNode`, internal controllers, hover/press). No business logic, no data fetching, no `AppLocalizations` — accept raw `String`s. |
+| **Molecules** | `lib/src/composite/` | compose atoms; **always stateless** — delegate state/callbacks upward. |
+| **Organisms** | `lib/src/composite/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. |
+| Templates / Pages | *consuming apps* | **out of scope here by design** — they live in the consuming app per the repo-separation rule, so this kit intentionally has only three layers. |
+
+Molecules and organisms share the `composite/` folder but must not be conflated: if a widget only
+combines atoms and delegates all state upward it is a **molecule**; if it manages a self-contained
+UI behaviour (expandable panel, tab bar, local menu) without touching repositories or domain logic
+it is an **organism** (when in doubt, treat it as an organism and ask a reviewer). **Composite
+widgets should include a brief comment at the top indicating whether they are a molecule (stateless)
+or an organism (local-UI-state only)**, so intent is visible in the file itself.
 
 ## Naming rule: components vs. layouts
 

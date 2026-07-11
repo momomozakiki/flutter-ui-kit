@@ -45,6 +45,11 @@ repo — see "Repo separation" below for why this matters to the user.
   primitives and tokens they're built from. A layout is only promoted into this kit's `composite/`
   layer (with a shared `Ui<Name>`) once a **second** app has a genuinely identical use case
   ("promotion rule").
+- **Atomic Design.** The kit follows Atomic Design: `theme/` = tokens, `components/` = **atoms**
+  (stateless), `composite/` = **molecules** (stateless) / **organisms** (local UI state only);
+  templates/pages stay in consuming apps. Full mapping + state boundaries live in the
+  [design-system contract](docs/design-system-contract.md#atomic-design-mapping) and the
+  [`Atomic Design in Flutter`](<docs/Atomic Design in Flutter.md>) guide.
 - **Default-with-override pattern.** Every tunable value ships as a const default; per-instance
   overrides are optional named constructor parameters (`null` = inherit the shared default) — see
   `UiButton`/`UiTextField`/`UiDropdown`'s `height` parameter, and `UiTuning` (the debug-only live
