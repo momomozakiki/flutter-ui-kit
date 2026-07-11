@@ -20,7 +20,7 @@ chunk lives in `plans/UNFINISHED.md`.
 
 ## Epic 3: Workflow-core integration follow-ups
 - [ ] Add `submodules: recursive` to flutter-ui-kit's own CI checkout so `.claude/workflow-core/` is present on fresh clones/CI (the submodule is dev-only; consumers via `flutter pub get` are unaffected)
-- [ ] Propose the supplement hook's four features (living-doc injection, ROADMAP `- [ ]` scan, UNFINISHED-in-Stop, F5 daily workflow-update check) upstream to `ai-self-correcting-workflow` (GUIDE §10), then retire them locally once merged — the F5 proposal also adds a `workflow_update_check` key to the upstream `config_schema.json`
+- [ ] Propose the supplement hook's three features (living-doc injection, ROADMAP `- [ ]` scan, human-authored-UNFINISHED-in-Stop) upstream to `ai-self-correcting-workflow` (GUIDE §10), then retire them locally once merged. (F5 was the fourth candidate — now **merged upstream** as of submodule `5c2128d`: `workflow_hook.py` runs it and `config_schema.json` defines `workflow_update_check`; the local F5 was retired.)
 
 ## Backlog / Icebox
 - [ ] Promote a shared composite into `lib/src/composite/` once a **second** app has a genuinely identical use case (promotion rule — wait-condition, not yet actionable)

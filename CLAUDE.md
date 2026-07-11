@@ -149,14 +149,18 @@ carries the same bindings in more detail.
   `documentation_directories: ["docs", ".ai"]`, `roadmap_file: ROADMAP.md`,
   `ledger.directory: history`, `main_branch: main`.
 - **Two chained hooks.** `.claude/workflow-core/hooks/workflow_hook.py` (canonical:
-  git status, doc nudge, ledger/dirty Stop reminders) runs alongside the local
-  `.claude/hooks/supplement.py`, which adds this repo's `.ai/env_check.ps1` output
-  (F2, puro-aware), the living-doc summaries (F3), the next `ROADMAP.md` `- [ ]`
-  item (F4), the **F5 daily workflow-update check** (once/day, consuming the
-  `workflow_update_check` config block — fetches the `workflow-core` submodule and
-  notes if it's behind; the actual `git submodule update` stays user-approved), and
-  the `plans/UNFINISHED.md` surfacing at Stop. `env_check.tool_paths` is
-  intentionally empty in the config so the supplement owns the environment check.
+  git status, doc nudge, ledger/dirty Stop reminders, the **F5 daily workflow-update
+  check**, and the Stop **auto-breadcrumb** that records an interrupted Phase 3 to
+  `plans/UNFINISHED.md`) runs alongside the local `.claude/hooks/supplement.py`,
+  which adds this repo's `.ai/env_check.ps1` output (F2, puro-aware), the living-doc
+  summaries (F3), and the next `ROADMAP.md` `- [ ]` item (F4). F5 is owned by the
+  upstream hook and is enabled for this repo via the `workflow_update_check` config
+  block (`enabled: true` — fetches the submodule once/day and notes if behind; the
+  actual `git submodule update` stays user-approved). The supplement's Stop handler
+  only blocks on a *human-authored* `plans/UNFINISHED.md` — it skips the upstream
+  auto-breadcrumb (which the upstream hook re-surfaces next SessionStart via F4).
+  `env_check.tool_paths` is intentionally empty in the config so the supplement owns
+  the environment check.
 - **F1 detail:** never silently skip on an unreachable remote or a dirty tree — a
   stale base is how two sessions clobber each other.
 - **Ledger (required, non-optional).** Every change is recorded in a weekly ledger

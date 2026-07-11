@@ -1,5 +1,5 @@
 # Provenance for workflow_config.json
-- version: 1.1
+- version: 1.2
 - last_validated: 2026-07-11
 - official: false
 - source: agent-generated
@@ -11,5 +11,9 @@
   (`.claude/hooks/supplement.py`) owns the environment check via `.ai/env_check.ps1`
   (puro-aware), so the upstream hook emits no env line.
 - v1.1 (2026-07-11): added the `workflow_update_check` block (enabled, submodule_path,
-  remote, branch). Consumed by `supplement.py` to run the F5 daily workflow-update
-  check. Proposed for the upstream `config_schema.json` (GUIDE §10).
+  remote, branch). Kept `enabled: true` (upstream default is `false`/opt-in — we
+  deliberately opt in).
+- v1.2 (2026-07-11): the key is now a first-class property of the upstream
+  `schemas/config_schema.json` (submodule bumped 91a4163 → 5c2128d), and the F5 check
+  is now performed by the upstream `workflow_hook.py`. The local `supplement.py` F5
+  implementation was retired; this config block now drives the upstream check.

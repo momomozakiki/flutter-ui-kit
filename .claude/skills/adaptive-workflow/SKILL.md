@@ -48,14 +48,14 @@ widgets). Reach for those in Phase 2.
   puro binary path when `flutter`/`dart` aren't on PATH). A `MISSING` line is
   information, not a gate. This is injected by the local **supplement hook**
   (`.claude/hooks/supplement.py`), which runs *alongside* the workflow-core hook and
-  also injects the living-doc summaries and the next `ROADMAP.md` `- [ ]` item, runs
-  the **F5 daily workflow-update check**, and surfaces `plans/UNFINISHED.md` at Stop.
-- **F5 Daily workflow-update check:** the supplement hook, once/day, reads the
-  `workflow_update_check` config block, fetches the `workflow-core` submodule, and
-  injects a notice if it is behind its remote branch. Detection-only — running
-  `git submodule update --remote --merge` stays user-approved (GUIDE §9). The
-  once/day marker is `.ai/.workflow_check_date` (gitignored); it is written only after
-  a successful fetch, so an offline session retries next run.
+  also injects the living-doc summaries and the next `ROADMAP.md` `- [ ]` item, and
+  blocks at Stop on a *human-authored* `plans/UNFINISHED.md`.
+- **F5 Daily workflow-update check:** owned by the **upstream** `workflow_hook.py`
+  and enabled for this repo via `workflow_update_check.enabled: true` in
+  `workflow_config.json`. Once/day the SessionStart hook fetches the `workflow-core`
+  submodule and injects a `🔄 Workflow updates available` notice if it is behind
+  (once/day marker `.ai/.workflow_check_date`, gitignored). Detection-only — running
+  `git submodule update --remote` stays user-approved (GUIDE §9).
 - **F3 Core docs:** `.ai/best_practices.md`, `.ai/naming_conventions.md`,
   `docs/design-system-contract.md`. The SessionStart supplement pre-injects
   summaries; request the full doc when a summary is too terse.
@@ -78,10 +78,10 @@ widgets). Reach for those in Phase 2.
 
 ## Contributing improvements upstream
 
-The four ambient features the `supplement.py` hook adds (living-doc injection,
-ROADMAP `- [ ]` scan, UNFINISHED-in-Stop, and the F5 daily workflow-update check
-consuming `workflow_update_check`) are candidates to fold back into workflow-core
-rather than carried locally forever — see
+The three ambient features the `supplement.py` hook adds (living-doc injection,
+ROADMAP `- [ ]` scan, human-authored-UNFINISHED-in-Stop) are candidates to fold back
+into workflow-core rather than carried locally forever — see
 [`.claude/workflow-core/CONTRIBUTING.md`](../../workflow-core/CONTRIBUTING.md) and
-GUIDE §10 for the classification + PR process. The F5 automation would also carry a
-`workflow_update_check` addition to the upstream `config_schema.json`.
+GUIDE §10 for the classification + PR process. (F5 was previously a fourth local
+feature; it is now **owned upstream** — `workflow_hook.py` + a `workflow_update_check`
+key in the upstream `config_schema.json` — so it has been retired from the supplement.)
