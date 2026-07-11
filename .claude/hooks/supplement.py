@@ -24,6 +24,7 @@ Schemas match the validated hook-integration contract: SessionStart uses
 """
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import re
@@ -37,6 +38,7 @@ from pathlib import Path
 MAX_STOP_BLOCKS = 2            # how many times Stop may block before giving up
 STATE_TTL_SECONDS = 24 * 3600  # SessionStart deletes state files older than this
 ENV_CHECK_TIMEOUT = 30         # seconds before giving up on env_check.ps1
+GIT_FETCH_TIMEOUT = 20         # seconds before giving up on the F5 submodule fetch
 # Living docs shorter than this are injected in full; longer ones are truncated.
 DOC_SUMMARY_CHARS = 2000
 
@@ -69,6 +71,16 @@ def _save_state(session_id: str, state: dict) -> None:
 
 def _project_dir(data: dict) -> Path:
     return Path(os.environ.get("CLAUDE_PROJECT_DIR") or data.get("cwd") or ".")
+
+
+def _load_config(project_dir: Path) -> dict:
+    """Read .claude/workflow_config.json; {} on any error (fail soft)."""
+    try:
+        text = (project_dir / ".claude" / "workflow_config.json").read_text(encoding="utf-8")
+        cfg = json.loads(text)
+        return cfg if isinstance(cfg, dict) else {}
+    except (OSError, ValueError):
+        return {}
 
 
 # --- output helpers ---------------------------------------------------------
@@ -154,6 +166,78 @@ def _next_roadmap_item(project_dir: Path) -> str | None:
     return None
 
 
+def _workflow_update_notice(project_dir: Path, config: dict) -> str | None:
+    """F5 — daily workflow-update check (GUIDE §9).
+
+    At most once/day: fetch the workflow-core submodule and, if it is behind its
+    configured remote branch, return a notice. Detection-only — the actual
+    ``git submodule update`` stays agent+user-approved. Fails soft everywhere.
+
+    Deliberate refinement over GUIDE §9: the ``.workflow_check_date`` marker is
+    written only after a *successful* fetch, so an offline session retries next
+    run instead of suppressing the check for the rest of the day.
+    """
+    block = config.get("workflow_update_check")
+    if not isinstance(block, dict) or not block.get("enabled"):
+        return None
+
+    submodule_path = block.get("submodule_path") or ".claude/workflow-core"
+    remote = block.get("remote") or "origin"
+    branch = block.get("branch") or "main"
+
+    submodule = project_dir / submodule_path
+    # Submodule absent → skip and do NOT create the date file (GUIDE §9), so the
+    # check starts working the moment the submodule appears.
+    if not (submodule / ".git").exists() and not submodule.is_dir():
+        return None
+    if not submodule.is_dir():
+        return None
+
+    date_file = project_dir / ".ai" / ".workflow_check_date"
+    today = datetime.date.today().isoformat()
+    try:
+        if date_file.read_text(encoding="utf-8").strip() == today:
+            return None  # already checked today
+    except OSError:
+        pass  # no marker yet → proceed
+
+    def _git(*args: str) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            ["git", "-C", str(submodule), *args],
+            capture_output=True, text=True, timeout=GIT_FETCH_TIMEOUT,
+        )
+
+    try:
+        fetch = _git("fetch", remote)
+        if fetch.returncode != 0:
+            return None  # offline / unreachable — retry next session, no marker
+        count_proc = _git("rev-list", "--count", f"HEAD..{remote}/{branch}")
+    except Exception:
+        return None  # timeout or any git failure — fail soft, no marker
+
+    # Fetch succeeded → record the check for today.
+    try:
+        date_file.write_text(today, encoding="utf-8")
+    except OSError:
+        pass
+
+    if count_proc.returncode != 0:
+        return None
+    try:
+        behind = int((count_proc.stdout or "0").strip())
+    except ValueError:
+        return None
+    if behind <= 0:
+        return None
+
+    plural = "commit" if behind == 1 else "commits"
+    return (
+        f"🔄 Workflow updates available ({behind} new {plural} in {remote}/{branch}). "
+        "Review and update? I can run 'git submodule update --remote --merge' and "
+        "absorb any new invariants/triggers."
+    )
+
+
 def handle_session_start(data: dict, session_id: str) -> int:
     _cleanup_stale_state()
     _save_state(session_id, {})  # reset per-session flags for a resumed id
@@ -169,6 +253,10 @@ def handle_session_start(data: dict, session_id: str) -> int:
     next_item = _next_roadmap_item(project_dir)
     if next_item:
         parts.append(f"[Roadmap] Next: {next_item}")
+
+    notice = _workflow_update_notice(project_dir, _load_config(project_dir))
+    if notice:
+        parts.append(f"[Workflow update] {notice}")
 
     return _emit_context("SessionStart", "\n\n".join(parts))
 
