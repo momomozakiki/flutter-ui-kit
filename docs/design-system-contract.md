@@ -1,6 +1,6 @@
 ---
 title: Design System Contract
-version: 1.2
+version: 1.3
 last_validated: 2026-07-12
 official: false
 source: agent-generated
@@ -10,7 +10,7 @@ estimated_tokens: 2600
 ---
 
 # Design System Contract
-**Version 1.2** — *the tech/language requirements and layer/token rules every change here must follow.*
+**Version 1.3** — *the tech/language requirements and layer/token rules every change here must follow.*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -18,6 +18,7 @@ estimated_tokens: 2600
 | 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 | 1.1     | 2026-07-11 | Documented atomic-design layer mapping + state boundaries. |
 | 1.2     | 2026-07-12 | Noted the v0.2.0 common-atoms inventory under the atomic-design mapping. |
+| 1.3     | 2026-07-12 | Documented the `catalog/` registry layer + the `example/` component viewer (v0.3.0). |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
@@ -60,6 +61,13 @@ linter:
 | `lib/src/theme/` | reusable **properties** (design tokens): `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`, `UiBreakpoints`, `UiTuning`, `buildUiTheme()` | descriptive, no `Ui` prefix required for non-widget classes |
 | `lib/src/components/` | **core atoms** — one widget per file, the generic Material control wrapped with the kit's consistent look | `Ui<Name>` (e.g. `UiButton`, `UiDropdown`) |
 | `lib/src/composite/` | **generic compositions** — project-agnostic groupings of atoms (e.g. `UiResponsive`, the tuning panel/overlay) | `Ui<Name>` |
+| `lib/src/catalog/` | **component registry** (metadata, not widgets) — `uiComponentCatalog`, a `List<UiComponentDescriptor>` of `{id, label, category, sample}` naming every component + a default instance | descriptive |
+
+The **catalog layer** is what makes a new component discoverable: it feeds the kit's own component
+viewer (`example/`) and, because it ships in `lib/`, any consuming app's palette (e.g. a form
+designer) can import the same list. Adding a component means adding **one** catalog entry — nothing
+auto-discovers widget classes (Dart has no runtime reflection for that). Each `sample` reads the kit
+theme, so callers must invoke `sample(context)` under a `buildUiTheme()`-themed `MaterialApp`.
 
 **App-specific screens/layouts never live here.** They stay in the consuming app's own repo, in that
 app's own `composite/`-equivalent folder, named however that app wants — see the naming rule below.
@@ -76,7 +84,12 @@ for the theory); its layers map onto the canonical Atomic Design layers, and eac
 | **Atoms** | `lib/src/components/` | always `StatelessWidget`; only ephemeral UI state (`FocusNode`, internal controllers, hover/press). No business logic, no data fetching, no `AppLocalizations` — accept raw `String`s. |
 | **Molecules** | `lib/src/composite/` | compose atoms; **always stateless** — delegate state/callbacks upward. |
 | **Organisms** | `lib/src/composite/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. |
-| Templates / Pages | *consuming apps* | **out of scope here by design** — they live in the consuming app per the repo-separation rule, so this kit intentionally has only three layers. |
+| Templates / Pages | *consuming apps* | **out of scope here by design** — they live in the consuming app per the repo-separation rule, so this kit intentionally has only three widget layers. |
+
+The three widget layers are complemented by two non-widget artifacts: the token layer (`theme/`)
+and the **catalog layer** (`catalog/`, a registry over the atoms — see the Layer-rules table). A
+runnable **component viewer** lives in `example/` (a standard Flutter web app with a path dependency
+on the kit, so the kit itself stays zero-dependency); it renders `uiComponentCatalog` as a gallery.
 
 The atom layer (`lib/src/components/`) currently ships: `UiButton`, `UiIconButton`, `UiTextField`,
 `UiDropdown`, `UiCheckbox`, `UiRadio` / `UiRadioGroup`, `UiSwitch`, `UiSlider`, `UiStatusChip`,

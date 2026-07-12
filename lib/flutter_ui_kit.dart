@@ -10,6 +10,9 @@
 ///   [UiSwitch], [UiSlider], [UiStatusChip], [UiChip], [UiBanner], [UiCard],
 ///   [UiText], [UiAvatar], [UiProgressIndicator]).
 /// * **composite/** — generic compositions ([UiResponsive]).
+/// * **catalog/** — the [uiComponentCatalog] registry ([UiComponentDescriptor])
+///   listing every component + a default sample, shared by the viewer and any
+///   consumer palette.
 ///
 /// The package depends only on the Flutter SDK, so it carries no transport or
 /// domain coupling and can be dropped into any Flutter project.
@@ -42,6 +45,9 @@ export 'src/components/ui_status_chip.dart';
 export 'src/components/ui_switch.dart';
 export 'src/components/ui_text.dart';
 export 'src/components/ui_text_field.dart';
+
+// catalog (component registry — shared by the viewer and consumer palettes)
+export 'src/catalog/ui_component_catalog.dart';
 
 // composite (generic compositions)
 export 'src/composite/ui_responsive.dart';

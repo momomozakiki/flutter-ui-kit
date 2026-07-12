@@ -10,12 +10,13 @@ estimated_tokens: 900
 ---
 
 # Best Practices (living document)
-**Version 1.0** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
+**Version 1.1** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
 
 ## Revision History
 | Version | Date       | Change   |
 |---------|------------|----------|
 | 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
+| 1.1     | 2026-07-12 | Added the puro `flutter run -d chrome` web-SDK gotcha + static-serve workaround. |
 
 Hard-won conventions and gotchas for working in **flutter-ui-kit**. Append here
 whenever a new pattern, rule, or repeatable mistake surfaces (see the trigger table
@@ -56,6 +57,20 @@ example or reason.
   identical use case (the promotion rule).
 - Don't edit this repo from an `odb_library`/consuming-app session or vice versa —
   separate repos, separate memory scope.
+
+## Tooling gotchas (puro / Windows)
+
+- **`flutter run -d chrome` fails under puro** with `Error: SDK root directory not
+  found: ../../../.puro/envs/stable/flutter/bin/cache/flutter_web_sdk/.` — the debug
+  service resolves the web SDK by a *relative* path that doesn't hold. The SDK is
+  present and **`flutter build web` works fine**. To *see* the `example/` viewer, build
+  and serve the static output instead of live-running:
+  ```sh
+  cd example && flutter build web
+  cd build/web && python -m http.server 8080   # open http://localhost:8080
+  ```
+  No hot reload, but faithful for a visual check. (Only affects live web dev runs on
+  this puro setup — not CI, not the app, not desktop runs.)
 
 ## Validation & versioning
 

@@ -23,11 +23,15 @@ chunk lives in `plans/UNFINISHED.md`.
 - [ ] Propose the supplement hook's three features (living-doc injection, ROADMAP `- [ ]` scan, human-authored-UNFINISHED-in-Stop) upstream to `ai-self-correcting-workflow` (GUIDE §10), then retire them locally once merged. (F5 was the fourth candidate — now **merged upstream** as of submodule `5c2128d`: `workflow_hook.py` runs it and `config_schema.json` defines `workflow_update_check`; the local F5 was retired.)
 
 ## Backlog / Icebox
+- [ ] Wire `omni_form_design`'s component palette off the kit's `uiComponentCatalog` (follow-up **in that repo**, not here — it's a consumer of the catalog shipped in v0.3.0)
+- [ ] Optional: a lint/test that flags exported components missing from `uiComponentCatalog` (Dart has no reflection, so it'd be brittle source-scanning — do only if drift becomes a real problem)
+- [ ] Optional: per-component interactive "knobs" in the viewer (currently shows a representative default instance)
 - [ ] Promote a shared composite into `lib/src/composite/` once a **second** app has a genuinely identical use case (promotion rule — wait-condition, not yet actionable)
 - [ ] Dark-theme token pass / additional semantic color tiers, if a consumer needs them
 - [ ] Further atoms on demand (e.g. segmented control, standalone tooltip, badge) — add only when a consumer actually needs them, per the kit's "don't build speculatively" stance
 
 ## Completed Epics
+- [x] Epic 5: Component viewer + catalog (v0.3.0, 2026-07-12) — user-requested way to *see* the components. Added the `catalog/` registry layer (`uiComponentCatalog` / `UiComponentDescriptor`, exported from the barrel) and a `example/` Flutter web viewer that renders it as a gallery (dogfoods `UiResponsive` + `UiTuningOverlay`, light/dark). The catalog is the shared seam a form-designer palette can import directly (no drag-and-drop in the kit — see Backlog for the `omni_form_design` follow-up).
 - [x] Epic 4: Common-atoms completion (v0.2.0, 2026-07-12) — user-requested build of the standard Material atom set on top of the six core atoms: `ui_icon_button`, `ui_radio` (`UiRadio`/`UiRadioGroup`, M3 `RadioGroup` API), `ui_switch`, `ui_slider`, `ui_chip` (generic), `ui_card`, `ui_text`, `ui_avatar`, `ui_progress_indicator`, plus the `UiTone` token. Deliberate override of the "don't build speculatively" stance (see the ledger); Icebox reworded to remaining niche atoms.
 - [x] Epic 0a: Core atoms — `ui_button`, `ui_text_field`, `ui_dropdown`, `ui_status_chip`, `ui_banner`, `ui_checkbox` (all implemented in `lib/src/components/`)
 - [x] Epic 0b: Theme/token layer — `ui_colors`, `ui_spacing`, `ui_sizing`, `ui_radius`, `ui_typography`, `ui_breakpoints`, `ui_theme`, `ui_tuning` (`lib/src/theme/`)

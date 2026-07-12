@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0 - Component catalog + viewer
+
+Additive only — no breaking changes to existing tokens or components.
+
+### Added
+- New **catalog layer** `lib/src/catalog/ui_component_catalog.dart`: `UiComponentDescriptor`
+  (`id` / `label` / `category` / `sample`) and `uiComponentCatalog`, an unmodifiable
+  `List<UiComponentDescriptor>` naming every `Ui*` component plus a default sample instance. Exported
+  from the barrel. This is the single registry that surfaces components in the viewer and that a
+  consuming app (e.g. a form designer's palette) can import directly.
+- `example/` — a Flutter **web** component viewer (gallery) with a path dependency on the kit, so the
+  kit stays zero-dependency. Dogfoods `UiResponsive` (master/detail layout) and `UiTuningOverlay`
+  (live token tuning), with a light/dark toggle.
+- `test/ui_component_catalog_test.dart` — builds every catalog `sample` under `buildUiTheme()` and
+  asserts unique ids + non-empty label/category.
+
 ## 0.2.0 - Common-atoms completion
 
 Additive only — no breaking changes to existing tokens or components.
