@@ -5,8 +5,10 @@
 /// * **theme/** — reusable *properties* (design tokens): [UiSpacing], [UiSizing],
 ///   [UiRadius], [UiTypography], [UiColors] (a [ThemeExtension]), [UiBreakpoints]
 ///   / [UiDeviceClass], and [buildUiTheme].
-/// * **components/** — core atomic widgets ([UiButton], [UiTextField],
-///   [UiDropdown], [UiStatusChip], [UiBanner], [UiCheckbox]).
+/// * **components/** — core atomic widgets ([UiButton], [UiIconButton],
+///   [UiTextField], [UiDropdown], [UiCheckbox], [UiRadio] / [UiRadioGroup],
+///   [UiSwitch], [UiSlider], [UiStatusChip], [UiChip], [UiBanner], [UiCard],
+///   [UiText], [UiAvatar], [UiProgressIndicator]).
 /// * **composite/** — generic compositions ([UiResponsive]).
 ///
 /// The package depends only on the Flutter SDK, so it carries no transport or
@@ -20,15 +22,25 @@ export 'src/theme/ui_radius.dart';
 export 'src/theme/ui_sizing.dart';
 export 'src/theme/ui_spacing.dart';
 export 'src/theme/ui_theme.dart';
+export 'src/theme/ui_tone.dart';
 export 'src/theme/ui_tuning.dart';
 export 'src/theme/ui_typography.dart';
 
 // components (core atoms)
+export 'src/components/ui_avatar.dart';
 export 'src/components/ui_banner.dart';
 export 'src/components/ui_button.dart';
+export 'src/components/ui_card.dart';
 export 'src/components/ui_checkbox.dart';
+export 'src/components/ui_chip.dart';
 export 'src/components/ui_dropdown.dart';
+export 'src/components/ui_icon_button.dart';
+export 'src/components/ui_progress_indicator.dart';
+export 'src/components/ui_radio.dart';
+export 'src/components/ui_slider.dart';
 export 'src/components/ui_status_chip.dart';
+export 'src/components/ui_switch.dart';
+export 'src/components/ui_text.dart';
 export 'src/components/ui_text_field.dart';
 
 // composite (generic compositions)

@@ -1,7 +1,7 @@
 ---
 title: Design System Contract
-version: 1.1
-last_validated: 2026-07-11
+version: 1.2
+last_validated: 2026-07-12
 official: false
 source: agent-generated
 tags: [contract, design-system, contributor-guide, tokens, components]
@@ -10,13 +10,14 @@ estimated_tokens: 2600
 ---
 
 # Design System Contract
-**Version 1.1** — *the tech/language requirements and layer/token rules every change here must follow.*
+**Version 1.2** — *the tech/language requirements and layer/token rules every change here must follow.*
 
 ## Revision History
 | Version | Date       | Change   |
 |---------|------------|----------|
 | 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 | 1.1     | 2026-07-11 | Documented atomic-design layer mapping + state boundaries. |
+| 1.2     | 2026-07-12 | Noted the v0.2.0 common-atoms inventory under the atomic-design mapping. |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
@@ -76,6 +77,12 @@ for the theory); its layers map onto the canonical Atomic Design layers, and eac
 | **Molecules** | `lib/src/composite/` | compose atoms; **always stateless** — delegate state/callbacks upward. |
 | **Organisms** | `lib/src/composite/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. |
 | Templates / Pages | *consuming apps* | **out of scope here by design** — they live in the consuming app per the repo-separation rule, so this kit intentionally has only three layers. |
+
+The atom layer (`lib/src/components/`) currently ships: `UiButton`, `UiIconButton`, `UiTextField`,
+`UiDropdown`, `UiCheckbox`, `UiRadio` / `UiRadioGroup`, `UiSwitch`, `UiSlider`, `UiStatusChip`,
+`UiChip`, `UiBanner`, `UiCard`, `UiText`, `UiAvatar`, `UiProgressIndicator`. New atoms are added on
+demand per the "don't build speculatively" stance (the v0.2.0 common-atoms batch was an explicit,
+user-requested exception — see `ROADMAP.md` Epic 4 and the `history/` ledger).
 
 Molecules and organisms share the `composite/` folder but must not be conflated: if a widget only
 combines atoms and delegates all state upward it is a **molecule**; if it manages a self-contained

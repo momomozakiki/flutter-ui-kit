@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../components/ui_card.dart';
 import '../theme/ui_sizing.dart';
 import '../theme/ui_spacing.dart';
 
@@ -34,29 +35,27 @@ class UnderMaintenancePage extends StatelessWidget {
         padding: const EdgeInsets.all(UiSpacing.xl),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 360),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(UiSpacing.xl),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Icon(icon, size: UiSizing.iconLg, color: theme.disabledColor),
-                  UiSpacing.gapVMd,
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  UiSpacing.gapVXs,
-                  Text(
-                    subtitle,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: theme.disabledColor),
-                  ),
-                ],
-              ),
+          child: UiCard(
+            padding: const EdgeInsets.all(UiSpacing.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Icon(icon, size: UiSizing.iconLg, color: theme.disabledColor),
+                UiSpacing.gapVMd,
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
+                UiSpacing.gapVXs,
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.disabledColor),
+                ),
+              ],
             ),
           ),
         ),

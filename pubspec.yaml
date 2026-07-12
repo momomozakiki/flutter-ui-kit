@@ -5,7 +5,7 @@ description: >-
   semantic colors), tablet-first breakpoints, and core widgets (button, text
   field, dropdown, status chip, banner, checkbox). Depends only on the Flutter
   SDK so it can be reused by any Flutter project.
-version: 0.1.0
+version: 0.2.0
 publish_to: 'none'
 
 environment:

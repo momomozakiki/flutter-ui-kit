@@ -10,7 +10,7 @@ Each bullet is a high-level task, not a detailed plan — detail for the one act
 chunk lives in `plans/UNFINISHED.md`.
 
 ## Epic 1: Test coverage gaps
-- [ ] Add a mirrored test for `ui_status_chip` (`test/ui_status_chip_test.dart`) — the only component in `lib/src/components/` without one
+- [x] Add a mirrored test for `ui_status_chip` (`test/ui_status_chip_test.dart`) — the only component in `lib/src/components/` without one
 - [ ] Audit remaining `lib/src/composite/` widgets for test coverage (`ui_responsive`, `ui_tuning_panel`, `under_maintenance_page`) and add tests where behavior is untested
 
 ## Epic 2: Documentation & contract upkeep
@@ -25,9 +25,10 @@ chunk lives in `plans/UNFINISHED.md`.
 ## Backlog / Icebox
 - [ ] Promote a shared composite into `lib/src/composite/` once a **second** app has a genuinely identical use case (promotion rule — wait-condition, not yet actionable)
 - [ ] Dark-theme token pass / additional semantic color tiers, if a consumer needs them
-- [ ] New atoms on demand (e.g. radio group, segmented control, tooltip) — add only when a consumer actually needs them, per the kit's "don't build speculatively" stance
+- [ ] Further atoms on demand (e.g. segmented control, standalone tooltip, badge) — add only when a consumer actually needs them, per the kit's "don't build speculatively" stance
 
 ## Completed Epics
+- [x] Epic 4: Common-atoms completion (v0.2.0, 2026-07-12) — user-requested build of the standard Material atom set on top of the six core atoms: `ui_icon_button`, `ui_radio` (`UiRadio`/`UiRadioGroup`, M3 `RadioGroup` API), `ui_switch`, `ui_slider`, `ui_chip` (generic), `ui_card`, `ui_text`, `ui_avatar`, `ui_progress_indicator`, plus the `UiTone` token. Deliberate override of the "don't build speculatively" stance (see the ledger); Icebox reworded to remaining niche atoms.
 - [x] Epic 0a: Core atoms — `ui_button`, `ui_text_field`, `ui_dropdown`, `ui_status_chip`, `ui_banner`, `ui_checkbox` (all implemented in `lib/src/components/`)
 - [x] Epic 0b: Theme/token layer — `ui_colors`, `ui_spacing`, `ui_sizing`, `ui_radius`, `ui_typography`, `ui_breakpoints`, `ui_theme`, `ui_tuning` (`lib/src/theme/`)
 - [x] Epic 0c: Debug live-tuning — `ui_tuning`, `ui_tuning_panel`, `ui_tuning_overlay` (floating design-tuning panel + font control)

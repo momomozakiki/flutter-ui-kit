@@ -54,6 +54,8 @@ class UiTuning extends ChangeNotifier {
   double _buttonHeight = UiSizing.controlHeight;
   double _checkboxHeight = UiSizing.controlHeight;
   double _chipHeight = UiSizing.controlHeight;
+  double _radioHeight = UiSizing.controlHeight;
+  double _switchHeight = UiSizing.controlHeight;
 
   double get controlHeight => _controlHeight;
   double get spacingXs => _spacingXs;
@@ -70,6 +72,8 @@ class UiTuning extends ChangeNotifier {
   double get buttonHeight => _buttonHeight;
   double get checkboxHeight => _checkboxHeight;
   double get chipHeight => _chipHeight;
+  double get radioHeight => _radioHeight;
+  double get switchHeight => _switchHeight;
 
   set controlHeight(double v) {
     _controlHeight = v;
@@ -146,6 +150,16 @@ class UiTuning extends ChangeNotifier {
     notifyListeners();
   }
 
+  set radioHeight(double v) {
+    _radioHeight = v;
+    notifyListeners();
+  }
+
+  set switchHeight(double v) {
+    _switchHeight = v;
+    notifyListeners();
+  }
+
   /// Restores every field to its seeded default (the current committed
   /// consts). Also the reset hook tests use in `setUp`/`tearDown` so mutating
   /// this singleton in one test can't leak into the next test in the same file.
@@ -165,6 +179,8 @@ class UiTuning extends ChangeNotifier {
     _buttonHeight = UiSizing.controlHeight;
     _checkboxHeight = UiSizing.controlHeight;
     _chipHeight = UiSizing.controlHeight;
+    _radioHeight = UiSizing.controlHeight;
+    _switchHeight = UiSizing.controlHeight;
     notifyListeners();
   }
 }
