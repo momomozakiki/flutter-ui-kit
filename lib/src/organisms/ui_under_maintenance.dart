@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../components/ui_card.dart';
+import '../atoms/ui_card.dart';
 import '../theme/ui_sizing.dart';
 import '../theme/ui_spacing.dart';
 
-/// Full-page placeholder centered card: a feature icon, a [title], and a
+// Tier: organism — a full-screen composition (stateless here). Named without a
+// `_page` suffix because page/template widgets live in consuming apps, not the kit.
+
+/// Full-screen placeholder centered card: a feature icon, a [title], and a
 /// caption ([subtitle]). The caption defaults to "Under maintenance" for the
 /// not-yet-available case (printer / scanner / camera tabs, unimplemented
 /// preview panels), but can be overridden to convey a different non-error state
@@ -13,8 +16,8 @@ import '../theme/ui_spacing.dart';
 ///
 /// Domain-free and token-based (no hardcoded colors/sizes), so it is reusable
 /// across projects.
-class UnderMaintenancePage extends StatelessWidget {
-  const UnderMaintenancePage({
+class UiUnderMaintenance extends StatelessWidget {
+  const UiUnderMaintenance({
     required this.icon,
     required this.title,
     this.subtitle = 'Under maintenance',

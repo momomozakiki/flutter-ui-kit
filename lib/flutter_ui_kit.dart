@@ -1,21 +1,26 @@
 /// flutter_ui_kit: a reusable, domain-agnostic Flutter design system and
 /// component library.
 ///
-/// Two layers, mirroring the folder structure:
-/// * **theme/** — reusable *properties* (design tokens): [UiSpacing], [UiSizing],
+/// Layers mirror the folder structure, following strict Atomic Design (this kit
+/// is the canonical Atomic Design authority consuming apps mirror):
+/// * **theme/** — design *tokens* (reusable properties): [UiSpacing], [UiSizing],
 ///   [UiRadius], [UiTypography], [UiColors] (a [ThemeExtension]), [UiBreakpoints]
 ///   / [UiDeviceClass], and [buildUiTheme].
-/// * **components/** — core atomic widgets ([UiButton], [UiIconButton],
+/// * **atoms/** — indivisible stateless widgets ([UiButton], [UiIconButton],
 ///   [UiTextField], [UiDropdown], [UiCheckbox], [UiRadio] / [UiRadioGroup],
 ///   [UiSwitch], [UiSlider], [UiStatusChip], [UiChip], [UiBanner], [UiCard],
 ///   [UiText], [UiAvatar], [UiProgressIndicator]).
-/// * **composite/** — generic compositions ([UiResponsive]).
+/// * **molecules/** — stateless compositions of atoms ([UiResponsive]).
+/// * **organisms/** — compositions that may own local UI state
+///   ([UiTuningPanel], [UiTuningOverlay], [UiUnderMaintenance]).
 /// * **catalog/** — the [uiComponentCatalog] registry ([UiComponentDescriptor])
-///   listing every component + a default sample, shared by the viewer and any
+///   listing every atom + a default sample, shared by the viewer and any
 ///   consumer palette.
 ///
-/// The package depends only on the Flutter SDK, so it carries no transport or
-/// domain coupling and can be dropped into any Flutter project.
+/// Templates and pages are intentionally out of scope — they live in consuming
+/// apps per the repo-separation rule. The package depends only on the Flutter
+/// SDK, so it carries no transport or domain coupling and can be dropped into
+/// any Flutter project.
 library;
 
 // theme (design tokens)
@@ -29,28 +34,30 @@ export 'src/theme/ui_tone.dart';
 export 'src/theme/ui_tuning.dart';
 export 'src/theme/ui_typography.dart';
 
-// components (core atoms)
-export 'src/components/ui_avatar.dart';
-export 'src/components/ui_banner.dart';
-export 'src/components/ui_button.dart';
-export 'src/components/ui_card.dart';
-export 'src/components/ui_checkbox.dart';
-export 'src/components/ui_chip.dart';
-export 'src/components/ui_dropdown.dart';
-export 'src/components/ui_icon_button.dart';
-export 'src/components/ui_progress_indicator.dart';
-export 'src/components/ui_radio.dart';
-export 'src/components/ui_slider.dart';
-export 'src/components/ui_status_chip.dart';
-export 'src/components/ui_switch.dart';
-export 'src/components/ui_text.dart';
-export 'src/components/ui_text_field.dart';
+// atoms (indivisible stateless widgets)
+export 'src/atoms/ui_avatar.dart';
+export 'src/atoms/ui_banner.dart';
+export 'src/atoms/ui_button.dart';
+export 'src/atoms/ui_card.dart';
+export 'src/atoms/ui_checkbox.dart';
+export 'src/atoms/ui_chip.dart';
+export 'src/atoms/ui_dropdown.dart';
+export 'src/atoms/ui_icon_button.dart';
+export 'src/atoms/ui_progress_indicator.dart';
+export 'src/atoms/ui_radio.dart';
+export 'src/atoms/ui_slider.dart';
+export 'src/atoms/ui_status_chip.dart';
+export 'src/atoms/ui_switch.dart';
+export 'src/atoms/ui_text.dart';
+export 'src/atoms/ui_text_field.dart';
 
 // catalog (component registry — shared by the viewer and consumer palettes)
 export 'src/catalog/ui_component_catalog.dart';
 
-// composite (generic compositions)
-export 'src/composite/ui_responsive.dart';
-export 'src/composite/ui_tuning_overlay.dart';
-export 'src/composite/ui_tuning_panel.dart';
-export 'src/composite/under_maintenance_page.dart';
+// molecules (stateless compositions of atoms)
+export 'src/molecules/ui_responsive.dart';
+
+// organisms (compositions that may own local UI state)
+export 'src/organisms/ui_tuning_overlay.dart';
+export 'src/organisms/ui_tuning_panel.dart';
+export 'src/organisms/ui_under_maintenance.dart';

@@ -35,19 +35,20 @@ repo — see "Repo separation" below for why this matters to the user.
 
 ## Repo separation
 
-- **Components** (`Ui<Name>` in `lib/src/components/`) — one identical name and behavior across
-  every consuming app. A component's *default* values live here; app-specific tuning happens through
-  optional constructor overrides or theme-level overrides in the consuming app, never by forking the
-  component.
+- **Components** (`Ui<Name>` in `lib/src/atoms/` / `molecules/` / `organisms/`) — one identical name
+  and behavior across every consuming app. A component's *default* values live here; app-specific
+  tuning happens through optional constructor overrides or theme-level overrides in the consuming
+  app, never by forking the component.
 - **Layouts/screens** — app-specific compositions (e.g. a Console's connection panel, a license
   studio's registration screen) stay in the *consuming app's own repo*, named however that app wants.
   They are not expected to be shared across apps, since apps don't share screens — only the
-  primitives and tokens they're built from. A layout is only promoted into this kit's `composite/`
-  layer (with a shared `Ui<Name>`) once a **second** app has a genuinely identical use case
-  ("promotion rule").
-- **Atomic Design.** The kit follows Atomic Design: `theme/` = tokens, `components/` = **atoms**
-  (stateless), `composite/` = **molecules** (stateless) / **organisms** (local UI state only);
-  templates/pages stay in consuming apps. Full mapping + state boundaries live in the
+  primitives and tokens they're built from. A layout is only promoted into the appropriate kit tier
+  (`molecules/` or `organisms/`, with a shared `Ui<Name>`) once a **second** app has a genuinely
+  identical use case ("promotion rule").
+- **Atomic Design.** The kit **is** the canonical Atomic Design system every consuming app mirrors:
+  `theme/` = tokens, `atoms/` = **atoms** (stateless), `molecules/` = **molecules** (stateless),
+  `organisms/` = **organisms** (local UI state only); templates/pages (and any `_page`-named widget)
+  stay in consuming apps. Full mapping + state boundaries live in the
   [design-system contract](docs/design-system-contract.md#atomic-design-mapping) and the
   [`Atomic Design in Flutter`](<docs/Atomic Design in Flutter.md>) guide.
 - **Default-with-override pattern.** Every tunable value ships as a const default; per-instance
@@ -79,9 +80,9 @@ before adding or changing anything. Summary:
 
 - **Zero dependencies beyond the Flutter SDK.** This is what makes the kit safely embeddable in any
   consumer app regardless of that app's own dependency tree. Never add a package dependency here.
-- **Layer rules:** `lib/src/theme/` = tokens only (no widgets); `lib/src/components/` = one-widget-
-  per-file primitives named `Ui<Name>`; `lib/src/composite/` = generic (project-agnostic)
-  compositions only.
+- **Layer rules:** `lib/src/theme/` = tokens only (no widgets); `lib/src/atoms/` = one-widget-
+  per-file stateless primitives named `Ui<Name>`; `lib/src/molecules/` = stateless generic
+  compositions; `lib/src/organisms/` = generic compositions with local UI state only.
 - **Token-only rule:** no widget hardcodes a `Color`, size, or spacing value — always read from
   `UiSpacing`/`UiSizing`/`UiRadius`/`UiTypography`, `context.uiColors`, or
   `Theme.of(context).colorScheme`.

@@ -89,6 +89,24 @@ packages/
   app_two/
 ```
 
+> **How this repo applies it.** `flutter-ui-kit` *is* that extracted `design_system/` package, and
+> its structure is the **canonical rule every Omni-family app mirrors**. The mapping onto this repo's
+> folders (the binding source of truth is the
+> [design-system contract](design-system-contract.md#atomic-design-mapping)):
+>
+> | Guide layer | This repo |
+> |---|---|
+> | `tokens/` + `themes/` | `lib/src/theme/` |
+> | `atoms/` | `lib/src/atoms/` |
+> | `molecules/` | `lib/src/molecules/` |
+> | `organisms/` | `lib/src/organisms/` |
+> | `templates/` + pages | *consuming apps only* (never in this kit) |
+>
+> Widgets are named `Ui<Name>` (not `Atom<Name>`) so the public name is stable across tiers, and the
+> package adds a non-widget `catalog/` registry that feeds the `example/` component viewer. No
+> `_page`-named widgets live here — a generic full-screen composition is an **organism** (e.g.
+> `UiUnderMaintenance`).
+
 ---
 
 ## 4. Design Tokens – Raw, Semantic & Responsive

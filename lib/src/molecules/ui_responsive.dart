@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/ui_breakpoints.dart';
 
+// Tier: molecule — stateless composition; delegates all state/callbacks upward.
+
 /// Signature for [UiResponsive.builder]: builds UI for the resolved
 /// [UiDeviceClass].
 typedef UiResponsiveBuilder = Widget Function(

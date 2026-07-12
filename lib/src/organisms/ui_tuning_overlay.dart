@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'ui_tuning_panel.dart';
 
+// Tier: organism — owns local UI state (the floating OverlayEntry lifecycle);
+// no business logic or data fetching.
+
 /// Toggles a movable, non-modal floating `UiTuningPanel` on top of the app —
 /// unlike a `Drawer`, there is no modal barrier, so the app underneath stays
 /// fully visible and interactive while tuning. Debug-only; call from behind a

@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import '../theme/ui_spacing.dart';
 import '../theme/ui_tuning.dart';
 
+// Tier: organism — owns local UI state (slider values via StatefulWidget); no
+// business logic or data fetching.
+
 /// Debug-only live sizing panel: one slider per [UiTuning] field, so control
 /// height / spacing / font / per-component height / chip padding / nav rail
 /// width can be dialed in while the app is running instead of iterated

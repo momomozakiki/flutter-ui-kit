@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../components/ui_avatar.dart';
-import '../components/ui_banner.dart';
-import '../components/ui_button.dart';
-import '../components/ui_card.dart';
-import '../components/ui_checkbox.dart';
-import '../components/ui_chip.dart';
-import '../components/ui_dropdown.dart';
-import '../components/ui_icon_button.dart';
-import '../components/ui_progress_indicator.dart';
-import '../components/ui_radio.dart';
-import '../components/ui_slider.dart';
-import '../components/ui_status_chip.dart';
-import '../components/ui_switch.dart';
-import '../components/ui_text.dart';
-import '../components/ui_text_field.dart';
+import '../atoms/ui_avatar.dart';
+import '../atoms/ui_banner.dart';
+import '../atoms/ui_button.dart';
+import '../atoms/ui_card.dart';
+import '../atoms/ui_checkbox.dart';
+import '../atoms/ui_chip.dart';
+import '../atoms/ui_dropdown.dart';
+import '../atoms/ui_icon_button.dart';
+import '../atoms/ui_progress_indicator.dart';
+import '../atoms/ui_radio.dart';
+import '../atoms/ui_slider.dart';
+import '../atoms/ui_status_chip.dart';
+import '../atoms/ui_switch.dart';
+import '../atoms/ui_text.dart';
+import '../atoms/ui_text_field.dart';
 
 /// A single entry in the [uiComponentCatalog]: the metadata needed to list a
 /// `Ui*` component and render a representative instance of it.

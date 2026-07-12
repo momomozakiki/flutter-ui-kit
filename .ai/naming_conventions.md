@@ -32,14 +32,17 @@ new terms.
 
 ## Kit-specific component & token naming
 
-- **Components** are `Ui<Name>`, one widget per file, file named `ui_<name>.dart`
-  under `lib/src/components/` (e.g. `UiButton` → `ui_button.dart`). Their tests
+- **Atoms** are `Ui<Name>`, one widget per file, file named `ui_<name>.dart`
+  under `lib/src/atoms/` (e.g. `UiButton` → `ui_button.dart`). Their tests
   mirror the name: `test/ui_<name>_test.dart`.
 - **Token classes** live in `lib/src/theme/` as `Ui<Category>` with `static const`
   members: `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`,
   `UiBreakpoints` (plus `UiTheme`, `UiTuning`).
-- **Composites** (generic, project-agnostic) are `Ui<Name>` under
-  `lib/src/composite/` (e.g. `UiResponsive`, `UiTuningPanel`).
+- **Molecules** (stateless, generic) are `Ui<Name>` under `lib/src/molecules/`
+  (e.g. `UiResponsive`); **organisms** (local-UI-state, generic) are `Ui<Name>` under
+  `lib/src/organisms/` (e.g. `UiTuningPanel`, `UiUnderMaintenance`). Each carries a
+  `// Tier: molecule` / `// Tier: organism` comment. No `_page`-named widgets in the
+  kit — page/template widgets live in consuming apps.
 - **Enums carry behavior via extensions** where useful (`<Enum>X`), e.g. a role or
   variant enum extended with helper getters.
 

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.4.0 - Strict Atomic Design folder tiering
+
+Structural reorganization — the kit's public symbol set is unchanged except for one rename (below).
+Consumers import the barrel (`package:flutter_ui_kit/flutter_ui_kit.dart`), so internal folder moves
+are transparent; nothing breaks until a consumer bumps its pinned tag.
+
+### Changed
+- `lib/src/` reorganized into strict Atomic Design tiers: `components/` → **`atoms/`**, and
+  `composite/` split into **`molecules/`** (stateless) and **`organisms/`** (local UI state). Tokens
+  stay in `theme/`, the registry in `catalog/`. Folder path now enforces each layer's state boundary.
+  This kit's structure is now the canonical Atomic Design rule every Omni-family app mirrors.
+- Each molecule/organism file carries a grep-friendly `// Tier: molecule|organism` comment.
+
+### Breaking
+- **`UnderMaintenancePage` → `UiUnderMaintenance`** (file `composite/under_maintenance_page.dart` →
+  `organisms/ui_under_maintenance.dart`). Renamed to satisfy the `Ui<Name>` convention and the new
+  rule that no `_page`-named widget lives in the kit (page/template widgets belong to consuming
+  apps). A generic full-screen composition is modelled as an organism. Consumers on `UiUnderMaintenance`'s
+  predecessor update the import symbol when they bump to `v0.4.0`.
+
 ## 0.3.0 - Component catalog + viewer
 
 Additive only — no breaking changes to existing tokens or components.

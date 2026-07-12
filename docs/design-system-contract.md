@@ -1,6 +1,6 @@
 ---
 title: Design System Contract
-version: 1.3
+version: 1.4
 last_validated: 2026-07-12
 official: false
 source: agent-generated
@@ -10,7 +10,7 @@ estimated_tokens: 2600
 ---
 
 # Design System Contract
-**Version 1.3** — *the tech/language requirements and layer/token rules every change here must follow.*
+**Version 1.4** — *the tech/language requirements and layer/token rules every change here must follow.*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -19,6 +19,7 @@ estimated_tokens: 2600
 | 1.1     | 2026-07-11 | Documented atomic-design layer mapping + state boundaries. |
 | 1.2     | 2026-07-12 | Noted the v0.2.0 common-atoms inventory under the atomic-design mapping. |
 | 1.3     | 2026-07-12 | Documented the `catalog/` registry layer + the `example/` component viewer (v0.3.0). |
+| 1.4     | 2026-07-12 | Adopted strict Atomic folder tiering (`atoms/` / `molecules/` / `organisms/`) as the canonical structure; added the no-`_page`-in-kit rule (v0.4.0). |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
@@ -59,9 +60,10 @@ linter:
 | Folder | Holds | Naming |
 |---|---|---|
 | `lib/src/theme/` | reusable **properties** (design tokens): `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`, `UiBreakpoints`, `UiTuning`, `buildUiTheme()` | descriptive, no `Ui` prefix required for non-widget classes |
-| `lib/src/components/` | **core atoms** — one widget per file, the generic Material control wrapped with the kit's consistent look | `Ui<Name>` (e.g. `UiButton`, `UiDropdown`) |
-| `lib/src/composite/` | **generic compositions** — project-agnostic groupings of atoms (e.g. `UiResponsive`, the tuning panel/overlay) | `Ui<Name>` |
-| `lib/src/catalog/` | **component registry** (metadata, not widgets) — `uiComponentCatalog`, a `List<UiComponentDescriptor>` of `{id, label, category, sample}` naming every component + a default instance | descriptive |
+| `lib/src/atoms/` | **atoms** — one widget per file, the generic Material control wrapped with the kit's consistent look; always stateless | `Ui<Name>` (e.g. `UiButton`, `UiDropdown`) |
+| `lib/src/molecules/` | **molecules** — stateless, project-agnostic groupings of atoms (e.g. `UiResponsive`) | `Ui<Name>` |
+| `lib/src/organisms/` | **organisms** — compositions that may own local UI state (e.g. the tuning panel/overlay, `UiUnderMaintenance`) | `Ui<Name>` |
+| `lib/src/catalog/` | **component registry** (metadata, not widgets) — `uiComponentCatalog`, a `List<UiComponentDescriptor>` of `{id, label, category, sample}` naming every atom + a default instance | descriptive |
 
 The **catalog layer** is what makes a new component discoverable: it feeds the kit's own component
 viewer (`example/`) and, because it ships in `lib/`, any consuming app's palette (e.g. a form
@@ -74,16 +76,18 @@ app's own `composite/`-equivalent folder, named however that app wants — see t
 
 ### Atomic-design mapping
 
-This kit **is** an Atomic Design system (see [`Atomic Design in Flutter.md`](Atomic%20Design%20in%20Flutter.md)
-for the theory); its layers map onto the canonical Atomic Design layers, and each layer carries a
-**state boundary** every new UI must respect:
+This kit **is** an Atomic Design system, and — as the single canonical design system for the
+Omni-family apps — its folder structure is the **golden rule every consuming app mirrors** (see
+[`Atomic Design in Flutter.md`](Atomic%20Design%20in%20Flutter.md) for the theory). Each folder is a
+canonical Atomic Design layer with its own **state boundary** every new UI must respect. The folder
+path itself *enforces* the boundary: nothing in `atoms/` may be stateful, etc.
 
 | Atomic Design layer | This repo | State boundary |
 |---|---|---|
 | Tokens | `lib/src/theme/` | const-only, no widgets |
-| **Atoms** | `lib/src/components/` | always `StatelessWidget`; only ephemeral UI state (`FocusNode`, internal controllers, hover/press). No business logic, no data fetching, no `AppLocalizations` — accept raw `String`s. |
-| **Molecules** | `lib/src/composite/` | compose atoms; **always stateless** — delegate state/callbacks upward. |
-| **Organisms** | `lib/src/composite/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. |
+| **Atoms** | `lib/src/atoms/` | always `StatelessWidget`; only ephemeral UI state (`FocusNode`, internal controllers, hover/press). No business logic, no data fetching, no `AppLocalizations` — accept raw `String`s. |
+| **Molecules** | `lib/src/molecules/` | compose atoms; **always stateless** — delegate state/callbacks upward. |
+| **Organisms** | `lib/src/organisms/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. |
 | Templates / Pages | *consuming apps* | **out of scope here by design** — they live in the consuming app per the repo-separation rule, so this kit intentionally has only three widget layers. |
 
 The three widget layers are complemented by two non-widget artifacts: the token layer (`theme/`)
@@ -91,30 +95,36 @@ and the **catalog layer** (`catalog/`, a registry over the atoms — see the Lay
 runnable **component viewer** lives in `example/` (a standard Flutter web app with a path dependency
 on the kit, so the kit itself stays zero-dependency); it renders `uiComponentCatalog` as a gallery.
 
-The atom layer (`lib/src/components/`) currently ships: `UiButton`, `UiIconButton`, `UiTextField`,
+The atom layer (`lib/src/atoms/`) currently ships: `UiButton`, `UiIconButton`, `UiTextField`,
 `UiDropdown`, `UiCheckbox`, `UiRadio` / `UiRadioGroup`, `UiSwitch`, `UiSlider`, `UiStatusChip`,
 `UiChip`, `UiBanner`, `UiCard`, `UiText`, `UiAvatar`, `UiProgressIndicator`. New atoms are added on
 demand per the "don't build speculatively" stance (the v0.2.0 common-atoms batch was an explicit,
 user-requested exception — see `ROADMAP.md` Epic 4 and the `history/` ledger).
 
-Molecules and organisms share the `composite/` folder but must not be conflated: if a widget only
-combines atoms and delegates all state upward it is a **molecule**; if it manages a self-contained
-UI behaviour (expandable panel, tab bar, local menu) without touching repositories or domain logic
-it is an **organism** (when in doubt, treat it as an organism and ask a reviewer). **Composite
-widgets should include a brief comment at the top indicating whether they are a molecule (stateless)
-or an organism (local-UI-state only)**, so intent is visible in the file itself.
+Molecules and organisms live in **separate folders** and must not be conflated: if a widget only
+combines atoms and delegates all state upward it is a **molecule** (`molecules/`); if it manages a
+self-contained UI behaviour (expandable panel, tab bar, local menu, floating overlay) without
+touching repositories or domain logic it is an **organism** (`organisms/`) (when in doubt, treat it
+as an organism and ask a reviewer). **Every molecule/organism file must carry a grep-friendly tier
+comment near the top — `// Tier: molecule` or `// Tier: organism`** — so intent is visible in the
+file itself and auditable across the tree.
+
+**No `_page`-named widgets in the kit.** A widget whose file name (or class) reads as a *page* or
+*template* belongs in a consuming app, not here (repo-separation rule). A full-screen composition
+that is genuinely generic is modelled as an **organism** without the `_page` suffix — e.g.
+`UiUnderMaintenance` (`organisms/ui_under_maintenance.dart`), not `under_maintenance_page`.
 
 ## Naming rule: components vs. layouts
 
-- **Components** (this repo's `components/` and `composite/` layers): **one identical name across
-  every consuming app.** A `UiButton` is `UiButton` everywhere. Consumer apps must never locally
-  rename, shadow, or fork a kit component — if it needs different behavior, that's either a
+- **Components** (this repo's `atoms/`, `molecules/`, and `organisms/` layers): **one identical name
+  across every consuming app.** A `UiButton` is `UiButton` everywhere. Consumer apps must never
+  locally rename, shadow, or fork a kit component — if it needs different behavior, that's either a
   constructor override (see below) or a signal the component itself needs to change here.
 - **Layouts** (an app's page/screen composition — e.g. how the Console page arranges its panels):
   app-specific, named however that app wants, since apps don't share screens. A layout is promoted
-  into this kit's `composite/` layer — taking on a shared `Ui<Name>` — **only** once a second,
-  genuinely identical use case exists in another app. Until then, keep it local to that app (the
-  existing "promotion rule": don't move something here speculatively).
+  into the appropriate kit tier (`molecules/` or `organisms/`) — taking on a shared `Ui<Name>` —
+  **only** once a second, genuinely identical use case exists in another app. Until then, keep it
+  local to that app (the existing "promotion rule": don't move something here speculatively).
 
 ## Token-only rule
 
