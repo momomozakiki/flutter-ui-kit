@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_kit/flutter_ui_kit.dart';
 
+import 'component_demos.dart';
+
 /// The component gallery: a master list of every entry in [uiComponentCatalog]
 /// on the left and a live preview of the selected component on the right.
 ///
@@ -128,24 +130,33 @@ class _PreviewPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Prefer the example app's richer interactive demo; fall back to the shared
+    // catalog's single static sample when a component has no dedicated demo.
+    final Widget preview =
+        buildComponentDemo(descriptor.id) ?? descriptor.sample(context);
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainerLowest,
       padding: const EdgeInsets.all(24),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          UiText.title(descriptor.label),
-          const SizedBox(height: 4),
-          UiText.caption(descriptor.id),
-          const SizedBox(height: 24),
-          UiCard(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 360),
-              child: descriptor.sample(context),
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            UiText.title(descriptor.label),
+            const SizedBox(height: 4),
+            UiText.caption(descriptor.id),
+            const SizedBox(height: 24),
+            ConstrainedBox(
+              // Multi-state demos are taller/wider than one control; give them
+              // room while keeping a comfortable reading measure.
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: UiCard(
+                child: SizedBox(width: double.infinity, child: preview),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
