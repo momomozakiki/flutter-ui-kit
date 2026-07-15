@@ -1,6 +1,6 @@
 ---
 title: Flutter Adaptive UI Design Specification
-version: 3.1
+version: 3.2
 last_validated: 2026-07-15
 official: unknown
 source: origin unknown
@@ -9,7 +9,7 @@ applies_when: "Designing adaptive/responsive layouts across Android tablets and 
 estimated_tokens: 3400
 ---
 
-# Flutter Adaptive UI Design Specification (v3.1)
+# Flutter Adaptive UI Design Specification (v3.2)
 ## Target Platforms: Android Tablets (7"–10") & Windows Desktop
 
 > **Provenance:** origin not yet confirmed (see frontmatter `official: unknown`). If this was
@@ -125,6 +125,12 @@ survives:
 | `BottomNavigationBar` (Material 2) for phones | Kit is **Material 3 only** | M3 `NavigationBar` |
 | `Platform.isWindows` to choose layout | Layout must follow *space*, not OS | `LayoutBuilder` + `UiBreakpoints.classify` |
 | `Shortcuts`/`Actions` + platform badges baked into the shell | Over-couples a shared widget; these vary per app | Consuming-app responsibility (see the guide's `Shortcuts`/`Actions` snippet as an *app* recipe) |
+
+**Also intentionally dropped** (smaller, same reasoning — token-only rule + caller flexibility): the
+guide's hardcoded rail `backgroundColor: Colors.grey.shade50` (kit uses the theme surface), its
+`Padding(all: 24)` around content (kit passes `body` through — padding is the caller's), its forced
+`leading`/`trailing: SizedBox.shrink()` (kit exposes optional `railLeading`/`railTrailing`), and its
+tier/platform/width AppBar badges (demo instrumentation — a real app supplies its own `appBar`).
 
 **Load-bearing principle:** the kit owns the *navigation shell*; the consuming app owns the *chrome*
 (window management, keyboard shortcuts, route-state preservation). This separation is what keeps the
@@ -266,8 +272,23 @@ callers — added only when a **second real use case** justifies it (the kit's p
 - **`go_router` state preservation.** Preserving navigation state across window-resize tier changes
   is a *consuming-app* concern; use `StatefulShellRoute.indexedStack` (the community
   `adaptive_scaffold_router` pattern). The kit shell stays router-agnostic.
+- **Adaptive FAB.** The external guide swaps a compact `FloatingActionButton` on phones for an
+  *extended* labelled `FloatingActionButton.extended` on tablet/desktop, docked on phone.
+  `UiAdaptiveNavShell` currently passes `floatingActionButton` through to the `Scaffold` **unchanged**
+  on every tier. A future opt-in would take a small `UiNavFab({icon, label})` descriptor (a raw
+  `Widget` can't be relabelled into an extended FAB) — which is exactly why the shell keeps
+  `floatingActionButton` additive. Build it when a consumer needs tier-varying FABs.
+- **Rail destination tooltips.** The guide (§7C) wraps rail icons in `Tooltip(message: label)` for
+  hover/long-press discoverability. The extended rail already shows labels inline, so this only helps
+  the *compact* rail — left to the app for now rather than baked into every destination.
 
 ---
+
+### Summary of v3.2 Adjustments
+- **Documented** the remaining intentional divergences from the external guide in §3.5 (hardcoded rail
+  color, forced content padding, forced rail leading/trailing, demo AppBar badges).
+- **Added** §9 extension points for the two *functional* gaps vs. the guide: an adaptive FAB and rail
+  destination tooltips (deferred under the promotion rule).
 
 ### Summary of v3.1 Adjustments
 - **Added** §3.4 the `UiAdaptiveNavShell` navigation-shell recipe (kit-provided, zero-dependency).

@@ -92,6 +92,27 @@ before adding or changing anything. Summary:
   they deliberately bump it.
 - Export every new public symbol from the barrel `lib/flutter_ui_kit.dart`.
 
+### Canonical-guide rule (one authority per design area)
+
+For any recurring design area, this repo keeps **exactly one** canonical authority — a skill and/or a
+doc — that every implementation must follow. When an alternative surfaces (an external guide, a
+package's convention, a Stack Overflow pattern, a subagent's suggestion), **do not adopt it directly.**
+Reconcile it against the canonical skill/doc first, and adopt it **only if it is clearly, substantially
+better** than the existing guidance — a marginal or merely-different idea loses to the incumbent on
+purpose, so the codebase doesn't fracture into competing patterns. If you *do* adopt a better idea,
+**update the canonical skill/doc in the same change** so the source of truth moves with the decision;
+there must never be two authorities disagreeing.
+
+- **Current canonical authorities:** the [design-system contract](docs/design-system-contract.md); the
+  `flutter-ui-kit-component`, `dart-solid-principles`, and `flutter-adaptive-navigation` skills; and the
+  [adaptive UI spec](docs/flutter-adaptive-ui-design-specification.md). Any divergent design is filtered
+  through these.
+- **Worked precedent:** the external "Flutter Complete Adaptive Layout Guide" was **harvested, not
+  copied** — its good ideas became `UiAdaptiveNavShell` + the `flutter-adaptive-navigation` skill + the
+  adaptive spec, and everything rejected (dependency-heavy packages, `Platform`-based layout, M2
+  widgets, mismatched breakpoints) is recorded with its reasoning in the spec's reconciliation table
+  (§3.5). That is the shape every future "should we follow this other guide?" decision should take.
+
 ## Git workflow
 
 - **Remote:** `origin` → https://github.com/momomozakiki/flutter-ui-kit.git
