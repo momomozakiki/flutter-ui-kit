@@ -12,7 +12,8 @@
 ///   [UiText], [UiAvatar], [UiProgressIndicator]).
 /// * **molecules/** — stateless compositions of atoms ([UiResponsive]).
 /// * **organisms/** — compositions that may own local UI state
-///   ([UiTuningPanel], [UiTuningOverlay], [UiUnderMaintenance]).
+///   ([UiAdaptiveNavShell], [UiTuningPanel], [UiTuningOverlay],
+///   [UiUnderMaintenance]).
 /// * **catalog/** — the [uiComponentCatalog] registry ([UiComponentDescriptor])
 ///   listing every atom + a default sample, shared by the viewer and any
 ///   consumer palette.
@@ -58,6 +59,7 @@ export 'src/catalog/ui_component_catalog.dart';
 export 'src/molecules/ui_responsive.dart';
 
 // organisms (compositions that may own local UI state)
+export 'src/organisms/ui_adaptive_nav_shell.dart';
 export 'src/organisms/ui_tuning_overlay.dart';
 export 'src/organisms/ui_tuning_panel.dart';
 export 'src/organisms/ui_under_maintenance.dart';

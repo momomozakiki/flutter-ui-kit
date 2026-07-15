@@ -1,7 +1,7 @@
 ---
 title: Design System Contract
-version: 1.4
-last_validated: 2026-07-12
+version: 1.5
+last_validated: 2026-07-15
 official: false
 source: agent-generated
 tags: [contract, design-system, contributor-guide, tokens, components]
@@ -10,7 +10,7 @@ estimated_tokens: 2600
 ---
 
 # Design System Contract
-**Version 1.4** — *the tech/language requirements and layer/token rules every change here must follow.*
+**Version 1.5** — *the tech/language requirements and layer/token rules every change here must follow.*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -20,6 +20,7 @@ estimated_tokens: 2600
 | 1.2     | 2026-07-12 | Noted the v0.2.0 common-atoms inventory under the atomic-design mapping. |
 | 1.3     | 2026-07-12 | Documented the `catalog/` registry layer + the `example/` component viewer (v0.3.0). |
 | 1.4     | 2026-07-12 | Adopted strict Atomic folder tiering (`atoms/` / `molecules/` / `organisms/`) as the canonical structure; added the no-`_page`-in-kit rule (v0.4.0). |
+| 1.5     | 2026-07-15 | Added the `UiAdaptiveNavShell` organism to the atomic-design inventory (v0.5.0). |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
@@ -62,7 +63,7 @@ linter:
 | `lib/src/theme/` | reusable **properties** (design tokens): `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`, `UiBreakpoints`, `UiTuning`, `buildUiTheme()` | descriptive, no `Ui` prefix required for non-widget classes |
 | `lib/src/atoms/` | **atoms** — one widget per file, the generic Material control wrapped with the kit's consistent look; always stateless | `Ui<Name>` (e.g. `UiButton`, `UiDropdown`) |
 | `lib/src/molecules/` | **molecules** — stateless, project-agnostic groupings of atoms (e.g. `UiResponsive`) | `Ui<Name>` |
-| `lib/src/organisms/` | **organisms** — compositions that may own local UI state (e.g. the tuning panel/overlay, `UiUnderMaintenance`) | `Ui<Name>` |
+| `lib/src/organisms/` | **organisms** — compositions that may own local UI state (e.g. the tuning panel/overlay, `UiUnderMaintenance`, `UiAdaptiveNavShell`) | `Ui<Name>` |
 | `lib/src/catalog/` | **component registry** (metadata, not widgets) — `uiComponentCatalog`, a `List<UiComponentDescriptor>` of `{id, label, category, sample}` naming every atom + a default instance | descriptive |
 
 The **catalog layer** is what makes a new component discoverable: it feeds the kit's own component

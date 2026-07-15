@@ -1,15 +1,15 @@
 ---
 title: Flutter Adaptive UI Design Specification
-version: 3.0
-last_validated: 2026-07-11
+version: 3.1
+last_validated: 2026-07-15
 official: unknown
 source: origin unknown
 tags: [adaptive-ui, responsive, spec, tablet, desktop]
 applies_when: "Designing adaptive/responsive layouts across Android tablets and Windows desktop."
-estimated_tokens: 3000
+estimated_tokens: 3400
 ---
 
-# Flutter Adaptive UI Design Specification (v3.0)
+# Flutter Adaptive UI Design Specification (v3.1)
 ## Target Platforms: Android Tablets (7"–10") & Windows Desktop
 
 > **Provenance:** origin not yet confirmed (see frontmatter `official: unknown`). If this was
@@ -87,6 +87,49 @@ For tablets and Windows, replace the phone's bottom navigation bar with:
 - **`NavigationRail`** (Preferred): Fixed on the left side.
 - **`NavigationDrawer`**: For apps requiring deep hierarchies.
 - **Bottom Navigation is strongly discouraged** on screens ≥ 600dp, as it wastes horizontal space and feels unnatural on large screens.
+
+#### 3.4 Navigation shell recipe (kit-provided: `UiAdaptiveNavShell`)
+
+The kit ships an organism, **`UiAdaptiveNavShell`** (`lib/src/organisms/ui_adaptive_nav_shell.dart`),
+that implements the navigation rules above with **zero added dependencies**, built on the centralized
+`UiBreakpoints` and the same `LayoutBuilder` pattern as `UiResponsive`. It classifies by *available
+pane width* (never `Platform.isX`), so a resized desktop window, split-screen, or foldable all resolve
+from the space they're given:
+
+| `UiDeviceClass` | Width      | Navigation                          | Rail state                          |
+|-----------------|------------|-------------------------------------|-------------------------------------|
+| `compact`       | `< 600`    | M3 `NavigationBar` (bottom)         | N/A                                 |
+| `medium`        | `600–839`  | `NavigationRail`                    | `extended: false`, `labelType: selected` |
+| `expanded`      | `840–1199` | `NavigationRail`                    | `extended: true` (labels inline)    |
+| `large`         | `>= 1200`  | `NavigationRail`                    | `extended: true` (labels inline)    |
+
+> **Extended-rail gotcha:** an extended `NavigationRail` shows every label inline, so Flutter
+> *asserts* `labelType` must be `null` (not `NavigationRailLabelType.all`) when `extended: true`.
+> "All labels visible" is achieved by `extended: true`, not by a label type.
+
+Selection is **controlled** — pass `selectedIndex` and handle `onDestinationSelected` in the caller;
+destinations are declared once as `UiNavDestination` and rendered as the right widget per tier. The
+API is deliberately minimal and all-optional beyond the core four, so future options can be added
+without breaking callers (see §9).
+
+#### 3.5 Reconciled from the external "Flutter Complete Adaptive Layout Guide"
+
+`UiAdaptiveNavShell` *harvested* the good ideas from an external four-tier guide (phone / 7″ / 10″ /
+Windows) but **rejected** the parts that violate this kit's rules. Recorded here so the reasoning
+survives:
+
+| Guide proposed | Rejected — why | Kit does instead |
+|---|---|---|
+| Add `window_manager`, `flutter_adaptive_kit`, `universal_breakpoints`, `fluent_ui` | **Zero-dependency rule** — the kit must embed in any consumer regardless of its dep tree | No packages; window sizing is the app's job (§6.1) |
+| Breakpoints `600 / 900 / 1200` | Per-widget/device-specific thresholds; 900 doesn't generalize | Centralized `UiBreakpoints` `600 / 840 / 1200` (840 = M3 standard) |
+| `BottomNavigationBar` (Material 2) for phones | Kit is **Material 3 only** | M3 `NavigationBar` |
+| `Platform.isWindows` to choose layout | Layout must follow *space*, not OS | `LayoutBuilder` + `UiBreakpoints.classify` |
+| `Shortcuts`/`Actions` + platform badges baked into the shell | Over-couples a shared widget; these vary per app | Consuming-app responsibility (see the guide's `Shortcuts`/`Actions` snippet as an *app* recipe) |
+
+**Load-bearing principle:** the kit owns the *navigation shell*; the consuming app owns the *chrome*
+(window management, keyboard shortcuts, route-state preservation). This separation is what keeps the
+shell reusable. These decisions are the current best per the 2025–2026 M3/zero-dep-UI-kit consensus,
+and are **overridable** if a genuinely better approach appears.
 
 ---
 
@@ -208,6 +251,29 @@ Windows users navigate via keyboard. The app must support:
 - [ ] Tested in **Split-Screen / Windowed** modes.
 
 ---
+
+### 9. Future Extensibility (documented, not yet built)
+
+`UiAdaptiveNavShell` keeps a minimal, additive API precisely so these can land later without breaking
+callers — added only when a **second real use case** justifies it (the kit's promotion rule):
+
+- **Foldable / dual-screen.** A future `dualPane` mode between `medium` and `expanded`, driven by
+  hinge/cutout data (`MediaQuery.displayFeatures`), for side-by-side list/detail on the two panels of
+  a folding device.
+- **Permanent `NavigationDrawer` at `large`.** For very wide screens, a permanent drawer is a valid
+  M3 alternative to the extended rail — the reason the shell reserves room for an additive
+  `desktopNavType` (rail | drawer) option rather than hardcoding the rail.
+- **`go_router` state preservation.** Preserving navigation state across window-resize tier changes
+  is a *consuming-app* concern; use `StatefulShellRoute.indexedStack` (the community
+  `adaptive_scaffold_router` pattern). The kit shell stays router-agnostic.
+
+---
+
+### Summary of v3.1 Adjustments
+- **Added** §3.4 the `UiAdaptiveNavShell` navigation-shell recipe (kit-provided, zero-dependency).
+- **Added** §3.5 the reconciliation table vs. the external four-tier Adaptive Layout Guide (what was
+  rejected and why).
+- **Added** §9 Future Extensibility (foldable `dualPane`, permanent drawer, `go_router`).
 
 ### Summary of v3.0 Final Adjustments
 - **Removed** the restrictive 1440x900 max window size; users can now maximize fully.

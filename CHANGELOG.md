@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.0 - Adaptive navigation shell
+
+Additive only — no breaking changes to existing tokens or components.
+
+### Added
+- New organism **`UiAdaptiveNavShell`** (`lib/src/organisms/ui_adaptive_nav_shell.dart`): a top-level
+  navigation scaffold that switches pattern by *available width* (via the kit's centralized
+  `UiBreakpoints`, never by platform) — M3 `NavigationBar` for `compact` (`< 600`), a compact
+  `NavigationRail` (`extended: false`, labels on selected) for `medium` (`600–839`), and an extended
+  `NavigationRail` for `expanded`/`large` (`>= 840`). Selection is controlled (`selectedIndex` /
+  `onDestinationSelected`); the API is all-optional beyond the core four so future options can be
+  added without breaking callers. Zero added dependencies — window management, keyboard shortcuts,
+  and route-state preservation stay in the consuming app.
+- New value type **`UiNavDestination`** (`icon` / `selectedIcon` / `label`) so callers declare
+  destinations once and the shell renders them as either a `NavigationDestination` or a
+  `NavigationRailDestination`.
+- Both exported from the barrel `lib/flutter_ui_kit.dart`. Reconciliation notes (what was harvested
+  from, and rejected in, the external "Flutter Complete Adaptive Layout Guide") live in
+  `docs/flutter-adaptive-ui-design-specification.md` (v3.1).
+
 ## 0.4.0 - Strict Atomic Design folder tiering
 
 Structural reorganization — the kit's public symbol set is unchanged except for one rename (below).
