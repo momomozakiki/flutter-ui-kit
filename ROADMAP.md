@@ -17,7 +17,7 @@ chunk lives in `plans/UNFINISHED.md`.
 - [ ] **Align skill/living-doc folder paths with the v0.4.0 tiering** — three skills (`flutter-ui-kit-component`, `dart-solid-principles`, `adaptive-workflow`) and `.ai/best_practices.md` still describe `lib/src/components/` + `lib/src/composite/` instead of `atoms/`/`molecules/`/`organisms/`. Detailed findings in `plans/2026-07-15_skill-doc-folder-alignment.md`. (Leave historical records — CHANGELOG, `history/`, `plans/archive/` — as-is.)
 - [ ] Reconcile the `docs/` set after the recent repo restructure (ONBOARDING, contract, adaptive-spec, layout guide) so cross-links resolve and there are no stale paths
 - [ ] Confirm provenance of the two `official: unknown` design docs (`flutter-adaptive-ui-design-specification.md`, `flutter-layout-and-component-design.md`) and the `Atomic Design in Flutter.md` third-party article (fill its `.prov.md` source URL)
-- [ ] Fold `docs/flutter-layout-and-component-design.md` (~9k tokens) into a folder per the Progressive Disclosure Guide (GUIDE §6.4) — exceeds the per-file token budget
+- [x] Fold `docs/flutter-layout-and-component-design.md` (~9k tokens) into a folder per the Progressive Disclosure Guide (GUIDE §6.4) — exceeds the per-file token budget *(done 2026-07-15: `docs/flutter-layout-and-component-design/` = index + 6 part files + CHANGELOG)*
 
 ## Epic 3: Workflow-core integration follow-ups
 - [ ] Add `submodules: recursive` to flutter-ui-kit's own CI checkout so `.claude/workflow-core/` is present on fresh clones/CI (the submodule is dev-only; consumers via `flutter pub get` are unaffected)

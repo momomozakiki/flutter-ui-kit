@@ -57,11 +57,11 @@ widgets). Reach for those in Phase 2.
   (once/day marker `.ai/.workflow_check_date`, gitignored). Detection-only — running
   `git submodule update --remote` stays user-approved (GUIDE §9).
 - **F3 Core docs:** `.ai/best_practices.md`, `.ai/naming_conventions.md`,
-  `docs/design-system-contract.md`. The SessionStart supplement pre-injects
+  `docs/golden-rule/design-system-contract.md`. The SessionStart supplement pre-injects
   summaries; request the full doc when a summary is too terse.
 - **Validation (Phase 2):** `flutter analyze` (keep at "No issues found") and
   `flutter test` (every new/changed widget gets a mirrored test under `test/`).
-- **Versioning:** token/API/contract change → update `docs/design-system-contract.md`
+- **Versioning:** token/API/contract change → update `docs/golden-rule/design-system-contract.md`
   dated, bump the semver + repo-root `CHANGELOG.md`; tag `vMAJOR.MINOR.PATCH` only once
   analyze/test are clean on `main`.
 - **Promotion rule:** app-specific screens/layouts stay in the consuming app; a

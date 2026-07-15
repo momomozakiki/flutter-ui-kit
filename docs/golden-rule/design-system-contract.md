@@ -79,7 +79,7 @@ app's own `composite/`-equivalent folder, named however that app wants — see t
 
 This kit **is** an Atomic Design system, and — as the single canonical design system for the
 Omni-family apps — its folder structure is the **golden rule every consuming app mirrors** (see
-[`Atomic Design in Flutter.md`](Atomic%20Design%20in%20Flutter.md) for the theory). Each folder is a
+[`Atomic Design in Flutter.md`](../Atomic%20Design%20in%20Flutter.md) for the theory). Each folder is a
 canonical Atomic Design layer with its own **state boundary** every new UI must respect. The folder
 path itself *enforces* the boundary: nothing in `atoms/` may be stateful, etc.
 

@@ -24,7 +24,7 @@ in [CLAUDE.md](../CLAUDE.md)). Keep entries concrete — pair each rule with a s
 example or reason.
 
 > **This file is a lean pointer, not a second copy.** The authoritative, detailed
-> rules live in [`docs/design-system-contract.md`](../docs/design-system-contract.md)
+> rules live in [`docs/golden-rule/design-system-contract.md`](../docs/golden-rule/design-system-contract.md)
 > (the contributor contract) and in the `flutter-ui-kit-component` and
 > `dart-solid-principles` skills. Record here only the *distilled* rules and the
 > gotchas those don't already cover.

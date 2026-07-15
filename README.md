@@ -12,7 +12,7 @@ This repo is the extracted, standalone home of what was previously `odb_library`
 `packages/flutter_ui_kit` — now consumed by every Omni-family app as a pinned git dependency instead
 of an in-tree path, so no app drifts from a different local copy of the design system. See
 [`CLAUDE.md`](CLAUDE.md) for the repo-separation rules and
-[`docs/design-system-contract.md`](docs/design-system-contract.md) for the full
+[`docs/golden-rule/design-system-contract.md`](docs/golden-rule/design-system-contract.md) for the full
 contributor contract.
 
 ## Why
@@ -54,7 +54,7 @@ lib/
 ## Usage
 
 Add the dependency, pinned to a released tag (never `ref: main` — see
-[`docs/design-system-contract.md`](docs/design-system-contract.md#versioning--releases)):
+[`docs/golden-rule/design-system-contract.md`](docs/golden-rule/design-system-contract.md#versioning--releases)):
 
 ```yaml
 dependencies:
@@ -144,16 +144,16 @@ The kit targets 7" and 10" Android tablets:
 | `large`    | `>= 1200`          | 10" landscape (1280×800 default)       |
 
 Hosts should default their desktop window to **1280×800** (10" landscape, 16:10) so behavior matches
-a tablet. See `docs/design-system-contract.md` and the code comments in
+a tablet. See `docs/golden-rule/design-system-contract.md` and the code comments in
 `lib/src/theme/ui_sizing.dart` for the current interactive-control-height floor and its rationale.
 
 ## Conventions
 
 Before adding or changing anything, read the contributor contract and supporting guides:
 
-- [`docs/design-system-contract.md`](docs/design-system-contract.md) — layer placement, component-vs-layout naming, token-only rule, default-with-override pattern, testing, versioning.
-- [`docs/flutter-adaptive-ui-design-specification.md`](docs/flutter-adaptive-ui-design-specification.md) — tablet-first breakpoints, touch targets, and responsive layout patterns for Android 7"/10" and Windows.
-- [`docs/flutter-layout-and-component-design.md`](docs/flutter-layout-and-component-design.md) — core Flutter layout mechanics (constraints, Container, Row/Column, Stack, composition), component design patterns, and naming conventions.
+- [`docs/golden-rule/design-system-contract.md`](docs/golden-rule/design-system-contract.md) — layer placement, component-vs-layout naming, token-only rule, default-with-override pattern, testing, versioning.
+- [`docs/golden-rule/flutter-adaptive-ui-design-specification.md`](docs/golden-rule/flutter-adaptive-ui-design-specification.md) — tablet-first breakpoints, touch targets, and responsive layout patterns for Android 7"/10" and Windows.
+- [`docs/flutter-layout-and-component-design/`](docs/flutter-layout-and-component-design/index.md) — core Flutter layout mechanics (constraints, Container, Row/Column, Stack, composition), component design patterns, and naming conventions (folded into a folder: index + 6 parts).
 
 ## Verify
 

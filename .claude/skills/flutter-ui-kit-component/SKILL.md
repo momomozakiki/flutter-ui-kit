@@ -212,6 +212,6 @@ class UiThing extends StatelessWidget {
 
 ## References
 
-- [`docs/design-system-contract.md`](../../docs/design-system-contract.md) — the full contract (layer rules, naming, token-only rule, default-with-override, testing, versioning).
+- [`docs/golden-rule/design-system-contract.md`](../../docs/golden-rule/design-system-contract.md) — the full contract (layer rules, naming, token-only rule, default-with-override, testing, versioning).
 - [`lib/src/theme/ui_theme.dart`](../../lib/src/theme/ui_theme.dart) — how `buildUiTheme()` assembles the Material theme and integrates `UiTuning`.
 - [`lib/src/components/`](../../lib/src/components/) — existing components as worked examples.

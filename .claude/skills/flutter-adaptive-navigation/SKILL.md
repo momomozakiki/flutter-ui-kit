@@ -94,7 +94,7 @@ idea can override them deliberately (allowed) rather than by accident:
 
 ## References
 
-- [`docs/flutter-adaptive-ui-design-specification.md`](../../docs/flutter-adaptive-ui-design-specification.md)
+- [`docs/golden-rule/flutter-adaptive-ui-design-specification.md`](../../docs/golden-rule/flutter-adaptive-ui-design-specification.md)
   §3.4 (shell recipe), §3.5 (reconciliation vs. the external guide), §9 (future extensibility).
 - [`flutter-ui-kit-component`](../flutter-ui-kit-component/SKILL.md) — the general rules for adding or
   editing any component/token here (token-only rule, tiering, testing, versioning).

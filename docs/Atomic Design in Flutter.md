@@ -92,7 +92,7 @@ packages/
 > **How this repo applies it.** `flutter-ui-kit` *is* that extracted `design_system/` package, and
 > its structure is the **canonical rule every Omni-family app mirrors**. The mapping onto this repo's
 > folders (the binding source of truth is the
-> [design-system contract](design-system-contract.md#atomic-design-mapping)):
+> [design-system contract](golden-rule/design-system-contract.md#atomic-design-mapping)):
 >
 > | Guide layer | This repo |
 > |---|---|

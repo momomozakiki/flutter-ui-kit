@@ -86,4 +86,4 @@ Follow these steps in order to set up a brand-new Flutter app to use `flutter_ui
    - Confirm it looks as expected — button color, text styling, size, padding, etc.
    - This early check catches a missing or misapplied theme before you've built a lot of UI on top of broken defaults.
 
-**You're ready to build.** Import kit components from `package:flutter_ui_kit/flutter_ui_kit.dart` and tokens from the `flutter_ui_kit` namespace in your composites. See `README.md` and `docs/design-system-contract.md` for the full component and token catalog.
+**You're ready to build.** Import kit components from `package:flutter_ui_kit/flutter_ui_kit.dart` and tokens from the `flutter_ui_kit` namespace in your composites. See `README.md` and `docs/golden-rule/design-system-contract.md` for the full component and token catalog.

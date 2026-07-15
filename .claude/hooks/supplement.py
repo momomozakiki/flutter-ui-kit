@@ -52,7 +52,7 @@ BREADCRUMB_MARKER = "<!-- workflow-hook: auto-breadcrumb -->"
 LIVING_DOCS = (
     (".ai/best_practices.md", "Best Practices"),
     (".ai/naming_conventions.md", "Naming Conventions"),
-    ("docs/design-system-contract.md", "Design-System Contract"),
+    ("docs/golden-rule/design-system-contract.md", "Design-System Contract"),
 )
 
 

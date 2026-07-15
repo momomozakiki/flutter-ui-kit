@@ -50,13 +50,13 @@ UiButton(label: 'Save', onPressed: onSave)
 UiButton(label: 'Save', onPressed: onSave, height: 48)
 ```
 
-If you want a different default app-wide (not just for one instance), that's a kit-level tuning change via the `UiTuning` debug-only live tuning system — refer to the kit's own `docs/design-system-contract.md` for the full mechanism.
+If you want a different default app-wide (not just for one instance), that's a kit-level tuning change via the `UiTuning` debug-only live tuning system — refer to the kit's own `docs/golden-rule/design-system-contract.md` for the full mechanism.
 
 ## Optional: Debug-only live tuning panel
 
 The kit's theme system works with zero setup — every tunable token is seeded from consts, so defaults work out of the box. However, if this app wants to experiment with live theme adjustments during development, the kit provides an optional `UiTuningOverlay` (a non-modal floating panel).
 
-To enable it, wire `UiTuningOverlay` into your widget tree alongside your root `MaterialApp`. See the kit's `README.md` and `docs/design-system-contract.md` for detailed setup instructions.
+To enable it, wire `UiTuningOverlay` into your widget tree alongside your root `MaterialApp`. See the kit's `README.md` and `docs/golden-rule/design-system-contract.md` for detailed setup instructions.
 
 ## Suggested folder layout
 

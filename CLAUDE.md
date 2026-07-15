@@ -49,7 +49,7 @@ repo — see "Repo separation" below for why this matters to the user.
   `theme/` = tokens, `atoms/` = **atoms** (stateless), `molecules/` = **molecules** (stateless),
   `organisms/` = **organisms** (local UI state only); templates/pages (and any `_page`-named widget)
   stay in consuming apps. Full mapping + state boundaries live in the
-  [design-system contract](docs/design-system-contract.md#atomic-design-mapping) and the
+  [design-system contract](docs/golden-rule/design-system-contract.md#atomic-design-mapping) and the
   [`Atomic Design in Flutter`](<docs/Atomic Design in Flutter.md>) guide.
 - **Default-with-override pattern.** Every tunable value ships as a const default; per-instance
   overrides are optional named constructor parameters (`null` = inherit the shared default) — see
@@ -75,7 +75,7 @@ flutter test test/ui_button_test.dart   # single file
 ## Conventions (the contributor contract)
 
 The full contract lives in
-[`docs/design-system-contract.md`](docs/design-system-contract.md) — read it
+[`docs/golden-rule/design-system-contract.md`](docs/golden-rule/design-system-contract.md) — read it
 before adding or changing anything. Summary:
 
 - **Zero dependencies beyond the Flutter SDK.** This is what makes the kit safely embeddable in any
@@ -103,10 +103,15 @@ purpose, so the codebase doesn't fracture into competing patterns. If you *do* a
 **update the canonical skill/doc in the same change** so the source of truth moves with the decision;
 there must never be two authorities disagreeing.
 
-- **Current canonical authorities:** the [design-system contract](docs/design-system-contract.md); the
-  `flutter-ui-kit-component`, `dart-solid-principles`, and `flutter-adaptive-navigation` skills; and the
-  [adaptive UI spec](docs/flutter-adaptive-ui-design-specification.md). Any divergent design is filtered
-  through these.
+- **The single index of canonical authorities is [`docs/golden-rule/index.md`](docs/golden-rule/index.md)**
+  — the golden-rule folder holds the [design-system contract](docs/golden-rule/design-system-contract.md)
+  and the [adaptive UI spec](docs/golden-rule/flutter-adaptive-ui-design-specification.md); the
+  `flutter-ui-kit-component`, `dart-solid-principles`, and `flutter-adaptive-navigation` skills
+  operationalize them. Any divergent design is filtered through these.
+- **Before adopting any new rule/convention/guide, run the [`golden-rule` skill](.claude/skills/golden-rule/SKILL.md)** —
+  it encodes the reconcile-before-adopt procedure (align → fold in; better-and-tests-green → replace +
+  update the one authority in the same change; else reject and record why). It is advisory; `flutter
+  test` is the real "doesn't break the code" gate.
 - **Worked precedent:** the external "Flutter Complete Adaptive Layout Guide" was **harvested, not
   copied** — its good ideas became `UiAdaptiveNavShell` + the `flutter-adaptive-navigation` skill + the
   adaptive spec, and everything rejected (dependency-heavy packages, `Platform`-based layout, M2
@@ -190,7 +195,7 @@ carries the same bindings in more detail.
   minor → one terse line. Format: [history/FORMAT.md](history/FORMAT.md). This is
   separate from the repo-root `CHANGELOG.md` (the semver *release* record).
 - **Versioning:** a token/API/contract change updates
-  [`docs/design-system-contract.md`](docs/design-system-contract.md) dated, bumps the
+  [`docs/golden-rule/design-system-contract.md`](docs/golden-rule/design-system-contract.md) dated, bumps the
   semver + `CHANGELOG.md`; tag `vMAJOR.MINOR.PATCH` only once `flutter analyze` and
   `flutter test` are clean on `main`.
 - **Filesystem-native recall, no index:** `ls history/` + `grep -r "keyword" plans/archive/`;
