@@ -2,7 +2,7 @@
 name: {{APP_NAME}}-ui-component
 description: >-
   Use when adding or editing a Flutter UI component, widget, or design token in
-  {{CONSUMING_PACKAGE}} — specifically app-specific composites in lib/src/composite/,
+  {{CONSUMING_PACKAGE}} — specifically app-specific compositions in lib/src/molecules/ or lib/src/organisms/,
   or when a request mentions buttons/fields/dropdowns/cards/theme/colors/spacing/responsive
   layout. Enforces design-token usage (no hardcoded colors/sizes), flutter_ui_kit
   dependency purity (it lives in a separate repo), and tablet-first sizing. Rules
@@ -21,14 +21,14 @@ whenever you add or change UI.
 
 | What you're building | Folder | Notes |
 |----------------------|--------|-------|
-| **Core atom** — generic, domain-free (button, field, dropdown, chip, banner, checkbox…) | `flutter-ui-kit` repo: `lib/src/components/` | Governed by that repo's own CLAUDE.md. Very rare for an app to contribute; promotion rule applies. |
-| **Generic composition** — project-agnostic, built from atoms (responsive scaffold, toolbar…) | `flutter-ui-kit` repo: `lib/src/composite/` | Still no domain coupling. Governed by that repo's own CLAUDE.md. Promotion rule applies. |
+| **Core atom** — generic, domain-free (button, field, dropdown, chip, banner, checkbox…) | `flutter-ui-kit` repo: `lib/src/atoms/` | Governed by that repo's own CLAUDE.md. Very rare for an app to contribute; promotion rule applies. |
+| **Generic composition** — project-agnostic, built from atoms (responsive scaffold, toolbar…) | `flutter-ui-kit` repo: `lib/src/molecules/` (stateless) or `lib/src/organisms/` (local UI state) | Still no domain coupling. Governed by that repo's own CLAUDE.md. Promotion rule applies. |
 | **Design token** — a reusable property (color, spacing, size, radius, typography, breakpoint) | `flutter-ui-kit` repo: `lib/src/theme/` | Extend existing token files in the kit itself. Governed by that repo's own CLAUDE.md. |
-| **App-specific composite** — knows about {{APP_NAME}}'s domain/features/screens | this app: `lib/src/composite/` | Imports the external kit via git dependency; never the reverse. This skill governs app-specific composites here. |
+| **App-specific composition** — knows about {{APP_NAME}}'s domain/features/screens | this app (mirrors the kit's Atomic tiering): `lib/src/molecules/` (stateless) or `lib/src/organisms/` (local UI state) | Imports the external kit via git dependency; never the reverse. This skill governs app-specific compositions here. |
 
-**The test for "core atom vs. app composite":** could a totally unrelated Flutter app use
+**The test for "core atom vs. app composition":** could a totally unrelated Flutter app use
 this widget unchanged? If it mentions {{APP_NAME}}-specific features, domain logic, or product concepts,
-it's an app composite and belongs here — putting it in the kit would poison the kit's purity (rule 3).
+it's an app composition and belongs here — putting it in the kit would poison the kit's purity (rule 3).
 
 ## 2. Properties are tokens — never hardcode
 
@@ -78,9 +78,9 @@ Color? _toneColor(BuildContext context) {
 
 ## 3. Keep the external design system pure
 
-The `flutter_ui_kit` (in a separate repo) depends **only on the Flutter SDK** — no domain logic, no app-specific concepts. That purity is what lets it travel to other projects. **This app must not add domain-specific edits to kit internals** — if a widget needs {{APP_NAME}}-knowledge, it's an *app-specific composite* that lives here under `lib/src/composite/`, not in the kit.
+The `flutter_ui_kit` (in a separate repo) depends **only on the Flutter SDK** — no domain logic, no app-specific concepts. That purity is what lets it travel to other projects. **This app must not add domain-specific edits to kit internals** — if a widget needs {{APP_NAME}}-knowledge, it's an *app-specific composition* that lives here under `lib/src/molecules/` or `lib/src/organisms/`, not in the kit.
 
-If you find yourself wanting to edit something inside `flutter-ui-kit/lib/`, stop and ask: does this belong in the kit (generic enough for any Flutter app?), or is it really a {{APP_NAME}}-specific composite or override?
+If you find yourself wanting to edit something inside `flutter-ui-kit/lib/`, stop and ask: does this belong in the kit (generic enough for any Flutter app?), or is it really a {{APP_NAME}}-specific composition or override?
 
 ## 4. Tablet-first (7" and 10" Android tablets)
 
@@ -99,7 +99,7 @@ Keep a widget **local** to {{CONSUMING_PACKAGE}} until a **second consuming app*
 ## 6. Wire it up, then verify
 
 1. **Export** the new widget from this app's barrel (if public):
-   - App-specific composites → export from `{{CONSUMING_PACKAGE}}/lib/{{CONSUMING_PACKAGE}}.dart` (or wherever this app's public API lives).
+   - App-specific compositions → export from `{{CONSUMING_PACKAGE}}/lib/{{CONSUMING_PACKAGE}}.dart` (or wherever this app's public API lives).
 2. **Test:** add a mirrored test (e.g. `my_card.dart` → `test/my_card_test.dart`).
 3. **Analyze + test** — both clean before committing:
    - `flutter analyze && flutter test`
@@ -117,7 +117,7 @@ grep -nE "BorderRadius\.circular\(|EdgeInsets\.all\([0-9]" <files>
 
 A surviving hit needs a reason. Otherwise replace it with the matching token.
 
-## Component template (app-specific composite)
+## Component template (app-specific composition)
 
 ```dart
 import 'package:flutter/material.dart';

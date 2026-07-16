@@ -1,7 +1,7 @@
 ---
 title: Best Practices
-version: 1.0
-last_validated: 2026-07-11
+version: 1.2
+last_validated: 2026-07-16
 official: false
 source: agent-generated
 tags: [best-practices, living-doc, conventions, gotchas]
@@ -10,13 +10,14 @@ estimated_tokens: 900
 ---
 
 # Best Practices (living document)
-**Version 1.1** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
+**Version 1.2** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
 
 ## Revision History
 | Version | Date       | Change   |
 |---------|------------|----------|
 | 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 | 1.1     | 2026-07-12 | Added the puro `flutter run -d chrome` web-SDK gotcha + static-serve workaround. |
+| 1.2     | 2026-07-16 | Aligned the layer-rules bullet with the v0.4.0 Atomic tiering (`atoms/` / `molecules/` / `organisms/`, replacing `components/` + `composite/`). |
 
 Hard-won conventions and gotchas for working in **flutter-ui-kit**. Append here
 whenever a new pattern, rule, or repeatable mistake surfaces (see the trigger table
@@ -42,9 +43,10 @@ example or reason.
   per-instance overrides are optional named params (`null` = inherit). `UiTuning`
   (the debug-only live tuning singleton) is seeded from the same consts used in
   release. Follow this for new tunables instead of forking a component.
-- **Layer rules.** `lib/src/theme/` = tokens only (no widgets); `lib/src/components/`
-  = one-widget-per-file primitives named `Ui<Name>`; `lib/src/composite/` = generic
-  (project-agnostic) compositions only.
+- **Layer rules.** `lib/src/theme/` = tokens only (no widgets); `lib/src/atoms/`
+  = one-widget-per-file primitives named `Ui<Name>`; `lib/src/molecules/` = generic
+  (project-agnostic) **stateless** compositions; `lib/src/organisms/` = generic
+  compositions that own **local UI state** only.
 - **Export** every new public symbol from the barrel `lib/flutter_ui_kit.dart`.
 
 ## Repo-separation gotchas

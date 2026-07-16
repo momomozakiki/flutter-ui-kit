@@ -2,8 +2,8 @@
 name: flutter-ui-kit-component
 description: >-
   Use when adding or editing a Flutter UI component, design token, or generic
-  composition in the flutter-ui-kit repo itself (lib/src/components/, lib/src/theme/,
-  lib/src/composite/). Enforces the token-only rule (no hardcoded colors/sizes), the
+  composition in the flutter-ui-kit repo itself (lib/src/atoms/, lib/src/theme/,
+  lib/src/molecules/, lib/src/organisms/). Enforces the token-only rule (no hardcoded colors/sizes), the
   default-with-override pattern via UiTuning, the shared control-height mechanism, the
   semantic-color pattern, and testing/versioning requirements. For consuming apps, use
   the app-specific UI component skill in that app's own repo.
@@ -20,8 +20,8 @@ whenever you add or change a component, token, or composition in this repo.
 | What you're building | Folder | Notes |
 |----------------------|--------|-------|
 | **Design token** — a reusable property (color, spacing, size, radius, typography, breakpoint) | `lib/src/theme/` | No widgets in theme files. Tokens are const-only. |
-| **Core atom** — generic, domain-free widget (button, field, dropdown, chip, banner, checkbox…) | `lib/src/components/` | One widget per file, `Ui`-prefixed. No app-specific logic. |
-| **Generic composition** — project-agnostic widget groupings built from atoms (responsive scaffold, tuning panel…) | `lib/src/composite/` | Still domain-free. Tuning/overlay widgets live here. |
+| **Core atom** — generic, domain-free widget (button, field, dropdown, chip, banner, checkbox…) | `lib/src/atoms/` | One widget per file, `Ui`-prefixed. No app-specific logic. |
+| **Generic composition** — project-agnostic widget groupings built from atoms (responsive scaffold, tuning panel…) | `lib/src/molecules/` (stateless) or `lib/src/organisms/` (local UI state) | Still domain-free. Tuning/overlay widgets live here. |
 
 **The test for "in the kit vs. in a consuming app":** could a totally unrelated Flutter app use
 this widget/token unchanged, without knowing anything about any specific Omni product? If it mentions a product's domain, it belongs in the consuming app, not here.
@@ -35,21 +35,22 @@ the theory). Every new UI must land in the right layer **and** respect that laye
 | Atomic Design layer | This repo | State boundary |
 |---|---|---|
 | Tokens | `lib/src/theme/` | const-only, no widgets |
-| **Atoms** | `lib/src/components/` | always `StatelessWidget`; **only ephemeral UI state** (`FocusNode`, an internal `TextEditingController`/`ScrollController`, hover/press). No business logic, no data fetching, **no `AppLocalizations`** — accept raw `String`s; render validation *visuals* only (`errorText`), logic lives outside. |
-| **Molecules** | `lib/src/composite/` | compose atoms; **always stateless** — delegate all state/callbacks upward. |
-| **Organisms** | `lib/src/composite/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but **never** business logic or data fetching. |
+| **Atoms** | `lib/src/atoms/` | always `StatelessWidget`; **only ephemeral UI state** (`FocusNode`, an internal `TextEditingController`/`ScrollController`, hover/press). No business logic, no data fetching, **no `AppLocalizations`** — accept raw `String`s; render validation *visuals* only (`errorText`), logic lives outside. |
+| **Molecules** | `lib/src/molecules/` | compose atoms; **always stateless** — delegate all state/callbacks upward. |
+| **Organisms** | `lib/src/organisms/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but **never** business logic or data fetching. |
 | Templates / Pages | *consuming apps, not here* | out of scope by design (repo-separation rule). |
 
-**Molecule vs. organism** (both share `composite/`, and no lint/test can tell them apart — a
-reviewer is the only gate):
+**Molecule vs. organism** (now in **separate folders** — `molecules/` vs `organisms/` — so the folder
+path *is* the state boundary; but no lint/test decides which folder a *new* widget belongs in, so a
+reviewer is still the only gate on that judgment):
 
 > If the widget only combines atoms and delegates all state/callbacks upward, it's a
 > **molecule**. If it manages a self-contained UI behaviour (expandable panel, tab bar, local
 > dropdown menu) without touching repositories or domain logic, it's an **organism**. If you
 > can't decide, it's probably an organism — when in doubt, ask a reviewer.
 
-Put a one-line role comment at the top of each composite widget stating whether it's a molecule
-or an organism, so the intent is visible in the file itself.
+Put a one-line role comment at the top of each molecule/organism widget stating whether it's a
+molecule or an organism, so the intent is visible in the file itself.
 
 ## 2. Properties are tokens — never hardcode
 
@@ -140,19 +141,20 @@ Every new or changed widget/token gets a mirrored test under `test/` (e.g. `ui_b
 - `UiTuning` is debug-only; gate it with `kDebugMode` at the entry point, never inside `buildUiTheme()`.
 - Every token file is a constant inventory (no logic). Logic lives in `buildUiTheme()` (using those consts).
 
-### `lib/src/components/` (core atoms)
+### `lib/src/atoms/` (core atoms)
 
 - One widget per file, `Ui`-prefixed name (e.g., `UiButton`, `UiDropdown`).
 - No domain-specific logic. A widget that imports or references product concepts has no business here.
 - Re-export from `lib/flutter_ui_kit.dart`.
 - Imports only the Flutter SDK and tokens from this kit's `theme/` folder — never another component, never a concrete transport/plugin.
 
-### `lib/src/composite/` (generic compositions)
+### `lib/src/molecules/` (stateless compositions) & `lib/src/organisms/` (local-UI-state compositions)
 
-- Project-agnostic groupings of atoms (e.g., `UiResponsive`, `UiTuningPanel`, `UiTuningOverlay`).
+- Project-agnostic groupings of atoms — stateless ones (e.g., `UiResponsive`) live in `molecules/`;
+  those owning local UI state (e.g., `UiTuningPanel`, `UiUnderMaintenance`) live in `organisms/`.
 - `Ui`-prefixed names (e.g., `UiResponsive`).
 - Re-export from `lib/flutter_ui_kit.dart`.
-- Imports only the Flutter SDK, tokens, and components from this kit — never app-specific logic.
+- Imports only the Flutter SDK, tokens, and atoms from this kit — never app-specific logic.
 
 ## 8. Promotion rule
 
@@ -182,7 +184,7 @@ grep -nE "BorderRadius\.circular\(|EdgeInsets\.all\([0-9]" <files>
 A surviving hit needs a reason (e.g., you're *defining* a token in `theme/`). Otherwise replace it with the matching token.
 
 Also confirm the atomic layer & state boundary (see §1a):
-- Is it in the right folder — atom (`components/`), molecule/organism (`composite/`), token (`theme/`)?
+- Is it in the right folder — atom (`atoms/`), molecule (`molecules/`), organism (`organisms/`), token (`theme/`)?
 - Is the widget clearly a **molecule** (stateless) or an **organism** (local UI state only)? If the distinction is unclear, re-examine state ownership. An atom must be a `StatelessWidget` with no business logic.
 
 ## Component template (core atom)
@@ -214,4 +216,4 @@ class UiThing extends StatelessWidget {
 
 - [`docs/golden-rule/design-system-contract.md`](../../docs/golden-rule/design-system-contract.md) — the full contract (layer rules, naming, token-only rule, default-with-override, testing, versioning).
 - [`lib/src/theme/ui_theme.dart`](../../lib/src/theme/ui_theme.dart) — how `buildUiTheme()` assembles the Material theme and integrates `UiTuning`.
-- [`lib/src/components/`](../../lib/src/components/) — existing components as worked examples.
+- [`lib/src/atoms/`](../../lib/src/atoms/) — existing atoms as worked examples.

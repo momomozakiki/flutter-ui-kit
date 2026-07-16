@@ -65,8 +65,9 @@ widgets). Reach for those in Phase 2.
   dated, bump the semver + repo-root `CHANGELOG.md`; tag `vMAJOR.MINOR.PATCH` only once
   analyze/test are clean on `main`.
 - **Promotion rule:** app-specific screens/layouts stay in the consuming app; a
-  composite is promoted into `lib/src/composite/` only once a **second** app has an
-  identical use case. Don't roadmap speculative composites as active work.
+  composition is promoted into `lib/src/molecules/` (stateless) or `lib/src/organisms/`
+  (local UI state) only once a **second** app has an identical use case. Don't roadmap
+  speculative compositions as active work.
 
 ## Historical context retrieval (filesystem-native, no index)
 
