@@ -69,6 +69,38 @@ widgets). Reach for those in Phase 2.
   (local UI state) only once a **second** app has an identical use case. Don't roadmap
   speculative compositions as active work.
 
+## Checklist-driven execution + branch/PR merge-gate
+
+The phases are a **master checklist, not a rigid pipeline** — for any task, *select the
+applicable rows*. Two tiers keep the flexibility safe (full authority: [CLAUDE.md → Git
+workflow](../../../CLAUDE.md) and its bindings section; CLAUDE.md wins on disagreement):
+
+- **Mandatory gates (always):** **G1** git sync before editing (F1) · **G2** branch/PR
+  merge-gate — no unverified code reaches `main` · **G3** ledger entry for any real change ·
+  **G4** no dangling `plans/UNFINISHED.md` at rest.
+- **Selectable rows (pick per task, each with its own trigger):** branch-or-not · PR-or-not ·
+  doc frontmatter · roadmap update · provenance · retro · `SCOPE.md` · test scope ·
+  version/`CHANGELOG` bump · env check.
+
+Phase 1 = look at the task → tick the applicable selectable rows → that (plus G1–G4) is the plan.
+
+**Branch/PR merge-gate — the repo-local override of the generic "commit & push to `main`" close:**
+
+- **F6 (Phase 0, after F1):** `gh pr list --state open`; if a PR is open, ask *"Is PR #N verified
+  and ready to merge?"* → **yes**: `gh pr merge <n> --squash --delete-branch` then
+  `git checkout main && git pull`; **no**: leave it, ask branch-or-fresh. Never stack new work on
+  an unverified PR. If `gh auth status` fails, defer the merge to the user.
+- **Branch decision (Phase 1, pragmatic scope rule):** branch on a substantive change to `lib/`,
+  tokens, the version, or canonical guidance (`docs/golden-rule/`, `CLAUDE.md`, `.claude/skills/`);
+  trivial doc/ledger/typo edits (including a skill typo) may go straight to `main`. Branch name
+  `<type>/<slug>`, `type` ∈ `feat | fix | docs | chore`.
+- **Branch close (Phase 3):** commit on the branch → `git push -u origin <branch>` →
+  `gh pr create` (title = plan summary; body = what/why + analyze/test results). **No same-session
+  merge** — merge is the next session's F6 gate after the user verifies. Fallback if `gh` is
+  unavailable: `git push -u origin <branch>` and hand the user the compare-URL. Self-check: not
+  done until the branch is pushed and the PR is opened (plus `UNFINISHED.md` cleared, ledger
+  written). Trivial non-branch edits still close with a direct commit to `main`.
+
 ## Historical context retrieval (filesystem-native, no index)
 
 - **Time-ordered — the ledger `history/`:** `ls history/` lists the weeks; open a

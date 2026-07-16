@@ -1,16 +1,16 @@
 ---
 title: Best Practices
-version: 1.3
+version: 1.4
 last_validated: 2026-07-16
 official: false
 source: agent-generated
 tags: [best-practices, living-doc, conventions, gotchas]
 applies_when: "Working in flutter-ui-kit — checking or recording repo conventions, patterns, and gotchas."
-estimated_tokens: 900
+estimated_tokens: 950
 ---
 
 # Best Practices (living document)
-**Version 1.3** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
+**Version 1.4** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -19,6 +19,7 @@ estimated_tokens: 900
 | 1.1     | 2026-07-12 | Added the puro `flutter run -d chrome` web-SDK gotcha + static-serve workaround. |
 | 1.2     | 2026-07-16 | Aligned the layer-rules bullet with the v0.4.0 Atomic tiering (`atoms/` / `molecules/` / `organisms/`, replacing `components/` + `composite/`). |
 | 1.3     | 2026-07-16 | Added the Windows desktop review target (`flutter run -d windows` with hot reload) as the primary preview path given the broken `-d chrome` under puro. |
+| 1.4     | 2026-07-16 | Added the branch + PR merge-gate discipline (`main` advances only through a verified, merged PR) + the checklist-driven select-what-applies note. |
 
 Hard-won conventions and gotchas for working in **flutter-ui-kit**. Append here
 whenever a new pattern, rule, or repeatable mistake surfaces (see the trigger table
@@ -92,3 +93,22 @@ example or reason.
 - Consumer apps pin an **exact tag** (`ref: vX.Y.Z`), so a breaking token/API change
   bumps **MAJOR** and updates `CHANGELOG.md`. A change isn't seen by consumers until
   they deliberately bump the ref — versioning discipline is the contract.
+
+## Git workflow — branch + PR merge-gate (distilled; full rules in CLAUDE.md)
+
+- **`main` advances only through a verified, merged PR** — never a direct push. Consumer
+  apps tag off `main`, so an unverified change landing there is how a consumer silently
+  breaks. Full authority: [CLAUDE.md → Git workflow](../CLAUDE.md).
+- **Branch when it's substantive** (pragmatic scope rule): a change to `lib/`, tokens, the
+  version, or canonical guidance (`docs/golden-rule/`, `CLAUDE.md`, `.claude/skills/`).
+  Trivial doc/ledger/typo edits may commit straight to `main`. Branch name `<type>/<slug>`,
+  `type` ∈ `feat | fix | docs | chore`.
+- **Close by opening a PR, not merging** — Phase 3 pushes the branch and runs `gh pr create`;
+  the merge (`gh pr merge <n> --squash --delete-branch`) happens only after the user confirms
+  the PR is verified. On a merge conflict, stop and ask. If `gh` isn't authenticated, push the
+  branch and hand over the compare-URL.
+- **Start of session:** `gh pr list --state open` — resolve/verify any open PR before stacking
+  new work on it.
+- **The workflow is a checklist, not a pipeline** — for a task, *select the applicable steps*
+  over the four always-on gates (git sync · branch/PR gate · ledger entry · no dangling
+  `UNFINISHED.md`); the rest (branch/PR/docs/roadmap/version bump/…) are picked per task.

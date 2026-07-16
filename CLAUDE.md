@@ -126,6 +126,34 @@ there must never be two authorities disagreeing.
 - Consumer apps pin an exact tag (`ref: vX.Y.Z` in their `pubspec.yaml` git dependency) — never
   `ref: main`, so an in-progress change here can never silently break a consumer.
 
+### Branch + PR merge-gate (the merge discipline)
+
+`main` only ever advances through a **verified, merged PR** — never a direct push. This is the
+repo-local override of the workflow's default "commit & push to `main`" close (see
+[Workflow — flutter-ui-kit bindings](#workflow--flutter-ui-kit-bindings) → **G2 / F6 / branch
+close**). It exists because consumer apps tag off `main`; an unverified change landing there is
+how a consumer silently breaks.
+
+- **Branch decision (pragmatic scope rule).** Create a branch when a task makes a *substantive*
+  change to `lib/` code, design tokens, the version, or any **canonical guidance** — the
+  contract/spec (`docs/golden-rule/`), this constitution (`CLAUDE.md`), or a skill
+  (`.claude/skills/`). Trivial doc/ledger/typo-only edits (including a typo fix in a skill) may
+  commit straight to `main`. When in doubt, branch.
+- **Branch naming.** `<type>/<slug>` with `type` ∈ `feat | fix | docs | chore`, matching the
+  repo's Conventional-Commit style (e.g. `feat/status-chip-variant`, `chore/workflow-branch-pr-gate`).
+- **Open the PR at close; do not self-merge.** Phase 3 pushes the branch and opens a PR
+  (`gh pr create`). The PR is the verification gate: the change merges only after the user
+  confirms it is verified. `flutter analyze` + `flutter test` green is the machine gate;
+  functional/visual verification is the user's.
+- **Merge on confirmed verification (assistant runs it).** Once the user explicitly says a PR is
+  verified, merge with `gh pr merge <n> --squash --delete-branch`, then `git checkout main &&
+  git pull`. A squash keeps `main`'s history linear and preserves the Conventional-Commit
+  message. On a merge conflict, **stop and ask** — never auto-resolve.
+- **Start-of-session gate (F6).** Before starting new work, `gh pr list --state open`; if a PR is
+  open, ask whether it is verified and mergeable before stacking new work on top of it.
+- **`gh` fallback.** If `gh auth status` fails, fall back to `git push -u origin <branch>` and
+  hand the user the compare-URL to open the PR manually; the merge gate is unchanged.
+
 ---
 
 <!-- ==================================================================== -->
@@ -190,6 +218,34 @@ carries the same bindings in more detail.
   the environment check.
 - **F1 detail:** never silently skip on an unreachable remote or a dirty tree — a
   stale base is how two sessions clobber each other.
+- **Checklist-driven, select-what-applies.** The phases are a **master checklist**, not a rigid
+  pipeline: for any task, *select the applicable rows* rather than marching through every step (a
+  generalization of Phase 2's conditional-trigger table). Two tiers keep flexibility from eroding
+  safety —
+  - **Mandatory gates (always fire):** **G1** git sync before editing (F1) · **G2** the
+    branch / PR merge-gate (no unverified code reaches `main` — see [Git workflow](#branch--pr-merge-gate-the-merge-discipline)) ·
+    **G3** a ledger entry for any real (non-trivial) change · **G4** no dangling
+    `plans/UNFINISHED.md` at rest.
+  - **Selectable rows (pick per task, each carries its own trigger):** branch-or-not ·
+    PR-or-not · doc frontmatter · roadmap update · provenance · retro · `SCOPE.md` · test
+    scope · version/`CHANGELOG` bump · env check.
+  Phase 1 = look at the task → tick the applicable selectable rows → that, plus the four
+  mandatory gates, is the plan. Nothing is improperly "skipped" because every selectable row
+  states when it applies.
+- **F6 PR/merge gate (Phase 0, after F1).** `gh pr list --state open`; if a PR is open, ask the
+  user *"Is PR #N verified and ready to merge into `main`?"* On **yes** →
+  `gh pr merge <n> --squash --delete-branch` then `git checkout main && git pull`; on **no** →
+  leave it and ask whether to keep working on that branch or branch fresh from `main`. Never
+  silently start new work on top of an unverified PR. Fallback if `gh auth status` fails: report
+  it and defer the merge to the user.
+- **Branch close (Phase 3, overrides "commit & push").** For a branch-worthy task (pragmatic
+  scope rule in [Git workflow](#branch--pr-merge-gate-the-merge-discipline)), close by committing
+  on the branch, `git push -u origin <branch>`, and `gh pr create` (title = plan summary; body =
+  what/why + `flutter analyze`/`flutter test` results). **Do not merge in the same session** —
+  merge is the next session's F6 gate after the user verifies (or immediately if the user says
+  it is verified now). Self-check: not done until the branch is pushed **and** the PR is opened
+  (plus `UNFINISHED.md` cleared and the ledger entry written). Trivial non-branch edits still
+  close with a direct commit to `main`.
 - **Ledger (required, non-optional).** Every change is recorded in a weekly ledger
   `history/YYYY-Www.md` (`ls history/` is the time index); substantial → What/Why/Refs,
   minor → one terse line. Format: [history/FORMAT.md](history/FORMAT.md). This is
