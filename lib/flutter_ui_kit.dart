@@ -5,14 +5,15 @@
 /// is the canonical Atomic Design authority consuming apps mirror):
 /// * **theme/** — design *tokens* (reusable properties): [UiSpacing], [UiSizing],
 ///   [UiRadius], [UiTypography], [UiColors] (a [ThemeExtension]), [UiBreakpoints]
-///   / [UiDeviceClass], and [buildUiTheme].
+///   / [UiDeviceClass], [buildUiTheme], and the runtime theme-selection
+///   [UiThemeController] / [UiThemePreset].
 /// * **atoms/** — indivisible stateless widgets ([UiButton], [UiIconButton],
 ///   [UiTextField], [UiDropdown], [UiCheckbox], [UiRadio] / [UiRadioGroup],
 ///   [UiSwitch], [UiSlider], [UiStatusChip], [UiChip], [UiBanner], [UiCard],
 ///   [UiText], [UiAvatar], [UiProgressIndicator]).
 /// * **molecules/** — stateless compositions of atoms ([UiResponsive]).
 /// * **organisms/** — compositions that may own local UI state
-///   ([UiAdaptiveNavShell], [UiTuningPanel], [UiTuningOverlay],
+///   ([UiAdaptiveNavShell], [UiThemePicker], [UiTuningPanel], [UiTuningOverlay],
 ///   [UiUnderMaintenance]).
 /// * **catalog/** — the [uiComponentCatalog] registry ([UiComponentDescriptor])
 ///   listing every atom + a default sample, shared by the viewer and any
@@ -31,6 +32,7 @@ export 'src/theme/ui_radius.dart';
 export 'src/theme/ui_sizing.dart';
 export 'src/theme/ui_spacing.dart';
 export 'src/theme/ui_theme.dart';
+export 'src/theme/ui_theme_controller.dart';
 export 'src/theme/ui_tone.dart';
 export 'src/theme/ui_tuning.dart';
 export 'src/theme/ui_typography.dart';
@@ -60,6 +62,7 @@ export 'src/molecules/ui_responsive.dart';
 
 // organisms (compositions that may own local UI state)
 export 'src/organisms/ui_adaptive_nav_shell.dart';
+export 'src/organisms/ui_theme_picker.dart';
 export 'src/organisms/ui_tuning_overlay.dart';
 export 'src/organisms/ui_tuning_panel.dart';
 export 'src/organisms/ui_under_maintenance.dart';

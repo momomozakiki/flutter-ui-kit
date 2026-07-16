@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.6.0 - User-selectable theme colors
+
+Additive only — no breaking changes to existing tokens or components. Existing apps that don't wire
+the controller keep the identical default blue theme.
+
+### Added
+- New runtime theme-selection mechanism in `lib/src/theme/ui_theme_controller.dart`:
+  - **`UiThemeController`** — a `ChangeNotifier` singleton (`UiThemeController.instance`) holding the
+    chosen color `seed` and the `themeMode` (light / dark / **system**), mirroring the `UiTuning`
+    singleton shape (`reset()`, private ctor). A consuming app wraps its `MaterialApp` in a
+    `ListenableBuilder` on it and passes `theme` / `darkTheme` / `themeMode`, so a selection recolors
+    the whole app live. The seed feeds `buildUiTheme(seed:)`, which regenerates the entire Material 3
+    `ColorScheme`. **Persistence is the app's responsibility** (the kit stays zero-dependency); `seed`
+    and `themeMode` are public so an app can restore a saved value and persist on change.
+  - **`UiThemePreset`** value type + **`kUiThemePresets`** — a curated 2026 palette: Ocean Blue
+    (`#1565C0`, the default), Emerald (`#16A34A`), Teal (`#14B8A6`), Violet (`#8B5CF6`), Cyan
+    (`#0891B2`).
+- New organism **`UiThemePicker`** (`lib/src/organisms/ui_theme_picker.dart`): a drop-in settings
+  control — a swatch grid (color-as-data fill) + a light/dark/system `SegmentedButton` — bound to
+  `UiThemeController.instance`. Typically shown in a modal bottom sheet from an app-bar action.
+- The four **semantic accents** (`UiColors` success/warning/danger/info) stay **seed-independent** by
+  design — a chosen brand color never re-tints them.
+- All exported from the barrel `lib/flutter_ui_kit.dart`. The `example/` viewer is rewired to use the
+  controller (app-bar palette button → `UiThemePicker` sheet) as the reference wiring.
+
 ## 0.5.0 - Adaptive navigation shell
 
 Additive only — no breaking changes to existing tokens or components.

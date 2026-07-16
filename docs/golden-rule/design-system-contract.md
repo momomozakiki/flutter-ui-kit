@@ -1,7 +1,7 @@
 ---
 title: Design System Contract
-version: 1.5
-last_validated: 2026-07-15
+version: 1.6
+last_validated: 2026-07-16
 official: false
 source: agent-generated
 tags: [contract, design-system, contributor-guide, tokens, components]
@@ -10,7 +10,7 @@ estimated_tokens: 2600
 ---
 
 # Design System Contract
-**Version 1.5** — *the tech/language requirements and layer/token rules every change here must follow.*
+**Version 1.6** — *the tech/language requirements and layer/token rules every change here must follow.*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -21,6 +21,7 @@ estimated_tokens: 2600
 | 1.3     | 2026-07-12 | Documented the `catalog/` registry layer + the `example/` component viewer (v0.3.0). |
 | 1.4     | 2026-07-12 | Adopted strict Atomic folder tiering (`atoms/` / `molecules/` / `organisms/`) as the canonical structure; added the no-`_page`-in-kit rule (v0.4.0). |
 | 1.5     | 2026-07-15 | Added the `UiAdaptiveNavShell` organism to the atomic-design inventory (v0.5.0). |
+| 1.6     | 2026-07-16 | Added the `UiThemePicker` organism + `UiThemeController`/`UiThemePreset` theme-selection mechanism; carved out the color-as-data exception to the token-only rule (v0.6.0). |
 
 This is the contributor contract for `flutter-ui-kit` — the tech/language requirements and rules
 every change here must follow, so every consuming app (`odb_library`'s `omnidata_binding_ui` /
@@ -60,10 +61,10 @@ linter:
 
 | Folder | Holds | Naming |
 |---|---|---|
-| `lib/src/theme/` | reusable **properties** (design tokens): `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`, `UiBreakpoints`, `UiTuning`, `buildUiTheme()` | descriptive, no `Ui` prefix required for non-widget classes |
+| `lib/src/theme/` | reusable **properties** (design tokens): `UiSpacing`, `UiSizing`, `UiRadius`, `UiTypography`, `UiColors`, `UiBreakpoints`, `UiTuning`, `buildUiTheme()`, and the runtime theme-selection `UiThemeController` / `UiThemePreset` | descriptive, no `Ui` prefix required for non-widget classes |
 | `lib/src/atoms/` | **atoms** — one widget per file, the generic Material control wrapped with the kit's consistent look; always stateless | `Ui<Name>` (e.g. `UiButton`, `UiDropdown`) |
 | `lib/src/molecules/` | **molecules** — stateless, project-agnostic groupings of atoms (e.g. `UiResponsive`) | `Ui<Name>` |
-| `lib/src/organisms/` | **organisms** — compositions that may own local UI state (e.g. the tuning panel/overlay, `UiUnderMaintenance`, `UiAdaptiveNavShell`) | `Ui<Name>` |
+| `lib/src/organisms/` | **organisms** — compositions that may own local UI state (e.g. the tuning panel/overlay, `UiUnderMaintenance`, `UiAdaptiveNavShell`, `UiThemePicker`) | `Ui<Name>` |
 | `lib/src/catalog/` | **component registry** (metadata, not widgets) — `uiComponentCatalog`, a `List<UiComponentDescriptor>` of `{id, label, category, sample}` naming every atom + a default instance | descriptive |
 
 The **catalog layer** is what makes a new component discoverable: it feeds the kit's own component
@@ -88,7 +89,7 @@ path itself *enforces* the boundary: nothing in `atoms/` may be stateful, etc.
 | Tokens | `lib/src/theme/` | const-only, no widgets |
 | **Atoms** | `lib/src/atoms/` | always `StatelessWidget`; only ephemeral UI state (`FocusNode`, internal controllers, hover/press). No business logic, no data fetching, no `AppLocalizations` — accept raw `String`s. |
 | **Molecules** | `lib/src/molecules/` | compose atoms; **always stateless** — delegate state/callbacks upward. |
-| **Organisms** | `lib/src/organisms/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. |
+| **Organisms** | `lib/src/organisms/` | may own **local UI state** (expanded panel, open/closed menu, selected tab) but never business logic or data fetching. Reading/mutating a kit runtime singleton (e.g. `UiThemePicker` ↔ `UiThemeController`) is allowed and still counts as UI state, not business logic. |
 | Templates / Pages | *consuming apps* | **out of scope here by design** — they live in the consuming app per the repo-separation rule, so this kit intentionally has only three widget layers. |
 
 The three widget layers are complemented by two non-widget artifacts: the token layer (`theme/`)
@@ -136,6 +137,12 @@ No widget hardcodes a `Color`, size, or spacing value. Always read from:
 
 Never write `Colors.red.shade700` or a bare `16.0` in a widget body.
 
+**Color-as-data exception.** The rule bans hardcoding a color as a *style* value. A color that is
+itself the *data being displayed* — e.g. a swatch in `UiThemePicker` filled with the very `seed` it
+represents, or a user-chosen color preview — is not a style token and is allowed to be the raw
+`Color`. Everything *around* that data (selection ring, check mark, borders, text) must still come
+from tokens (`ColorScheme` / `context.uiColors`). Mark such a use with a short justifying comment.
+
 ## Default-with-override pattern
 
 Every tunable value ships as a `const` default. Per-instance overrides are optional named
@@ -156,6 +163,15 @@ in release, so nothing changes until a slider is actually touched, and there is 
 in both debug and release builds (no `kDebugMode` branch inside `buildUiTheme()` itself) — this
 guards against debug-tuned values silently diverging from what ships. New tunables should follow
 this same pattern rather than inventing a parallel mechanism.
+
+`UiThemeController` is the **release-facing** counterpart: the same singleton `ChangeNotifier` shape
+(private ctor + `instance` + `reset()`), but it backs a real user setting — the chosen color `seed`
+and `themeMode` — rather than a debug tool. Its `seed` feeds `buildUiTheme(seed:)`, so one color
+regenerates the whole Material 3 `ColorScheme`; the semantic `UiColors` accents stay seed-independent
+on purpose. The kit provides the *mechanism* and a curated `kUiThemePresets`; **persisting** the
+choice is the consuming app's job (the kit stays zero-dependency), which is why `seed`/`themeMode` are
+public — an app restores its saved value on startup and listens to persist on change. Any future
+runtime, user-facing selection should reuse this singleton shape, not invent a parallel one.
 
 ## Testing
 

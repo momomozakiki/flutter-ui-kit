@@ -8,17 +8,11 @@ import 'component_demos.dart';
 ///
 /// The layout adapts via the kit's own [UiResponsive]: side-by-side on wide
 /// screens, and a list that pushes a full-screen preview on narrow ones. The app
-/// bar flips light/dark and toggles the kit's live-token [UiTuningOverlay], so
-/// every component recolors and resizes as tokens change.
+/// bar opens the kit's [UiThemePicker] (color + light/dark/system, backed by
+/// [UiThemeController]) and toggles the kit's live-token [UiTuningOverlay], so
+/// every component recolors and resizes as the theme and tokens change.
 class GalleryScreen extends StatefulWidget {
-  const GalleryScreen({
-    required this.brightness,
-    required this.onToggleBrightness,
-    super.key,
-  });
-
-  final Brightness brightness;
-  final VoidCallback onToggleBrightness;
+  const GalleryScreen({super.key});
 
   @override
   State<GalleryScreen> createState() => _GalleryScreenState();
@@ -27,6 +21,14 @@ class GalleryScreen extends StatefulWidget {
 class _GalleryScreenState extends State<GalleryScreen> {
   int _selected = 0;
 
+  void _openThemePicker() {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (BuildContext context) => const SafeArea(child: UiThemePicker()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +36,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
         title: const Text('flutter_ui_kit — components'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(widget.brightness == Brightness.light
-                ? Icons.dark_mode_outlined
-                : Icons.light_mode_outlined),
-            tooltip: 'Toggle light / dark',
-            onPressed: widget.onToggleBrightness,
+            icon: const Icon(Icons.palette_outlined),
+            tooltip: 'Theme color & appearance',
+            onPressed: _openThemePicker,
           ),
           IconButton(
             icon: const Icon(Icons.tune),
