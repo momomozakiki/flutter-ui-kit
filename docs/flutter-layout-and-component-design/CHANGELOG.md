@@ -9,6 +9,12 @@ tags: [changelog, history]
 Full revision history for this folded document (Episodic memory — not loaded into AI context; see the
 Progressive Disclosure Guide §9). The lean current-state history lives in [`index.md`](index.md).
 
+## 1.2 — 2026-07-16
+- **Part 6 (Naming Conventions).** Renamed the consumer-app example folder `composite/` → `screens/` in
+  the "File Organization" tree. The `composite/` name was a valid consumer example when written, but it
+  now collides with the kit's retired pre-v0.4.0 layer name; `screens/` is a neutral, unambiguous label.
+  Content-only clarity edit — no rule change.
+
 ## 1.1 — 2026-07-15
 - **Folded** the single ~9,000-token file `docs/flutter-layout-and-component-design.md` into this folder
   (`index.md` + `part-1-core-layout.md` … `part-6-naming-conventions.md` + this CHANGELOG), per

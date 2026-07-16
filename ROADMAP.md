@@ -15,7 +15,7 @@ chunk lives in `plans/UNFINISHED.md`.
 
 ## Epic 2: Documentation & contract upkeep
 - [x] **Align skill/living-doc folder paths with the v0.4.0 tiering** — done 2026-07-16: updated three skills (`flutter-ui-kit-component`, `dart-solid-principles`, `adaptive-workflow`), `.ai/best_practices.md`, and `templates/app-ui-component.SKILL.md.template` (found by pre-flight grep) from `lib/src/components/` + `lib/src/composite/` to `atoms/`/`molecules/`/`organisms/`. Historical records left as-is. See `plans/archive/2026-07-16_skill-doc-folder-alignment/`.
-- [ ] Reconcile the `docs/` set after the recent repo restructure (ONBOARDING, contract, adaptive-spec, layout guide) so cross-links resolve and there are no stale paths
+- [x] **Reconcile stale folder paths after the v0.4.0 restructure** — done 2026-07-16: `docs/` was already reconciled (cross-links resolve); fixed the real live stale refs outside it — `README.md` project-structure tree (full refresh to current `atoms/`/`molecules/`/`organisms/`/`catalog/` + 15 atoms), `.ai/best_practices.md:60` dangling `composite/` prose (v1.4→1.5), and the part-6 consumer example `composite/`→`screens/` (folder v1.1→1.2). See `plans/archive/2026-07-16_reconcile-v040-paths/`.
 - [ ] Confirm provenance of the two `official: unknown` design docs (`flutter-adaptive-ui-design-specification.md`, `flutter-layout-and-component-design.md`) and the `Atomic Design in Flutter.md` third-party article (fill its `.prov.md` source URL)
 - [x] Fold `docs/flutter-layout-and-component-design.md` (~9k tokens) into a folder per the Progressive Disclosure Guide (GUIDE §6.4) — exceeds the per-file token budget *(done 2026-07-15: `docs/flutter-layout-and-component-design/` = index + 6 part files + CHANGELOG)*
 

@@ -36,19 +36,35 @@ lib/
       ui_colors.dart         # UiColors     — semantic colors as a ThemeExtension (context.uiColors)
       ui_breakpoints.dart    # UiBreakpoints / UiDeviceClass — 7"/10" tablet breakpoints
       ui_tuning.dart         # UiTuning     — debug-only live overrides, seeded from the consts above
+      ui_tone.dart           # UiTone       — tonal-emphasis token (subtle/normal/strong)
       ui_theme.dart          # buildUiTheme() — assembles ThemeData (M3 + tokens)
-    components/              # CORE atoms (one widget per file, Ui-prefixed)
+      ui_theme_controller.dart # UiThemeController / UiThemePreset — user-selectable theme color
+    atoms/                   # ATOMS — stateless primitives, one widget per file (Ui-prefixed)
       ui_button.dart         # UiButton (primary/secondary/text)
+      ui_icon_button.dart    # UiIconButton
       ui_text_field.dart     # UiTextField (outlined, floating label)
       ui_dropdown.dart       # UiDropdown (label notches the border)
-      ui_status_chip.dart    # UiStatusChip (success/warning/danger/info/neutral)
-      ui_banner.dart         # UiBanner (info/warning/error/success)
       ui_checkbox.dart       # UiCheckbox (tappable label)
-    composite/                # GENERIC compositions
+      ui_radio.dart          # UiRadio / UiRadioGroup (M3 RadioGroup API)
+      ui_switch.dart         # UiSwitch
+      ui_slider.dart         # UiSlider
+      ui_status_chip.dart    # UiStatusChip (success/warning/danger/info/neutral)
+      ui_chip.dart           # UiChip (generic)
+      ui_banner.dart         # UiBanner (info/warning/error/success)
+      ui_card.dart           # UiCard
+      ui_text.dart           # UiText
+      ui_avatar.dart         # UiAvatar
+      ui_progress_indicator.dart # UiProgressIndicator
+    molecules/               # MOLECULES — stateless generic compositions
       ui_responsive.dart      # UiResponsive — builds against UiDeviceClass (LayoutBuilder)
+    organisms/               # ORGANISMS — generic compositions with local UI state only
+      ui_adaptive_nav_shell.dart # UiAdaptiveNavShell — width-adaptive nav (bar ↔ rail)
+      ui_theme_picker.dart    # UiThemePicker — end-user theme-color settings control
       ui_tuning_panel.dart    # UiTuningPanel — debug slider UI for UiTuning
       ui_tuning_overlay.dart  # UiTuningOverlay — movable floating panel wrapper
-      under_maintenance_page.dart
+      ui_under_maintenance.dart # UiUnderMaintenance — generic full-screen maintenance state
+    catalog/                 # component registry (uiComponentCatalog / UiComponentDescriptor)
+      ui_component_catalog.dart
 ```
 
 ## Usage
