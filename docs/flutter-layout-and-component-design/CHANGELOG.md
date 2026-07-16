@@ -9,6 +9,13 @@ tags: [changelog, history]
 Full revision history for this folded document (Episodic memory — not loaded into AI context; see the
 Progressive Disclosure Guide §9). The lean current-state history lives in [`index.md`](index.md).
 
+## 1.3 — 2026-07-17
+- **Provenance confirmed.** Frontmatter `official: unknown` → `official: false`, `source: origin unknown`
+  → `source: agent-generated`. The guide's content was AI-distilled from online layout/component
+  best-practice resources, then regenerated and reorganized in-repo (folded into this chunked folder).
+  It stays **canonical reference/teaching material** — not promoted to a rule authority; the contract
+  remains the single rule authority. Resolves the ROADMAP Epic 2 provenance item for this doc.
+
 ## 1.2 — 2026-07-16
 - **Part 6 (Naming Conventions).** Renamed the consumer-app example folder `composite/` → `screens/` in
   the "File Organization" tree. The `composite/` name was a valid consumer example when written, but it
