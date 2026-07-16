@@ -35,6 +35,9 @@ final Map<String, WidgetBuilder> _demos = <String, WidgetBuilder>{
   'ui_status_chip': (context) => const _StatusChipDemo(),
   'ui_banner': (context) => const _BannerDemo(),
   'ui_progress_indicator': (context) => const _ProgressDemo(),
+  // Molecules / organisms (tiers beyond the shared atom catalog).
+  'ui_responsive': (context) => const _ResponsiveDemo(),
+  'ui_adaptive_nav_shell': (context) => const _AdaptiveNavShellDemo(),
 };
 
 /// A titled group of related states inside a demo, laid out vertically.
@@ -507,5 +510,91 @@ class _ProgressDemo extends StatelessWidget {
         ]),
       ],
     );
+  }
+}
+
+// --- Molecules ---
+
+/// Shows how [UiResponsive] rebuilds its subtree against the available width's
+/// [UiDeviceClass] — stacked when narrow, side-by-side when wide. Resize the
+/// window (or drag the divider) to watch it flip.
+class _ResponsiveDemo extends StatelessWidget {
+  const _ResponsiveDemo();
+
+  @override
+  Widget build(BuildContext context) {
+    return _Section('Reflows by available width', <Widget>[
+      UiResponsive(
+        builder: (BuildContext context, UiDeviceClass deviceClass) {
+          final bool wide = deviceClass == UiDeviceClass.expanded ||
+              deviceClass == UiDeviceClass.large;
+          final List<Widget> boxes = <Widget>[
+            const Expanded(child: UiCard(child: UiText('Pane A'))),
+            const Expanded(child: UiCard(child: UiText('Pane B'))),
+          ];
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              UiStatusChip(
+                label: 'device class: ${deviceClass.name}'
+                    '  ·  ${wide ? 'row' : 'stacked'}',
+                status: UiStatus.info,
+              ),
+              UiSpacing.gapVSm,
+              if (wide)
+                Row(children: boxes)
+              else
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    UiCard(child: UiText('Pane A')),
+                    SizedBox(height: 8),
+                    UiCard(child: UiText('Pane B')),
+                  ],
+                ),
+            ],
+          );
+        },
+      ),
+    ]);
+  }
+}
+
+// --- Organisms ---
+
+/// A bounded, interactive [UiAdaptiveNavShell]: selecting a rail/bar
+/// destination swaps the body. It renders a bottom bar / rail / extended rail
+/// purely from the width it's given — shrink the preview to see it adapt.
+class _AdaptiveNavShellDemo extends StatefulWidget {
+  const _AdaptiveNavShellDemo();
+
+  @override
+  State<_AdaptiveNavShellDemo> createState() => _AdaptiveNavShellDemoState();
+}
+
+class _AdaptiveNavShellDemoState extends State<_AdaptiveNavShellDemo> {
+  int _index = 0;
+
+  static const List<UiNavDestination> _destinations = <UiNavDestination>[
+    UiNavDestination(icon: Icons.home_outlined, label: 'Home'),
+    UiNavDestination(icon: Icons.search_outlined, label: 'Search'),
+    UiNavDestination(icon: Icons.settings_outlined, label: 'Settings'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return _Section('Width-driven navigation', <Widget>[
+      SizedBox(
+        height: 360,
+        child: UiAdaptiveNavShell(
+          selectedIndex: _index,
+          onDestinationSelected: (int i) => setState(() => _index = i),
+          destinations: _destinations,
+          body: Center(
+            child: UiText.title(_destinations[_index].label),
+          ),
+        ),
+      ),
+    ]);
   }
 }

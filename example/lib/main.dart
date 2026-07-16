@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ui_kit/flutter_ui_kit.dart';
 
-import 'gallery_screen.dart';
+import 'gallery_shell.dart';
 
 void main() => runApp(const ViewerApp());
 
@@ -28,7 +28,7 @@ class ViewerApp extends StatelessWidget {
           darkTheme:
               buildUiTheme(brightness: Brightness.dark, seed: controller.seed),
           themeMode: controller.themeMode,
-          home: const GalleryScreen(),
+          home: const GalleryShell(),
         );
       },
     );

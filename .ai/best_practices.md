@@ -1,6 +1,6 @@
 ---
 title: Best Practices
-version: 1.2
+version: 1.3
 last_validated: 2026-07-16
 official: false
 source: agent-generated
@@ -10,7 +10,7 @@ estimated_tokens: 900
 ---
 
 # Best Practices (living document)
-**Version 1.2** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
+**Version 1.3** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -18,6 +18,7 @@ estimated_tokens: 900
 | 1.0     | 2026-07-11 | Added Documentation Standard frontmatter. |
 | 1.1     | 2026-07-12 | Added the puro `flutter run -d chrome` web-SDK gotcha + static-serve workaround. |
 | 1.2     | 2026-07-16 | Aligned the layer-rules bullet with the v0.4.0 Atomic tiering (`atoms/` / `molecules/` / `organisms/`, replacing `components/` + `composite/`). |
+| 1.3     | 2026-07-16 | Added the Windows desktop review target (`flutter run -d windows` with hot reload) as the primary preview path given the broken `-d chrome` under puro. |
 
 Hard-won conventions and gotchas for working in **flutter-ui-kit**. Append here
 whenever a new pattern, rule, or repeatable mistake surfaces (see the trigger table
@@ -62,11 +63,21 @@ example or reason.
 
 ## Tooling gotchas (puro / Windows)
 
+- **Preferred review target: Windows desktop with hot reload.** Because live web runs
+  are broken under puro (below), the fastest faithful preview is the `example/` viewer
+  as a desktop app:
+  ```sh
+  cd example && flutter run -d windows   # then press r = hot reload, R = hot restart
+  ```
+  Its window opens at **1280×800** (a 10″ tablet's landscape pixel size, set in
+  `example/windows/runner/main.cpp`) and is resizable, so UI/UX eyeballed here
+  translates faithfully to a real tablet — and edits show **without an Android APK
+  rebuild/reinstall**. The kit renders the same tree on desktop, web, and Android.
 - **`flutter run -d chrome` fails under puro** with `Error: SDK root directory not
   found: ../../../.puro/envs/stable/flutter/bin/cache/flutter_web_sdk/.` — the debug
   service resolves the web SDK by a *relative* path that doesn't hold. The SDK is
-  present and **`flutter build web` works fine**. To *see* the `example/` viewer, build
-  and serve the static output instead of live-running:
+  present and **`flutter build web` works fine**. To *see* the `example/` viewer on web,
+  build and serve the static output instead of live-running:
   ```sh
   cd example && flutter build web
   cd build/web && python -m http.server 8080   # open http://localhost:8080
