@@ -1,7 +1,7 @@
 ---
 title: Flutter Layout & Component Design – Complete Guide
-version: 1.1
-last_validated: 2026-07-15
+version: 1.2
+last_validated: 2026-07-16
 official: unknown
 source: origin unknown
 tags: [layout, components, composition, responsive, guide, index]
@@ -10,7 +10,7 @@ estimated_tokens: 500
 ---
 
 # Flutter Layout & Component Design – Complete Guide
-**Version 1.1** — *core layout mechanics → responsive patterns → component design.* Folded into a folder
+**Version 1.2** — *core layout mechanics → responsive patterns → component design.* Folded into a folder
 (GUIDE §6.4) because the single file exceeded the Progressive Disclosure per-file token budget.
 
 > **Provenance:** origin not yet confirmed (`official: unknown`). If adapted from an external source,
@@ -20,6 +20,7 @@ estimated_tokens: 500
 ## Revision History
 | Version | Date       | Change |
 |---------|------------|--------|
+| 1.2     | 2026-07-16 | Part 6: renamed the consumer-app example folder `composite/` → `screens/` so it no longer collides with the retired v0.4.0 kit layer name. |
 | 1.1     | 2026-07-15 | Folded the single doc into this folder (index + 6 part files + CHANGELOG) per GUIDE §6.4. |
 | 1.0     | 2026-07-11 | Added Documentation-Standard frontmatter. (Full history in [CHANGELOG.md](CHANGELOG.md).) |
 

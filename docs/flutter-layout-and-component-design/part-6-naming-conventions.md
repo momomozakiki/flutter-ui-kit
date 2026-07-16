@@ -31,7 +31,7 @@ estimated_tokens: 500
 ```
 lib/
 ├── src/
-│   ├── composite/     # Custom app-specific screens and layouts
+│   ├── screens/       # Custom app-specific screens and layouts
 │   ├── widgets/       # Reusable UI components (non-kit)
 │   ├── utils/         # Helper functions and utilities
 │   ├── models/        # Data models

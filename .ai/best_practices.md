@@ -1,6 +1,6 @@
 ---
 title: Best Practices
-version: 1.4
+version: 1.5
 last_validated: 2026-07-16
 official: false
 source: agent-generated
@@ -10,7 +10,7 @@ estimated_tokens: 950
 ---
 
 # Best Practices (living document)
-**Version 1.4** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
+**Version 1.5** — *distilled conventions and gotchas for flutter-ui-kit (pointer to the contract + skills).*
 
 ## Revision History
 | Version | Date       | Change   |
@@ -20,6 +20,7 @@ estimated_tokens: 950
 | 1.2     | 2026-07-16 | Aligned the layer-rules bullet with the v0.4.0 Atomic tiering (`atoms/` / `molecules/` / `organisms/`, replacing `components/` + `composite/`). |
 | 1.3     | 2026-07-16 | Added the Windows desktop review target (`flutter run -d windows` with hot reload) as the primary preview path given the broken `-d chrome` under puro. |
 | 1.4     | 2026-07-16 | Added the branch + PR merge-gate discipline (`main` advances only through a verified, merged PR) + the checklist-driven select-what-applies note. |
+| 1.5     | 2026-07-16 | Fixed a dangling `composite/` promotion-rule reference in Repo-separation gotchas → "the right kit tier (`molecules/` or `organisms/`)", matching the v0.4.0 tiering. |
 
 Hard-won conventions and gotchas for working in **flutter-ui-kit**. Append here
 whenever a new pattern, rule, or repeatable mistake surfaces (see the trigger table
@@ -56,9 +57,9 @@ example or reason.
 - This kit is **consumed by** app repos via a pinned git dependency; it must never
   depend on any of them (no ODB core, no app business logic). If a change would need
   an import outside the Flutter SDK, it doesn't belong here.
-- App-specific screens/layouts stay in the consuming app. A composite is promoted
-  into this kit's `composite/` layer only once a **second** app has a genuinely
-  identical use case (the promotion rule).
+- App-specific screens/layouts stay in the consuming app. A composition is promoted
+  into the right kit tier (`molecules/` or `organisms/`) only once a **second** app has
+  a genuinely identical use case (the promotion rule).
 - Don't edit this repo from an `odb_library`/consuming-app session or vice versa —
   separate repos, separate memory scope.
 
