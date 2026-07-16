@@ -1,25 +1,28 @@
 ---
 title: Flutter Layout & Component Design – Complete Guide
-version: 1.2
-last_validated: 2026-07-16
-official: unknown
-source: origin unknown
+version: 1.3
+last_validated: 2026-07-17
+official: false
+source: agent-generated
 tags: [layout, components, composition, responsive, guide, index]
 applies_when: "Learning or deciding Flutter layout mechanics, responsive patterns, and component composition."
 estimated_tokens: 500
 ---
 
 # Flutter Layout & Component Design – Complete Guide
-**Version 1.2** — *core layout mechanics → responsive patterns → component design.* Folded into a folder
+**Version 1.3** — *core layout mechanics → responsive patterns → component design.* Folded into a folder
 (GUIDE §6.4) because the single file exceeded the Progressive Disclosure per-file token budget.
 
-> **Provenance:** origin not yet confirmed (`official: unknown`). If adapted from an external source,
-> add the URL/attribution and set `source`. This is **reference/teaching material**, not a canonical
-> rule — the canonical rules live in the [golden-rule folder](../golden-rule/index.md).
+> **Provenance (confirmed 2026-07-17):** AI-distilled from online layout/component best-practice
+> resources, then regenerated and reorganized in-repo (folded into this chunked folder for easier
+> reference/indexing). `official: false`, `source: agent-generated`. This is **canonical
+> reference/teaching material**, *not* a rule authority — the binding rules live in the
+> [golden-rule folder](../golden-rule/index.md) (the contract is the single rule authority).
 
 ## Revision History
 | Version | Date       | Change |
 |---------|------------|--------|
+| 1.3     | 2026-07-17 | Confirmed provenance: `official: unknown`→`false`, `source: origin unknown`→`agent-generated` (AI-distilled from online best practices, reorganized in-repo). Remains canonical reference, not a rule authority. |
 | 1.2     | 2026-07-16 | Part 6: renamed the consumer-app example folder `composite/` → `screens/` so it no longer collides with the retired v0.4.0 kit layer name. |
 | 1.1     | 2026-07-15 | Folded the single doc into this folder (index + 6 part files + CHANGELOG) per GUIDE §6.4. |
 | 1.0     | 2026-07-11 | Added Documentation-Standard frontmatter. (Full history in [CHANGELOG.md](CHANGELOG.md).) |

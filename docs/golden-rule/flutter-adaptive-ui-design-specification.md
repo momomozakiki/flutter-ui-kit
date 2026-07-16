@@ -1,19 +1,22 @@
 ---
 title: Flutter Adaptive UI Design Specification
-version: 3.2
-last_validated: 2026-07-15
-official: unknown
-source: origin unknown
+version: 3.3
+last_validated: 2026-07-17
+official: false
+source: agent-generated
 tags: [adaptive-ui, responsive, spec, tablet, desktop]
 applies_when: "Designing adaptive/responsive layouts across Android tablets and Windows desktop."
 estimated_tokens: 3400
 ---
 
-# Flutter Adaptive UI Design Specification (v3.2)
+# Flutter Adaptive UI Design Specification (v3.3)
 ## Target Platforms: Android Tablets (7"–10") & Windows Desktop
 
-> **Provenance:** origin not yet confirmed (see frontmatter `official: unknown`). If this was
-> adapted from an external source, add the URL/attribution and set `source` accordingly.
+> **Provenance (confirmed 2026-07-17):** AI-distilled from online adaptive-UI / responsive
+> best-practice resources, then regenerated and reorganized in-repo into this spec (and chunked for
+> easier reference/indexing). `official: false`, `source: agent-generated`. This is a **canonical
+> golden authority** for adaptive layout in this kit — see the
+> [golden-rule index](index.md).
 
 ---
 
@@ -283,6 +286,11 @@ callers — added only when a **second real use case** justifies it (the kit's p
   the *compact* rail — left to the app for now rather than baked into every destination.
 
 ---
+
+### Summary of v3.3 Adjustments
+- **Provenance confirmed** (metadata only, no design change): `official: unknown` → `official: false`,
+  `source: origin unknown` → `source: agent-generated` (AI-distilled from online best-practice
+  resources, reorganized in-repo). De-provisionalized in the golden-rule index.
 
 ### Summary of v3.2 Adjustments
 - **Documented** the remaining intentional divergences from the external guide in §3.5 (hardcoded rail

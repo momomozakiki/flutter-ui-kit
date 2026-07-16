@@ -1,7 +1,7 @@
 ---
 title: "Golden Rules: canonical authorities index"
-version: 1.1
-last_validated: 2026-07-16
+version: 1.2
+last_validated: 2026-07-17
 official: false
 source: agent-generated
 tags: [golden-rule, governance, canonical, authority, index, contract]
@@ -11,7 +11,7 @@ estimated_tokens: 750
 
 # Golden Rules — canonical authorities index
 
-**Version 1.1** — *the single index of this kit's canonical rule authorities and the precedence that
+**Version 1.2** — *the single index of this kit's canonical rule authorities and the precedence that
 governs them.*
 
 ## Revision History
@@ -19,6 +19,7 @@ governs them.*
 |---------|------------|----------|
 | 1.0     | 2026-07-15 | Created the golden-rule folder + this index; moved the contract and adaptive spec in. |
 | 1.1     | 2026-07-16 | Recorded the git-workflow authority (`CLAUDE.md → Git workflow`) + the branch/PR merge-gate reconciliation (incumbent "commit & push to `main`" → adopted "branch → PR → verified merge"). |
+| 1.2     | 2026-07-17 | Confirmed provenance of the adaptive spec (de-provisionalized: fully golden) and the layout-and-component-design guide (canonical reference) — both `official: false`, agent-generated. |
 
 This folder holds the repo's **golden rules** — the canonical, must-follow authorities every change is
 measured against. It exists so there is exactly **one** place to find "what rules govern this kit" and
@@ -49,8 +50,8 @@ one precedence order, so alternative ideas can be *filtered* rather than silentl
   (`official: false`, agent-generated for this repo.)
 - [`flutter-adaptive-ui-design-specification.md`](flutter-adaptive-ui-design-specification.md) — the
   adaptive/responsive **spec**: breakpoints, window sizing, navigation patterns, Windows-desktop
-  constraints, testing protocols. **Provisional golden** — its provenance is still `official: unknown`
-  (ROADMAP Epic 2); its *content* is canonical but its origin needs confirming before it's fully blessed.
+  constraints, testing protocols. **Fully golden** — provenance confirmed 2026-07-17 (`official: false`,
+  `source: agent-generated`: AI-distilled from online best-practice resources, reorganized in-repo).
 
 ### Skills (in `.claude/skills/`, referenced not moved)
 - [`flutter-ui-kit-component`](../../.claude/skills/flutter-ui-kit-component/SKILL.md) — how to add/edit
@@ -67,7 +68,9 @@ one precedence order, so alternative ideas can be *filtered* rather than silentl
 These inform but are **not** canonical rules, so they are not in this folder:
 - `docs/Atomic Design in Flutter.md` — a verbatim third-party article (provenance pending). The kit's
   *actual* atomic-design rule lives in the contract's [atomic-design mapping](design-system-contract.md#atomic-design-mapping).
-- `docs/flutter-layout-and-component-design/` — a teaching/reference guide.
+- `docs/flutter-layout-and-component-design/` — a canonical teaching/reference guide (provenance
+  confirmed 2026-07-17: `official: false`, agent-generated; AI-distilled from online best practices,
+  reorganized in-repo). Reference, **not** a rule authority — the contract owns the binding rules.
 - `docs/ONBOARDING.md` — a how-to for adding the kit to a consuming app.
 
 ## Process authority (separate track)
