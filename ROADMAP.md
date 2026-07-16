@@ -11,7 +11,7 @@ chunk lives in `plans/UNFINISHED.md`.
 
 ## Epic 1: Test coverage gaps
 - [x] Add a mirrored test for `ui_status_chip` (`test/ui_status_chip_test.dart`) — the only atom in `lib/src/atoms/` without one
-- [ ] Audit remaining `lib/src/molecules/` + `lib/src/organisms/` widgets for test coverage (`ui_responsive`, `ui_tuning_panel`, `ui_under_maintenance`) and add tests where behavior is untested
+- [x] Audit remaining `lib/src/molecules/` + `lib/src/organisms/` widgets for test coverage (`ui_responsive`, `ui_tuning_panel`, `ui_under_maintenance`) and add tests where behavior is untested
 
 ## Epic 2: Documentation & contract upkeep
 - [x] **Align skill/living-doc folder paths with the v0.4.0 tiering** — done 2026-07-16: updated three skills (`flutter-ui-kit-component`, `dart-solid-principles`, `adaptive-workflow`), `.ai/best_practices.md`, and `templates/app-ui-component.SKILL.md.template` (found by pre-flight grep) from `lib/src/components/` + `lib/src/composite/` to `atoms/`/`molecules/`/`organisms/`. Historical records left as-is. See `plans/archive/2026-07-16_skill-doc-folder-alignment/`.
