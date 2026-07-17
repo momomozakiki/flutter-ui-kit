@@ -1,4 +1,26 @@
+---
+title: Atomic Design in Flutter
+version: 1.1
+last_validated: 2026-07-17
+official: false
+source: agent-verified
+tags: [atomic-design, reference, design-system, flutter, canonical-reference]
+applies_when: "Understanding how Atomic Design maps onto flutter-ui-kit's tiers; onboarding to the kit's structure and state boundaries."
+estimated_tokens: 5500
+---
+
 # Atomic Design in Flutter – The Definitive Enterprise Guide
+
+## Revision History
+| Version | Date       | Change |
+|---------|------------|--------|
+| 1.0     | 2026-07-11 | Provenance sidecar created; lightly-adapted external article, original source URL pending. |
+| 1.1     | 2026-07-17 | Original external URL deemed unrecoverable. Content independently verified for technical accuracy by **Claude (Opus 4.8)** against Flutter 3.44 / Material 3 (WidgetState ≥3.19, withValues ≥3.27, five-tier Atomic Design, ThemeExtension lerp/copyWith, adaptive NavigationBar→Rail→Drawer). Adopted as a repo-owned `agent-verified` canonical reference; sidecar `.prov.md` consolidated into this frontmatter. |
+
+> **Provenance note.** `source: agent-verified` marks this doc as externally-originated but
+> independently reviewed and adopted by this repo — distinct from `agent-generated` docs written
+> here from scratch. The original article's URL was never recovered; the content is vouched for on
+> its technical merits (see the 1.1 row above), not by external attribution.
 
 Atomic Design decomposes interfaces into five hierarchical levels. Flutter’s widget composition model aligns naturally with this methodology, enabling teams to create structured, reusable, and scalable UI codebases. This guide combines Atomic Design theory with modern Flutter best practices, focusing on maintainability, testability, and long‑term growth.
 

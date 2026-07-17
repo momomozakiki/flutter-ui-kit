@@ -66,8 +66,11 @@ one precedence order, so alternative ideas can be *filtered* rather than silentl
 ## Not golden (reference / how-to — kept in `docs/`, deliberately)
 
 These inform but are **not** canonical rules, so they are not in this folder:
-- `docs/Atomic Design in Flutter.md` — a verbatim third-party article (provenance pending). The kit's
-  *actual* atomic-design rule lives in the contract's [atomic-design mapping](design-system-contract.md#atomic-design-mapping).
+- `docs/Atomic Design in Flutter.md` — a lightly-adapted external article, now an `agent-verified`
+  repo-owned reference (provenance resolved 2026-07-17: original source URL unrecoverable, content
+  independently verified for technical accuracy and adopted; provenance consolidated into the doc's
+  own frontmatter). The kit's *actual* atomic-design rule lives in the contract's
+  [atomic-design mapping](design-system-contract.md#atomic-design-mapping).
 - `docs/flutter-layout-and-component-design/` — a canonical teaching/reference guide (provenance
   confirmed 2026-07-17: `official: false`, agent-generated; AI-distilled from online best practices,
   reorganized in-repo). Reference, **not** a rule authority — the contract owns the binding rules.
