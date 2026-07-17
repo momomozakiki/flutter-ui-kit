@@ -21,7 +21,7 @@ chunk lives in `plans/UNFINISHED.md`.
 - [x] Fold `docs/flutter-layout-and-component-design.md` (~9k tokens) into a folder per the Progressive Disclosure Guide (GUIDE §6.4) — exceeds the per-file token budget *(done 2026-07-15: `docs/flutter-layout-and-component-design/` = index + 6 part files + CHANGELOG)*
 
 ## Epic 3: Workflow-core integration follow-ups
-- [ ] Add `submodules: recursive` to flutter-ui-kit's own CI checkout so `.claude/workflow-core/` is present on fresh clones/CI (the submodule is dev-only; consumers via `flutter pub get` are unaffected)
+- [x] Add `submodules: recursive` to flutter-ui-kit's own CI checkout so `.claude/workflow-core/` is present on fresh clones/CI — done 2026-07-17: added a `with: submodules: recursive` block to the `actions/checkout@v4` step in `.github/workflows/ci.yml`. Submodule remote confirmed public (no `token:` needed); CI otherwise unchanged. The submodule is dev-only; consumers via `flutter pub get` are unaffected.
 - [ ] Propose the supplement hook's three features (living-doc injection, ROADMAP `- [ ]` scan, human-authored-UNFINISHED-in-Stop) upstream to `ai-self-correcting-workflow` (GUIDE §10), then retire them locally once merged. (F5 was the fourth candidate — now **merged upstream** as of submodule `5c2128d`: `workflow_hook.py` runs it and `config_schema.json` defines `workflow_update_check`; the local F5 was retired.)
 
 ## Backlog / Icebox
